@@ -6,24 +6,7 @@ hide:
 
 # PBE_25.2_8003
 
-<div class="grid cards" markdown>
-
--   :material-github:{ .lg .right } __PBE_25.21_8003_I__
-
-    ---
-
-    Lorem Ipsum     Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum
-
-    [:octicons-arrow-right-24: Repositório](https://github.com/Projetos-de-Extensao/PBE_25.2_8003_I)
-
--   :material-github:{ .lg .middle } __PBE_25.2_8003_II__
-
-    ---
-
-    Lorem Ipsum Lorem Ipsum Lorem Ipsum
-
-    [:octicons-arrow-right-24: Repositório](https://github.com/Projetos-de-Extensao/PBE_25.2_8003_II)
+##
 
 
-</div>
-
+![Resenha](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1vX9W_zgB83WASBGKFipYIXuBrmfeyIICsYDF4bAWs3K3TB_jD5hLLF5MscJfgcEN_Gs&usqp=CAU)

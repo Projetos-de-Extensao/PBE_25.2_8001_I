@@ -1,8 +1,7 @@
 ---
 repo_url: https://github.com/jonh-carvalho/PBE_25.2_8003
 site_author: Jonh Carvalho
-site_name: PBE_25.2_8003
-copyright: Copyright ©️ 2025, Jonh Carvalho
+site_name: Resenha
 
 nav: 
   - Home: index.md
@@ -36,7 +35,7 @@ nav:
   - Transição:
       - Index: Transicao/index.md
 
-  - Bibliografia: Disciplina/bibliografia.md
+  
 
 extra_css:
   - css/extra.css
@@ -108,7 +107,7 @@ theme:
         name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
+      primary: black
       accent: black
       toggle:
         icon: material/toggle-switch-off
@@ -140,8 +139,8 @@ theme:
     - toc.follow
     - toc.integrate
   font:
-    text: Roboto
-    code: Roboto Mono
+    text: Archivo
+    code: 
   icon:
     repo: fontawesome/brands/github
     logo: simple/react
