@@ -1,5 +1,5 @@
 ---
-repo_url: https://github.com/jonh-carvalho/PBE_25.2_8003
+repo_url: https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I
 site_author: Jonh Carvalho
 site_name: Resenha
 
@@ -32,9 +32,9 @@ nav:
       - Git Issues: Construcao/git_issues.md
       - GitHub Projects: Construcao/github_projects.md
       - CodeSpace: Construcao/codespace.md
-  - Transição:
-      - Index: Transicao/index.md
-
+  - Integrantes:
+      - Index: Integrantes/index.md
+    
   
 
 extra_css:
@@ -98,31 +98,23 @@ plugins:
 
 theme:
   name: material
-  logo: assets/ibmec_logo.png
+  logo: assets/explosaum.gif
   palette:
-    
-    - media: "(prefers-color-scheme)"
+    # Tema claro
+    - scheme: default
+      primary: 
+      accent: deep purple
       toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: black
-      accent: black
+        icon: material/weather-night   
+        name: Mudar para modo escuro
+
+    # Tema escuro
+    - scheme: slate
+      primary:
+      accent: purple
       toggle:
-        icon: material/toggle-switch-off
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: deep orange
-      accent: amber
-      toggle:
-        icon: material/toggle-switch-off
-        name: Switch to system preference
-      color_mode: dark
-      language: pt-BR
-      favicon: images/favicon.png
-      user_color_mode_toggle: true
+        icon: material/weather-sunny   
+        name: Mudar para modo claro
   
   features:
     - content.code.copy
@@ -139,7 +131,7 @@ theme:
     - toc.follow
     - toc.integrate
   font:
-    text: Archivo
+    text: Roboto flex
     code: 
   icon:
     repo: fontawesome/brands/github

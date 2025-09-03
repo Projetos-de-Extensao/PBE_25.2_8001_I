@@ -1,4 +1,51 @@
 .time {
-    color:red;
-    font-weight:bold;
+  color: red;
+  font-weight: bold;
+}
+
+
+.md-header__button.md-logo {
+  margin: 0;
+  padding: 0;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3.5rem;
+  width: auto;
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #ffffff;
+  --md-primary-bg-color: #222222;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #1E2129;
+  --md-primary-bg-color: #ffffff;
+}
+
+
+[data-md-color-scheme="slate"] .md-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+[data-md-color-scheme="default"] .md-header {
+  border-bottom: 1px solid rgba(27, 27, 27, 0.12);
+}
+
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #003cff;
+  --md-accent-fg-color: #3b63cf;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #003cff;
+  --md-accent-fg-color: #3b63cf;
+}
+
+
+
+.md-button--primary {
+  color: #888888 !important;
 }
