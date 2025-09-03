@@ -1,0 +1,21 @@
+.time {
+    color:red;
+    font-weight:bold;
+}
+
+/* Remove margens e aumenta o tamanho da logo */
+.md-header__button.md-logo {
+  margin: 0;
+  padding: 0;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3rem;  /* Aumente esse valor conforme necessário */
+  width: auto;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #1E2129              /* Cor do texto no header */
+  --md-primary-bg-color: #ffffff;              /* Cor de fundo do header */           
+}
