@@ -1,6 +1,6 @@
 # Elaboração
 
-Objetivo: Refinar os requisitos, resolver os riscos críticos e definir a arquitetura base.
+> Objetivo: Refinar os requisitos, resolver os riscos críticos e definir a arquitetura base.
 
 ## Principais atividades:
 

@@ -1,23 +1,15 @@
 ---
 repo_url: https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I
 site_author: Jonh Carvalho
-site_name: Resenha
-
+site_name: Quinto Elemento
 nav: 
   - Home: index.md
-  - Disciplina:
-      - Aulas: Disciplina/aulas.md
-      - Ambiente: Disciplina/ambiente.md
-      - Github: Disciplina/github.md
-      - Mkdocs: Disciplina/mkdocs.md
-      - CodeSpace: Disciplina/codespace.md
-      - Avaliações: Disciplina/avaliacoes.md
   - Iniciação: 
       - Index: Iniciacao/index.md
       - Pesquisa: Iniciacao/pesquisa.md
       - 5w2h: Iniciacao/5w2h.md
       - Design Thinking: Iniciacao/design_thinking.md
-      - Brainstorming: Iniciacao/brainstorm.md
+      - Brainstorming: Iniciacao/Brainstorm.md
       - Mapa Mental: Iniciacao/mapa_mental.md
       - Prototipagem Baixa Fidelidade: Iniciacao/prototipo_baixa_fidelidade.md
   - Elaboração:
@@ -32,10 +24,12 @@ nav:
       - Git Issues: Construcao/git_issues.md
       - GitHub Projects: Construcao/github_projects.md
       - CodeSpace: Construcao/codespace.md
-  - Integrantes:
-      - Index: Integrantes/index.md
-    
-  
+  - Sobre o Projeto:
+      - Index: Sobre o Projeto/index.md
+      - Integrantes: Sobre o Projeto/integrantes.md
+      - Repositório: Sobre o Projeto/repositorio.md
+      - Metodologia: Sobre o Projeto/metodologia.md
+      - Status: Sobre o Projeto/status.md
 
 extra_css:
   - css/extra.css
@@ -131,7 +125,7 @@ theme:
     - toc.follow
     - toc.integrate
   font:
-    text: Roboto flex
+    text: Noto Sans
     code: 
   icon:
     repo: fontawesome/brands/github

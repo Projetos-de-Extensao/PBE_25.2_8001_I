@@ -1,5 +1,5 @@
 ---
-id: brainstorm
+id: Brainstorm
 title: Brainstorm
 ---
  
@@ -15,115 +15,151 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
  
 ## Brainstorm
  
-## Versão 1.0
  
-## Perguntas
- 
-### 1. Qual o objetivo principal da aplicação?
- 
-<p align = "justify">
-<b>XXXX</b> - Deve ser uma plataforma onde qualquer pessoa possa...
-</p>
- 
-<b>ZZZ</b> - A plataforma deve fornece...
- 
-<b>YYYY</b> - O objetivo da aplicação é....
- 
-<b>WWWW</b> - O principal objetivo da aplicação é a...
- 
-<b>KKKK</b> - A plataforma deve gerenciar...
-</p>
- 
----
- 
-### 2. Como será o processo para cadastrar um novo cliente?
- 
-<p align = "justify">
-<b>XXXX</b> - O moderador deverá fazer login e...
- 
-<b>YYYY</b> - O cliente...
- 
-<b>WWWW</b> - Com o usuário logado, ele deverá...
 
-<b>ZZZZ</b> - O cliente...
- 
-<b>KKK</b> - O cliente...
- 
 ---
- 
-### 3. Como será a forma de adicionar produtos?
- 
-<p align = "justify">
-<b>XXXX</b> - O cliente ao cadastrar...
-</p>
- 
-<p align = "justify">
-<b>YYYYY</b> - O produto tem...
-</p>
- 
-<b>ZZZZ</b> - O produto....
- 
-<b>XXXX</b> - O produto....
 
- 
+## 1. Qual o objetivo principal da aplicação?
+
+<p align="justify">
+<b>XXXX</b> – Deve ser uma plataforma onde qualquer pessoa possa visualizar, cadastrar e interagir com produtos e eventos relacionados a torneios.
+</p>
+
+<p align="justify">
+<b>ZZZ</b> – A plataforma deve fornecer uma experiência intuitiva e centralizada para clientes e moderadores.
+</p>
+
+<p align="justify">
+<b>YYYY</b> – O objetivo da aplicação é facilitar a gestão de produtos e informações de torneios, promovendo maior engajamento dos usuários.
+</p>
+
+<p align="justify">
+<b>WWWW</b> – O principal objetivo da aplicação é a organização eficiente de dados e funcionalidades voltadas para eventos esportivos.
+</p>
+
+<p align="justify">
+<b>KKKK</b> – A plataforma deve gerenciar cadastros de clientes, produtos, torneios e permitir a visualização de informações relevantes.
+</p>
+
 ---
- 
-### 4. Outras perguntas pertinentes ao contexto
 
-<p align = "justify">
-<b>XXXX</b> - Com a localização...
- 
-<b>YYYY</b> - O cliente...
- 
-<b>ZZZ</b> - O cliente...
- 
+## 2. Como será o processo para cadastrar um novo cliente?
+
+<p align="justify">
+<b>XXXX</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
+</p>
+
+<p align="justify">
+<b>YYYY</b> – O cliente poderá se cadastrar por meio de um formulário com dados pessoais e preferências.
+</p>
+
+<p align="justify">
+<b>WWWW</b> – Com o usuário logado, ele deverá ter acesso a funcionalidades específicas como edição de perfil e histórico de atividades.
+</p>
+
+<p align="justify">
+<b>ZZZZ</b> – O cliente poderá visualizar produtos e eventos após o cadastro.
+</p>
+
+<p align="justify">
+<b>KKK</b> – O cliente receberá confirmação por e-mail e poderá acessar a plataforma com login e senha.
+</p>
+
 ---
- 
-### 5. "Outras perguntas pertinentes ao contexto", Como seria a forma de adicionar do cliente adicionar os produtos ?
-<p align = "justify">
-<b>XXX</b> - O cliente....
-</p>
- 
-### 6. Quais informações seriam interessante para o cliente?
-<p align = "justify">
-   <b>XXX</b> - Informações...
-   
-   <b>ZZZZ</b> - O cliente usuário poderá acessar informações...
 
-   <b>WWWWs</b> - O usuário poderá ver scouts de partidas do torneio, ver as regras dos torneios, locais e data das partidas.
-   
+## 3. Como será a forma de adicionar produtos?
+
+<p align="justify">
+<b>XXXX</b> – Ao cadastrar um produto, o cliente deverá preencher campos como nome, descrição, categoria, preço e imagens.
 </p>
- 
-### Requisitos elicitados
- 
-|ID|Descrição|
-|----|-------------|
-|BS01| O cliente...|
-|BS02| O cliente...|
-|BS03| O cliente...|
-|BS04| O cliente...|
-|BS05| O cliente...|
-|BS06| O cliente...|
-|BS07| O cliente...|
-|BS08| O cliente...|
-|BS09| O cliente...|
-|BS10| O produto...|
-|BS11| O produto...|
-|BS12| O produto...|
-|BS13| O produto...|
-|BS14| O produto...|
-|BS15| O produto...|
- 
+
+<p align="justify">
+<b>YYYYY</b> – O produto terá atributos como disponibilidade, variações (ex: tamanho, cor) e vínculo com eventos específicos.
+</p>
+
+<p align="justify">
+<b>ZZZZ</b> – O produto poderá ser editado posteriormente, caso haja necessidade de atualização.
+</p>
+
+<p align="justify">
+<b>XXXX</b> – O produto será exibido na vitrine da plataforma após validação do moderador.
+</p>
+
+---
+
+## 4. Outras perguntas pertinentes ao contexto
+
+<p align="justify">
+<b>XXXX</b> – Com a localização ativada, o sistema poderá sugerir produtos e eventos próximos ao cliente.
+</p>
+
+<p align="justify">
+<b>YYYY</b> – O cliente poderá configurar filtros personalizados para facilitar a navegação.
+</p>
+
+<p align="justify">
+<b>ZZZ</b> – O cliente poderá acessar suporte técnico e informações detalhadas sobre os eventos.
+</p>
+
+---
+
+## 5. Como seria a forma de o cliente adicionar produtos?
+
+<p align="justify">
+<b>XXX</b> – O cliente acessará um painel com formulário intuitivo para cadastrar produtos, com campos obrigatórios e opcionais.
+</p>
+
+---
+
+## 6. Quais informações seriam interessantes para o cliente?
+
+<p align="justify">
+<b>XXX</b> – Informações sobre produtos, avaliações de outros usuários, recomendações e histórico de compras.
+</p>
+
+<p align="justify">
+<b>ZZZZ</b> – O cliente poderá acessar dados sobre torneios, como regulamentos, locais, datas e participantes.
+</p>
+
+<p align="justify">
+<b>WWWWs</b> – O usuário poderá visualizar scouts de partidas, regras dos torneios, locais e datas das competições.
+</p>
+
+---
+
+## Requisitos Elicitados
+
+| ID   | Descrição |
+|------|-----------|
+| BS01 | O cliente poderá visualizar produtos disponíveis. |
+| BS02 | O cliente poderá cadastrar novos produtos. |
+| BS03 | O cliente poderá editar produtos cadastrados. |
+| BS04 | O cliente poderá configurar filtros personalizados. |
+| BS05 | O cliente poderá acessar informações sobre torneios. |
+| BS06 | O cliente poderá visualizar scouts e regulamentos. |
+| BS07 | O cliente poderá se cadastrar na plataforma. |
+| BS08 | O cliente poderá acessar suporte técnico. |
+| BS09 | O cliente poderá receber notificações personalizadas. |
+| BS10 | O produto terá atributos como preço e variações. |
+| BS11 | O produto poderá ser vinculado a eventos. |
+| BS12 | O produto será exibido após validação. |
+| BS13 | O produto poderá ser avaliado por outros usuários. |
+| BS14 | O produto poderá ser compartilhado. |
+| BS15 | O produto poderá ser filtrado por localização. |
+
+---
+
 ## Conclusão
-<p align = "justify">
-Através da aplicação da técnica, foi possível elicitar alguns dos primeiros requisitos do projeto.
+
+<p align="justify">
+Através da aplicação da técnica de elicitação, foi possível identificar os principais requisitos funcionais e não funcionais da aplicação, com foco na experiência do cliente e na eficiência da gestão de produtos e eventos.
 </p>
-## Referências Bibliográficas
- 
-> BARBOSA, S. D. J; DA SILVA, B. S. Interação humano-computador. Elsevier, 2010.
- 
- 
+
+---
+
+
 ## Autor(es)
-| Data | Versão | Descrição | Autor(es) |
-| -- | -- | -- | -- |
-| DD/MM/YYYY | 1.0 | Criação do documento | XXX XXXX, XXXX XXXX, YYY YYYY e ZZZ XXXX |
+
+| Data       | Versão | Descrição            | Autor(es)                          |
+|------------|--------|----------------------|------------------------------------|
+| DD/MM/YYYY | 1.0    | Criação do documento | XXX XXXX, XXXX XXXX, YYY YYYY, ZZZ XXXX |
