@@ -35,13 +35,13 @@
 }
 
 [data-md-color-scheme="default"] {
-  --md-typeset-a-color: #003cff;
-  --md-accent-fg-color: #3b63cf;
+  --md-typeset-a-color: #0f2c8b;
+  --md-accent-fg-color: #3c5fcf;
 }
 
 [data-md-color-scheme="slate"] {
-  --md-typeset-a-color: #003cff;
-  --md-accent-fg-color: #3b63cf;
+  --md-typeset-a-color: #0f2c8b;
+  --md-accent-fg-color: #ffbe31;
 }
 
 
