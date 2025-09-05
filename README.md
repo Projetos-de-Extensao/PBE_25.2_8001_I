@@ -1,4 +1,5 @@
-  ### [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=#003d80&size=40&center=true&vCenter=true&width=1000&lines=Bem-vindo+ao+repositório!;Projeto+Back-End+2025.2;Quinto+Elemento;Grupo+I+(turma+8001);)](https://git.io/typing-svg)
+### [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffffff&size=45&center=true&vCenter=true&pause=2000&width=1000&lines=Bem-vindo+ao+nosso+Github!+👋;Projeto+Back-End;Quinto+Elemento;)](https://git.io/typing-svg)
+
 
 <p align="center">
   <img src="https://img.shields.io/github/languages/count/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
