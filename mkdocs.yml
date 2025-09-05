@@ -6,12 +6,12 @@ nav:
   - Home: index.md
   - Iniciação: 
       - Index: Iniciacao/index.md
-      - Pesquisa: Iniciacao/pesquisa.md
       - 5w2h: Iniciacao/5w2h.md
       - Design Thinking: Iniciacao/design_thinking.md
       - Brainstorming: Iniciacao/Brainstorm.md
       - Mapa Mental: Iniciacao/mapa_mental.md
       - Prototipagem Baixa Fidelidade: Iniciacao/prototipo_baixa_fidelidade.md
+      - Pesquisa: Iniciacao/pesquisa.md
   - Elaboração:
       - Index: Elaboracao/index.md
       - Requisitos: Elaboracao/das.md
@@ -97,7 +97,7 @@ theme:
     # Tema claro
     - scheme: default
       primary: 
-      accent: deep purple
+      accent: 
       toggle:
         icon: material/weather-night   
         name: Mudar para modo escuro
@@ -105,7 +105,7 @@ theme:
     # Tema escuro
     - scheme: slate
       primary:
-      accent: purple
+      accent: 
       toggle:
         icon: material/weather-sunny   
         name: Mudar para modo claro

@@ -7,22 +7,31 @@ title: Design Thinking
 
 ### **1. Capa**
 
-- **Título do Projeto:** Projeto Back-end
-- **Nome da Equipe:** Quinto Elemento 
-- **Data:** 4/9/2025
-- **Logo da Organização:** <br> <img src="https://media.tenor.com/eSvQulvUm6wAAAAj/ralsei-deltarune.gif" alt="Descrição da imagem" width="100" />
+- ###  Projeto Back-nd
+> Turma 8001
+- ###  Quinto Elemento 
+> Grupo I
+- ###  2025.2
+> 04/9
+- ###  Logo da Organização
+<img src="https://media.tenor.com/eSvQulvUm6wAAAAj/ralsei-deltarune.gif" alt="Descrição da imagem" width="100" />
 
+---
 
 ### **2. Introdução**
 
-- **Contexto do Projeto**: A monitoria não tem muita visibilidade e não possui um sistema próprio. Isso dificulta muito o acesso dos alunos às informações sobre monitorias,atividades e arquivos do monitor, vagas disponíveis, datas de inscrição e critérios de seleção. Além disso, todo o processo é feito manualmente, o que gera sobrecarga para professores e coordenadores, aumenta o risco de erros e compromete a transparência. A ausência de uma plataforma impede o acompanhamento eficiente das atividades dos monitores e a avaliação do impacto da monitoria no desempenho acadêmico.
-- **Objetivo**: Cria uma plataforma própria da monitoria para:
-    - Divulga os dias da monitoria
-    - Arquivos e Atividades passadas pelos monitores
-    - Divulga vagas e processo seletivo para as monitorias
-- **Público-Alvo**: Alunos, Professores e Coordenadores
-- **Escopo**: A plataforma vai divulgar datas de monitorias, arquivos e atividades complementares dos monitores e processo seletivo.
+- **Contexto do Projeto**: A monitoria tem apresentado um crescimento significativo, com uma alta taxa de procura por parte dos alunos. No entanto, esse avanço não tem sido acompanhado por uma estrutura adequada. A ausência de um sistema próprio traz uma série de desafios que comprometem a eficiência, a organização e a confiabilidade do serviço, com tantos processos e informações sendo gerenciados de forma descentralizada, a operação acaba ficando vulnerável a erros e falhas de comunicação.
 
+- **Objetivo**: Cria uma plataforma própria da monitoria:
+    - Permita que alunos se candidatem às vagas disponíveis
+    - Gerencia processos seletivos e as entrevistas, como aprova ou reprovar o aluno
+    - Visualização de horários e temas das monitorias
+    - Área de materiais de apoio e conteúdos extras
+    - Sistema de feedback e acompanhamento sobre as monitorias
+
+
+- **Público-Alvo**: Alunos, Professores e Coordenadores
+- **Escopo**: Desenvolver um site próprio para a monitoria, com o intuito de centralizar processos, melhorar a comunicação, reduzir erros operacionais e oferecer uma experiência mais eficiente e profissional aos alunos e monitores.
 ---
 
 ### **3. Fases do Design Thinking**
@@ -34,62 +43,43 @@ title: Design Thinking
     - Coleta de depoimentos de alunos que nunca participaram das monitorias, buscando identificar barreiras de acesso, falta de informação ou desinteresse.
     - Entrevistas com professores e coordenadores para avaliar o impacto da monitoria no desempenho acadêmico dos alunos envolvidos e entender a perspectiva docente sobre o programa.
 - **Insights**
-!!! warning "Falta de divulgação estruturada"
-    - Muitos alunos não sabem que o programa de monitoria existe ou como participar.
 
-    - A comunicação depende de canais informais (grupos de WhatsApp, boca a boca, anuncios em corredores).
+    - **Alta demanda exige estrutura**
+        - A falta de estrutura pode comprometer a qualidade do serviço e a experiência dos alunos, como exemplo a comunicação depende de canais informais (grupos de WhatsApp, boca a boca).
 
-    - Mesmo estudantes motivados acabam não se inscrevendo por falta de informações claras sobre como funciona o processo seletivo, quais são os benefícios oferecidos e quais requisitos precisam cumprir.
+        - A tendência é que a demanda continue crescendo. Um modelo manual não acompanha esse ritmo. Um sistema digital permite escalar com controle, mantendo a qualidade e ampliando o alcance da monitoria.
 
-!!! danger "Gestão manual e descentralizada" 
+    - **Dados como ferramenta de melhoria**
 
-    - Professores e coordenadores usam forms, e-mails ou papel para organizar inscrições e atividades.
+        - Sem um sistema que registre e analise dados, perde-se a chance de entender padrões de engajamento, identificar dificuldades recorrentes e melhorar continuamente o serviço.
 
-    - A ausência de um sistema estruturado torna os processos excessivamente robustos e suscetíveis a falhas críticas.
+        - A ausência de um sistema também dificulta o acompanhamento do impacto da monitoria no desempenho acadêmico.
 
-    - A ausência de um sistema também dificulta o acompanhamento do impacto da monitoria no desempenho acadêmico.
+    
+    - **Oportunidade de profissionalização**
+
+        - A criação de um site próprio representa mais do que organização: é um passo rumo à profissionalização da monitoria. Uma plataforma bem estruturada transmite seriedade, facilita a gestão e abre espaço para inovação.
 
 
-!!! failure "Desvalorização da monitoria como prática pedagógica" 
 
-    - Sem visibilidade, o programa não é reconhecido como uma ferramenta de apoio ao ensino.
-
-    - Monitores não têm espaço para registrar suas atividades ou receber feedback.
-
-    - Isso faz com que professores e gestores não a considerem uma prioridade, dificultando investimentos em estrutura, formação e acompanhamento.
 
 - **Personas**
 
-!!! tip "Aluno"
-    - Nome: Julia
-    - Idade: 20 anos
-    - Curso: Engenharia
-    - Desafio: Não sabe como se inscrever na monitoria
-    - Frustração: Só ouve falar da monitoria por colegas, nunca por canais oficiais
-    - Objetivo: Participar do programa para aprender mais e ajudar outros alunos
-
-!!! note "Professor" 
-
-    - Nome: Clayton
-    - Idade: 54 anos
-
-    - Desafio: Organiza a monitoria com formulários e e-mails
-
-    - Frustração: Falta de sistema e pouca valorização pedagógica da monitoria
-
-    - Objetivo: Tornar o programa mais eficiente, visível e reconhecido
+     - Aluno: Quer se candidatar, mas não entende o processo atual.
+     - Monitor: Busca um sistema simples para iformar os seus modelos de entrevista e os resultados.
+      -  Professor: Precisa de um painel intuitivo para gerenciar candidaturas rapidamente e analisar dados.
 
 
 
 
 #### **3.2. Definição**
 
-- **Problema Central**: A monitoria acadêmica é subutilizada como ferramenta pedagógica por falta de estrutura e visibilidade, o que compromete sua eficácia e desestimula a participação de alunos e professores.
-- **Pontos de Vista (POV)**
-    * **Professor** : _Organizar tudo por e-mail e papel é improdutivo. Falta uma plataforma que facilite esse processo_
+- **Problema Central**: A tendência é que a demanda continue crescendo. Um modelo manual não acompanha esse ritmo.
+- **Pontos de Vista**
 
-    * **Alunos** : _Fui monitor, mas ninguém acompanhou meu trabalho. Parece que não tem importância para a faculdade._
+     - Alunos: 
 
+     - Professor:
 
 #### **3.3. Ideação**
 
