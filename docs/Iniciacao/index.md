@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---  
+
 # Iniciação
 
 > Objetivo: Definir o escopo inicial do projeto e alinhar os objetivos principais.

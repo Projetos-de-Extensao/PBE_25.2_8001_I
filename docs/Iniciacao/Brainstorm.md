@@ -1,28 +1,27 @@
 ---
 id: Brainstorm
 title: Brainstorm
+hide:
+  - toc
 ---
  
-## Introdução
 <p align = "justify">
 O brainstorm é uma técnica de elicitação de requisitos que consiste em reunir a equipe e discutir sobre diversos tópicos gerais do projeto apresentados no documento problema de negócio. No brainstorm o diálogo é incentivado e críticas são evitadas para permitir que todos colaborem com suas próprias ideias.
 </p>
  
+---
+
 ## Metodologia
 <p align = "justify">
 A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .... e terminou..., onde o XXXX XXXX foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
 </p>
  
-## Brainstorm
- 
- 
-
 ---
 
-## 1. Qual o objetivo principal da aplicação?
+## Qual o objetivo principal da aplicação?
 
 <p align="justify">
-<b>XXXX</b> – Deve ser uma plataforma onde qualquer pessoa possa visualizar, cadastrar e interagir com produtos e eventos relacionados a torneios.
+<b>Felipe Siaba</b> – A plataforma deve centralizar e automatizar o gerenciamento da monitoria acadêmica, permitindo que alunos se inscrevam, professores organizem processos seletivos e coordenadores acompanhem o desempenho (tudo em uma plataforma digital eficiente, acessível e segura.)
 </p>
 
 <p align="justify">
@@ -43,10 +42,10 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## 2. Como será o processo para cadastrar um novo cliente?
+## Como será o processo para cadastrar um novo cliente?
 
 <p align="justify">
-<b>XXXX</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
+<b>Felipe Siaba</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
 </p>
 
 <p align="justify">
@@ -67,7 +66,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## 3. Como será a forma de adicionar produtos?
+## Como será a forma de adicionar produtos?
 
 <p align="justify">
 <b>XXXX</b> – Ao cadastrar um produto, o cliente deverá preencher campos como nome, descrição, categoria, preço e imagens.
@@ -87,7 +86,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## 4. Outras perguntas pertinentes ao contexto
+## Outras perguntas pertinentes ao contexto
 
 <p align="justify">
 <b>XXXX</b> – Com a localização ativada, o sistema poderá sugerir produtos e eventos próximos ao cliente.
@@ -103,7 +102,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## 5. Como seria a forma de o cliente adicionar produtos?
+## Como seria a forma de o cliente adicionar produtos?
 
 <p align="justify">
 <b>XXX</b> – O cliente acessará um painel com formulário intuitivo para cadastrar produtos, com campos obrigatórios e opcionais.
@@ -111,7 +110,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## 6. Quais informações seriam interessantes para o cliente?
+## Quais informações seriam interessantes para o cliente?
 
 <p align="justify">
 <b>XXX</b> – Informações sobre produtos, avaliações de outros usuários, recomendações e histórico de compras.
@@ -155,6 +154,8 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 Através da aplicação da técnica de elicitação, foi possível identificar os principais requisitos funcionais e não funcionais da aplicação, com foco na experiência do cliente e na eficiência da gestão de produtos e eventos.
 </p>
 
+
+ 
 ---
 
 
@@ -162,4 +163,4 @@ Através da aplicação da técnica de elicitação, foi possível identificar o
 
 | Data       | Versão | Descrição            | Autor(es)                          |
 |------------|--------|----------------------|------------------------------------|
-| DD/MM/YYYY | 1.0    | Criação do documento | XXX XXXX, XXXX XXXX, YYY YYYY, ZZZ XXXX |
+| 08/09/2025 | 1.0    | Criação do documento | Felipe Siaba |

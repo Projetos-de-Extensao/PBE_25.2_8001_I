@@ -4,9 +4,8 @@ title: Documento de Arquitetura
 ---
 # Documento de Arquitetura de Software (DAS)
 
-# "Nome do Projeto"
 
-# Introdução
+## Introdução
 
 ## Proposta
 

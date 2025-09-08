@@ -11,28 +11,22 @@
 
 .md-header__button.md-logo img,
 .md-header__button.md-logo svg {
-  height: 3.5rem;
+  height: 2.5rem;
   width: auto;
 }
 
 [data-md-color-scheme="default"] {
-  --md-primary-fg-color: #ffffff;
+  --md-primary-fg-color: 	#cccccc	;
   --md-primary-bg-color: #222222;
 }
 
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #1E2129;
+  --md-primary-fg-color: #14151a;
   --md-primary-bg-color: #ffffff;
 }
 
 
-[data-md-color-scheme="slate"] .md-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
 
-[data-md-color-scheme="default"] .md-header {
-  border-bottom: 1px solid rgba(27, 27, 27, 0.12);
-}
 
 [data-md-color-scheme="default"] {
   --md-typeset-a-color: #0f2c8b;
@@ -40,8 +34,8 @@
 }
 
 [data-md-color-scheme="slate"] {
-  --md-typeset-a-color: #0f2c8b;
-  --md-accent-fg-color: #ffbe31;
+  --md-typeset-a-color: #2141aa;
+  --md-accent-fg-color: #2f5cf0;
 }
 
 
@@ -49,3 +43,4 @@
 .md-button--primary {
   color: #888888 !important;
 }
+
