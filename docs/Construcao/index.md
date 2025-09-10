@@ -1,3 +1,9 @@
+---
+hide:
+  
+  - toc
+--- 
+
 # Construção
 
 > Objetivo: Construir o sistema com base na arquitetura definida.

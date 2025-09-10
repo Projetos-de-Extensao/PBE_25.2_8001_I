@@ -1,5 +1,7 @@
 ---
-repo_url: https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I
+
+repo_url: https://medium.com/@NathanCarnegie/the-worst-programming-language-ever-java-3b7d62499b39
+repo_name: PBE_25.2_8001_I
 site_author: Jonh Carvalho
 site_name: Quinto Elemento
 nav: 
@@ -30,7 +32,6 @@ nav:
       - Integrantes: Sobre o Projeto/integrantes.md
       - Repositório: Sobre o Projeto/repositorio.md
       - Metodologia: Sobre o Projeto/metodologia.md
-      - Status: Sobre o Projeto/status.md
 
 extra_css:
   - css/extra.css
@@ -96,6 +97,7 @@ plugins:
   - minify:
       minify_html: true
   - search
+  
 
   
 
@@ -110,7 +112,7 @@ theme:
       primary: 
       accent: 
       toggle:
-        icon: material/weather-night   
+        icon: material/weather-night
         name: Mudar para modo escuro
 
     # Tema escuro
@@ -118,7 +120,7 @@ theme:
       primary:
       accent: 
       toggle:
-        icon: material/weather-sunny   
+        icon: material/white-balance-sunny   
         name: Mudar para modo claro
 
 
@@ -140,10 +142,13 @@ theme:
     - search.suggest
     - toc.follow
   font:
-    text: Noto Sans
+    text: Open Sans
     code: 
   icon:
-    repo: fontawesome/brands/github
+    repo: material/cat
     logo: simple/react
-    favicon: simple/react`
+    favicon: simple/react
+  
 
+   
+    

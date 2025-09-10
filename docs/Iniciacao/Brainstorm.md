@@ -21,31 +21,32 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ## Qual o objetivo principal da aplicação?
 
 <p align="justify">
-<b>Felipe Siaba</b> – A plataforma deve centralizar e automatizar o gerenciamento da monitoria acadêmica, permitindo que alunos se inscrevam, professores organizem processos seletivos e coordenadores acompanhem o desempenho (tudo em uma plataforma digital eficiente, acessível e segura.)
+<b>XXXX</b> – Deve ser uma plataforma onde qualquer pessoa possa...
 </p>
 
 <p align="justify">
-<b>ZZZ</b> – A plataforma deve fornecer uma experiência intuitiva e centralizada para clientes e moderadores.
+<b>YYYY</b> – A plataforma deve fornece...
 </p>
 
 <p align="justify">
-<b>YYYY</b> – O objetivo da aplicação é facilitar a gestão de produtos e informações de torneios, promovendo maior engajamento dos usuários.
+<b>WWWW</b> – O objetivo da aplicação é....
 </p>
 
 <p align="justify">
-<b>WWWW</b> – O principal objetivo da aplicação é a organização eficiente de dados e funcionalidades voltadas para eventos esportivos.
+<b>ZZZZ</b> – O principal objetivo da aplicação é a...
 </p>
 
 <p align="justify">
-<b>KKKK</b> – A plataforma deve gerenciar cadastros de clientes, produtos, torneios e permitir a visualização de informações relevantes.
-</p>
+<b>KKK</b> – A plataforma deve gerenciar...
 
+
+</p>
 ---
 
 ## Como será o processo para cadastrar um novo cliente?
 
 <p align="justify">
-<b>Felipe Siaba</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
+<b>XXXX</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
 </p>
 
 <p align="justify">
@@ -66,7 +67,7 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 ---
 
-## Como será a forma de adicionar produtos?
+## Como poderá cadastrar uma nova disciplina ou abrir uma vaga de monitoria?
 
 <p align="justify">
 <b>XXXX</b> – Ao cadastrar um produto, o cliente deverá preencher campos como nome, descrição, categoria, preço e imagens.
@@ -84,7 +85,51 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 <b>XXXX</b> – O produto será exibido na vitrine da plataforma após validação do moderador.
 </p>
 
+
 ---
+
+## Como seria a forma de o professor adicionar um novo monitor?
+
+<p align="justify">
+<b>XXX</b> – O cliente acessará um painel com formulário intuitivo para cadastrar produtos, com campos obrigatórios e opcionais.
+</p>
+
+---
+
+## Como será o sistema de feedback entre alunos e monitores?
+
+<p align="justify">
+<b>YYYYY</b> – O produto terá atributos como disponibilidade, variações (ex: tamanho, cor) e vínculo com eventos específicos.
+</p>
+
+<p align="justify">
+<b>ZZZZ</b> – O produto poderá ser editado posteriormente, caso haja necessidade de atualização.
+</p>
+
+<p align="justify">
+<b>XXXX</b> – O produto será exibido na vitrine da plataforma após validação do moderador.
+</p>
+
+---
+
+
+## Quais informações seriam interessantes para os usuarios?
+
+<p align="justify">
+<b>XXX</b> – Informações sobre produtos, avaliações de outros usuários, recomendações e histórico de compras.
+</p>
+
+<p align="justify">
+<b>ZZZZ</b> – O cliente poderá acessar dados sobre torneios, como regulamentos, locais, datas e participantes.
+</p>
+
+<p align="justify">
+<b>WWWWs</b> – O usuário poderá visualizar scouts de partidas, regras dos torneios, locais e datas das competições.
+</p>
+
+---
+
+
 
 ## Outras perguntas pertinentes ao contexto
 
@@ -98,30 +143,6 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 <p align="justify">
 <b>ZZZ</b> – O cliente poderá acessar suporte técnico e informações detalhadas sobre os eventos.
-</p>
-
----
-
-## Como seria a forma de o cliente adicionar produtos?
-
-<p align="justify">
-<b>XXX</b> – O cliente acessará um painel com formulário intuitivo para cadastrar produtos, com campos obrigatórios e opcionais.
-</p>
-
----
-
-## Quais informações seriam interessantes para o cliente?
-
-<p align="justify">
-<b>XXX</b> – Informações sobre produtos, avaliações de outros usuários, recomendações e histórico de compras.
-</p>
-
-<p align="justify">
-<b>ZZZZ</b> – O cliente poderá acessar dados sobre torneios, como regulamentos, locais, datas e participantes.
-</p>
-
-<p align="justify">
-<b>WWWWs</b> – O usuário poderá visualizar scouts de partidas, regras dos torneios, locais e datas das competições.
 </p>
 
 ---
@@ -163,4 +184,4 @@ Através da aplicação da técnica de elicitação, foi possível identificar o
 
 | Data       | Versão | Descrição            | Autor(es)                          |
 |------------|--------|----------------------|------------------------------------|
-| 08/09/2025 | 1.0    | Criação do documento | Felipe Siaba |
+| 10/09/2025 | 1.0    | Criação do documento e formatacao do documento | Felipe Siaba |

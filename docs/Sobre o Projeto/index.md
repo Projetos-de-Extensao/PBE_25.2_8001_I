@@ -3,9 +3,9 @@ hide:
   - toc
 ---
 
-# Sobre o Projeto
+#  Sobre o Projeto
 
-> CASAS
+> :material-home: 
 
 O projeto nasce da necessidade de modernizar e estruturar o sistema de monitoria acadêmica, que atualmente enfrenta limitações por conta da ausência de uma plataforma própria. Apesar da alta procura por parte dos alunos, a gestão descentralizada em canais informais dificulta a organização, aumenta a chance de falhas de comunicação e compromete a qualidade do serviço oferecido.
 

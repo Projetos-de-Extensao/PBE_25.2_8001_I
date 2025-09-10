@@ -30,12 +30,12 @@
 
 [data-md-color-scheme="default"] {
   --md-typeset-a-color: #0f2c8b;
-  --md-accent-fg-color: #3c5fcf;
+  --md-accent-fg-color: #788dd1;
 }
 
 [data-md-color-scheme="slate"] {
-  --md-typeset-a-color: #2141aa;
-  --md-accent-fg-color: #2f5cf0;
+  --md-typeset-a-color: #0f2c8b;
+  --md-accent-fg-color: #384f9c;
 }
 
 
@@ -44,3 +44,14 @@
   color: #888888 !important;
 }
 
+.md-button--primary {
+  background-color: #4D5C74 !important; /* vermelho */
+  color: white !important;
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: background-color 2s ease;
+}
+
+.md-button--primary:hover {
+  background-color: #7c95bd !important;
+}

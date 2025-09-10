@@ -46,7 +46,7 @@ Cria uma plataforma própria da monitoria:
 
 **Público-Alvo**
 
-Alunos, Professores e Coordenadores
+Alunos, Monitores, Professores e Coordenadores
 
 
 **Escopo** 
@@ -89,7 +89,7 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
     
 
-    Idade: 20 anos
+    Idade: 19 anos
 
     Curso: Engenharia de Computação
 
@@ -101,6 +101,23 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
     Necessidades: Plataforma intuitiva, com horários visíveis, opção de feedback e acesso a materiais extras
 
+=== "Monitor"
+    <span style="font-size:30px;">João Victor</span> 
+
+    
+
+    Idade: 21 anos
+
+    Curso: Engenharia Elétrica
+
+    Perfil: Proativo, comunicativo, gosta de ensinar e tem facilidade com tecnologia
+
+    Objetivos: Ser monitor da disciplina de Cálculo III para reforçar seu conhecimento, ajudar colegas e acumular experiência para o mestrado
+
+    Frustrações: Conciliar a monitoria com os estudos e estágios, lidar com burocracia e falta de feedback estruturado
+
+
+    Necessidades: Uma plataforma centralizada, com horários visíveis.
 === "Coordenador"
     <span style="font-size:30px;">Helena</span> 
 
@@ -135,6 +152,8 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
     Frustrações: Processos manuais, falta de histórico dos candidatos, dificuldade em manter controle
 
     Necessidades: Sistema de gestão de candidaturas, histórico de desempenho, comunicação direta com monitores
+
+
     
 
 ---
@@ -150,13 +169,15 @@ Além disso, a ausência de automação dificulta a escalabilidade do projeto, r
 
 Portanto, a manutenção de um fluxo manual coloca em risco a eficiência operacional e pode comprometer a sustentabilidade do projeto a longo prazo.
 
-**Pontos de Vista**
+**Pontos de Vista** / *POV*
 
 <div class="grid cards" markdown>
 
 -  __Aluno:__ Quero encontrar uma monitoria que me ajude com aquela matéria difícil, mas é tudo tão desorganizado. Não sei onde ver os horários, quem são os monitores, nem como me inscrever. Se houvesse um site claro, com tudo centralizado, eu conseguiria participar mais e aproveitar melhor esse apoio
+- __Monitor:__ Ser monitor agora é mais leve. Me sinto mais valorizado, mais organizado, e com mais tempo pra focar no que importa: ajudar meus colegas e crescer como futuro professor ou pesquisador.
 -  __Professor:__ A monitoria é essencial para reforçar o aprendizado dos alunos, mas hoje tudo depende de planilhas e mensagens soltas. Eu preciso de uma plataforma que me permita acompanhar os candidatos, aprovar entrevistas e ver como os alunos estão evoluindo — sem perder tempo com burocracia
 -  __Coordenador:__ A demanda por monitoria cresce a cada semestre, mas sem um sistema, fica impossível manter controle. Preciso de uma solução que centralize os dados, gere relatórios, facilite a comunicação entre todos os envolvidos e profissionalize o programa. A sustentabilidade do projeto depende disso.
+
 
 </div>
 
@@ -164,33 +185,18 @@ Portanto, a manutenção de um fluxo manual coloca em risco a eficiência operac
 
 **Brainstorming**
 
-
-- <b>Felipe Siaba</b> – A plataforma deve centralizar e automatizar o gerenciamento da monitoria acadêmica, permitindo que alunos se inscrevam, professores organizem processos seletivos e coordenadores acompanhem o desempenho
-</p>
-
-
-
-- <b>ZZZ</b> –
-
-
-
-- <b>YYYY</b> – 
-
-
-
-- <b>WWWW</b> –
-
-
-- <b>KKKK</b> – 
+A plataforma tem como objetivo principal digitalizar e integrar todas as etapas da monitoria acadêmica, desde a inscrição de alunos até o acompanhamento de desempenho pelos coordenadores. Ela será acessível via web e dispositivos móveis, com interfaces personalizadas para cada perfil de usuário.
 
 
 **Seleção de Ideias**
 
-Critérios utilizados para escolher as melhores ideias.
+...
 
 **Ideias Selecionadas**
 
-Descrição das ideias que serão prototipadas.
+...
+
+---
 
 ###  Prototipagem
 
@@ -206,19 +212,38 @@ Recursos necessários para criar o protótipo.
 
 Como o protótipo foi testado.
 
+---
+
 ###  Teste
 
-- **Feedback dos Usuários**: O que os usuários acharam do protótipo.
-- **Ajustes Realizados**: Mudanças feitas com base no feedback.
-- **Resultados Finais**: Descrição da solução final.
+**Feedback dos Usuários**
+
+O que os usuários acharam do protótipo.
+
+**Ajustes Realizados** 
+
+Mudanças feitas com base no feedback.
+
+**Resultados Finais** 
+
+Descrição da solução final.
 
 ---
 
 ##  Conclusão
 
-- **Resultados Obtidos**: O que foi alcançado com o projeto.
-- **Próximos Passos**: O que ainda precisa ser feito ou implementado.
-- **Aprendizados**: Lições aprendidas durante o processo.
+**Resultados Obtidos** 
+
+O que foi alcançado com o projeto.
+
+**Próximos Passos** 
+
+O que ainda precisa ser feito ou implementado.
+
+
+**Aprendizados**
+
+Lições aprendidas durante o processo.
 
 ---
 
