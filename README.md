@@ -13,7 +13,7 @@
 
 ### 🧑‍💻 Equipe
 
- [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/felipegoiabah.png" width="60"/>](https://github.com/felipegoiabah)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) 
+ [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/felipegoiabah.png" width="60"/>](https://github.com/felipegoiabah)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) [<img src="https://github.com/LFCMerino.png" width="60"/>](https://github.com/LFCMerino) 
 
 
 

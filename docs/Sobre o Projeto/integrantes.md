@@ -29,6 +29,12 @@
 
     <img src="https://github.com/vinimarinhooo.png?size=60" width="60"/>
 
+-   :material-github:{ .lg .middle } __Luiz Fabiano__
+
+    ---
+
+    <img src="https://github.com/LFCMerino.png?size=60" width="60" />
+
 
 
 </div>
