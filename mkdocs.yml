@@ -7,22 +7,19 @@ site_name: Quinto Elemento
 nav: 
   - Home: index.md
   - Iniciação: 
-      - Pesquisa: Iniciacao/pesquisa.md
       - Index: Iniciacao/index.md
+      - Pesquisa: Iniciacao/pesquisa.md
       - Design Thinking: Iniciacao/design_thinking.md
       - Brainstorming: Iniciacao/Brainstorm.md
       - 5w2h: Iniciacao/5w2h.md
       - Mapa Mental: Iniciacao/mapa_mental.md
-      - Metodologia Ágil: Iniciacao/metodologia.md
-      - Prototipagem Baixa Fidelidade: Iniciacao/prototipo_baixa_fidelidade.md
-
   - Elaboração:
       - Index: Elaboracao/index.md
       - Requisitos: Elaboracao/das.md
       - Casos de Uso: Elaboracao/casos_de_uso.md
       - Diagrama de Classes: Elaboracao/diagrama_de_classes.md
       - Diagrama de Sequência: Elaboracao/diagrama_de_sequencia.md
-      - Protótipo de Alta Fidelidade: Elaboracao/prototipo_alta_fidelidade.md
+      - Prototipagem Baixa Fidelidade: Elaboracao/prototipo_baixa_fidelidade.md
   - Construção:
       - Index: Construcao/index.md
       - Git Issues: Construcao/git_issues.md

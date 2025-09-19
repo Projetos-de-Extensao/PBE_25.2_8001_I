@@ -37,10 +37,12 @@ A monitoria tem apresentado um crescimento significativo, com uma alta taxa de p
 
 Cria uma plataforma própria da monitoria:
 
-- Permita que alunos se candidatem às vagas disponíveis
-- Gerencia processos seletivos e as entrevistas, como aprova ou reprovar o aluno
-- Visualização de horários e temas das monitorias
-- Área de materiais de apoio e conteúdos extras
+- Portal de Vagas: Interface para que coordenadores publiquem as vagas de monitoria, especificando a disciplina, os pré-requisitos, as responsabilidades e o número de vagas.
+- Cadastro de Candidatos: Permite que os alunos interessados criem um perfil, anexem documentos relevantes (histórico escolar, currículo, carta de motivação) e se candidatem às vagas disponíveis.
+- Seleção e Comunicação: Ferramentas para que os professores avaliem os candidatos, registrem suas avaliações e comuniquem o resultado (aprovação, lista de espera, reprovação) de forma padronizada.
+- Geração de Relatórios Básicos: Emissão de listas de candidatos por vaga, monitores selecionados por disciplina e departamento.
+- Registro de Frequência e Horas: Ferramenta para que o monitor registre suas horas trabalhadas e o professor supervisor as valide. Pode incluir a opção de registro por aplicativo móvel.
+- Dashboard de Gestão: Painel de controle para o departamento com visão geral do número de monitores por curso, horas trabalhadas, status dos pagamentos e avaliações pendentes.
 - Sistema de feedback e acompanhamento sobre as monitorias
 
 
@@ -67,18 +69,15 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
 **Insights**
 
-=== "Alta demanda exige estrutura"
-    - A falta de estrutura pode comprometer a qualidade do serviço e a experiência dos alunos, como exemplo a comunicação depende de canais informais (grupos de WhatsApp, boca a boca).
+=== "Estrutura e Transparência para Escalar com Qualidade"
+    A criação de um portal de vagas e um sistema de candidatura estruturado elimina a informalidade e democratiza o acesso à monitoria. Com critérios claros, documentos anexados e comunicação padronizada, o processo seletivo se torna mais justo, transparente e escalável — permitindo que a alta demanda seja atendida com organização e eficiência.
 
-    - A tendência é que a demanda continue crescendo. Um modelo manual não acompanha esse ritmo. Um sistema digital permite escalar com controle, mantendo a qualidade e ampliando o alcance da monitoria.
+=== "Gestão Inteligente com Dados e Automação"
+    Ferramentas como o registro de frequência, dashboards administrativos e geração de relatórios transformam a monitoria em um programa gerenciável e mensurável. Coordenadores e professores passam a tomar decisões com base em dados reais, reduzindo erros operacionais e fortalecendo a sustentabilidade do projeto a longo prazo.
+    
 
-=== "Dados como ferramenta de melhoria"
-    - Sem um sistema que registre e analise dados, perde-se a chance de entender padrões de engajamento, identificar dificuldades recorrentes e melhorar continuamente o serviço.
-
-    - A ausência de um sistema também dificulta o acompanhamento do impacto da monitoria no desempenho acadêmico.
-
-=== "Oportunidade de profissionalização"
-    - A criação de um site próprio representa mais do que organização: é um passo rumo à profissionalização da monitoria. Uma plataforma bem estruturada transmite seriedade, facilita a gestão e abre espaço para inovação.
+=== "Valorização da Experiência de Alunos e Monitores"
+    Ao integrar feedbacks, acompanhamento de desempenho e acesso a materiais de apoio, a plataforma promove uma experiência mais rica e profissional para todos os envolvidos. Monitores se sentem reconhecidos, alunos têm apoio acessível e os professores ganham agilidade - criando um ciclo virtuoso de aprendizado e colaboração.
 
 
 
@@ -95,11 +94,11 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
     Perfil: Curioso, esforçado, mas com dificuldades em algumas disciplinas técnicas
 
-    Objetivos: Melhorar o desempenho acadêmico, encontrar apoio acessível e confiável
+    Objetivos: Contribuir com colegas, reforçar seu próprio aprendizado e enriquecer o currículo para futuras oportunidades acadêmicas ou profissionais
 
-    Frustrações: Falta de informações claras sobre monitorias, dificuldade em se inscrever, comunicação confusa
+    Frustrações: Dificuldade em encontrar os critérios de seleção e se candidatar às vagas disponíveis
 
-    Necessidades: Plataforma intuitiva, com horários visíveis, opção de feedback e acesso a materiais extras
+    Necessidades: Portal de vagas com informações completas e atualizadas
 
 === "Monitor"
     <span style="font-size:30px;">João Victor</span> 
@@ -114,10 +113,11 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
     Objetivos: Ser monitor da disciplina de Cálculo III para reforçar seu conhecimento, ajudar colegas e acumular experiência para o mestrado
 
-    Frustrações: Conciliar a monitoria com os estudos e estágios, lidar com burocracia e falta de feedback estruturado
+    Frustrações: Dificuldade em conciliar monitoria com estudos e estágio, burocracia excessiva, falta de retorno sobre seu desempenho
 
 
-    Necessidades: Uma plataforma centralizada, com horários visíveis.
+    Necessidades: Uma plataforma centralizada registrar horas e frequência e feedbacks dos alunos e professores
+
 === "Coordenador"
     <span style="font-size:30px;">Helena</span> 
 
@@ -163,17 +163,15 @@ Desenvolver um site próprio para a monitoria, com o intuito de centralizar proc
 
 **Problema Central**
 
-A tendência é que a demanda continue crescendo. Um modelo manual não acompanha esse ritmo, pois torna os processos mais lentos, sujeitos a falhas humanas e difíceis de padronizar. Essa limitação gera gargalos na execução das tarefas, compromete a qualidade dos resultados e aumenta a sobrecarga da equipe.
+O crescimento contínuo da demanda por monitorias nas instituições de ensino tem exposto a fragilidade de um modelo operacional manual, descentralizado e pouco padronizado. A ausência de uma plataforma própria compromete a transparência dos processos seletivos, dificulta a comunicação entre alunos, professores e coordenadores, e torna a gestão das atividades dos monitores ineficiente e suscetível a erros.
 
-Além disso, a ausência de automação dificulta a escalabilidade do projeto, reduz a agilidade para responder às mudanças e prejudica a tomada de decisões estratégicas, já que muitas informações ficam dispersas ou desatualizadas.
-
-Portanto, a manutenção de um fluxo manual coloca em risco a eficiência operacional e pode comprometer a sustentabilidade do projeto a longo prazo.
+Sem um sistema digital integrado, tarefas como publicação de vagas, candidatura, avaliação, registro de horas e acompanhamento de desempenho são realizadas por meio de planilhas, e-mails e mensagens informais, gerando sobrecarga administrativa, baixa rastreabilidade e perda de dados importantes. Essa limitação impede a escalabilidade do programa, reduz a qualidade da experiência dos envolvidos e compromete a profissionalização da monitoria como ferramenta pedagógica.
 
 **Pontos de Vista** / *POV*
 
 <div class="grid cards" markdown>
 
--  __Aluno:__ Quero encontrar uma monitoria que me ajude com aquela matéria difícil, mas é tudo tão desorganizado. Não sei onde ver os horários, quem são os monitores, nem como me inscrever. Se houvesse um site claro, com tudo centralizado, eu conseguiria participar mais e aproveitar melhor esse apoio
+-  __Aluno:__ Quero muito ser monitor da disciplina que eu domino, mas o processo é confuso demais. Não sei onde encontrar as vagas, quais são os critérios, nem como enviar meus documentos. Se houvesse uma plataforma clara, com tudo centralizado — desde a inscrição até o resultado
 - __Monitor:__ Ser monitor agora é mais leve. Me sinto mais valorizado, mais organizado, e com mais tempo pra focar no que importa: ajudar meus colegas e crescer como futuro professor ou pesquisador.
 -  __Professor:__ A monitoria é essencial para reforçar o aprendizado dos alunos, mas hoje tudo depende de planilhas e mensagens soltas. Eu preciso de uma plataforma que me permita acompanhar os candidatos, aprovar entrevistas e ver como os alunos estão evoluindo — sem perder tempo com burocracia
 -  __Coordenador:__ A demanda por monitoria cresce a cada semestre, mas sem um sistema, fica impossível manter controle. Preciso de uma solução que centralize os dados, gere relatórios, facilite a comunicação entre todos os envolvidos e profissionalize o programa. A sustentabilidade do projeto depende disso.
@@ -185,7 +183,7 @@ Portanto, a manutenção de um fluxo manual coloca em risco a eficiência operac
 
 **Brainstorming**
 
-A plataforma tem como objetivo principal digitalizar e integrar todas as etapas da monitoria acadêmica, desde a inscrição de alunos até o acompanhamento de desempenho pelos coordenadores. Ela será acessível via web e dispositivos móveis, com interfaces personalizadas para cada perfil de usuário.
+...
 
 
 **Seleção de Ideias**
@@ -212,10 +210,6 @@ A plataforma será um sistema web responsivo, com acesso também por dispositivo
 
     - 📝 Candidatura rápida com preenchimento de dados e justificativa
 
-    - 📅 Agenda de monitorias com filtros por curso, matéria e dia da semana
-
-    - 📚 Área de materiais de apoio e conteúdos extras organizados por disciplina
-
     - ⭐ Sistema de feedback pós-monitoria (avaliação do monitor, conteúdo e estrutura)
 
     - 🔔 Notificações sobre novas vagas, alterações de horário e lembretes de sessões
@@ -223,10 +217,6 @@ A plataforma será um sistema web responsivo, com acesso também por dispositivo
 === " Interface do Monitor"
 
     - 📌 Gerenciamento de horários e temas das monitorias
-
-    - ✅ Aprovação ou reprovação de candidatos (com histórico e justificativa)
-
-    - 📤 Upload de materiais de apoio e conteúdos extras
 
     - 📈 Acompanhamento dos feedbacks recebidos
 

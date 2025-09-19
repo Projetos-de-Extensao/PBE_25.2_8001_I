@@ -50,5 +50,5 @@ A partir da elaboração do protótipo foi possível ter uma noção inicial da 
 
 | Data     | Versão | Descrição                            | Autor(es)                                                                            |
 | -------- | ------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| 17/09/25 | 1.0     | Criação do documento                 | Felipe Siaba                                               |
+| 17/09/25 | 1.0     | Criação do documento e Figma         | Felipe Siaba          |                                     |
 
