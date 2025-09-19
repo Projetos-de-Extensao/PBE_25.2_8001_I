@@ -11,17 +11,17 @@
 
 .md-header__button.md-logo img,
 .md-header__button.md-logo svg {
-  height: 2.5rem;
+  height: 2.0rem;
   width: auto;
 }
 
 [data-md-color-scheme="default"] {
-  --md-primary-fg-color: 	#cccccc	;
+  --md-primary-fg-color: 	#cfcfcf	;
   --md-primary-bg-color: #222222;
 }
 
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #14151a;
+  --md-primary-fg-color: #181a20;
   --md-primary-bg-color: #ffffff;
 }
 
@@ -40,18 +40,3 @@
 
 
 
-.md-button--primary {
-  color: #888888 !important;
-}
-
-.md-button--primary {
-  background-color: #4D5C74 !important; /* vermelho */
-  color: white !important;
-  border-radius: 6px;
-  padding: 8px 12px;
-  transition: background-color 2s ease;
-}
-
-.md-button--primary:hover {
-  background-color: #7c95bd !important;
-}
