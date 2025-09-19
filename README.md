@@ -21,7 +21,7 @@
 ---
 
 ### 📌 Sobre 
-Descreva o seu projeto em linhas gerais. 
+O projeto tem o objetivo de criar, modernizar e estruturar o sistema de monitoria acadêmica, que atualmente enfrenta limitações por conta da falta de uma plataforma própria. 
 
 ---
 

@@ -1,12 +1,13 @@
 ---
 
-repo_url: https://medium.com/@NathanCarnegie/the-worst-programming-language-ever-java-3b7d62499b39
+repo_url: https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I
 repo_name: PBE_25.2_8001_I
 site_author: Jonh Carvalho
 site_name: Quinto Elemento
 nav: 
   - Home: index.md
   - Iniciação: 
+      - Pesquisa: Iniciacao/pesquisa.md
       - Index: Iniciacao/index.md
       - Design Thinking: Iniciacao/design_thinking.md
       - Brainstorming: Iniciacao/Brainstorm.md
@@ -14,7 +15,7 @@ nav:
       - Mapa Mental: Iniciacao/mapa_mental.md
       - Metodologia Ágil: Iniciacao/metodologia.md
       - Prototipagem Baixa Fidelidade: Iniciacao/prototipo_baixa_fidelidade.md
-      - Pesquisa: Iniciacao/pesquisa.md
+
   - Elaboração:
       - Index: Elaboracao/index.md
       - Requisitos: Elaboracao/das.md
@@ -30,8 +31,7 @@ nav:
   - Sobre o Projeto:
       - Index: Sobre o Projeto/index.md
       - Integrantes: Sobre o Projeto/integrantes.md
-      - Repositório: Sobre o Projeto/repositorio.md
-      - Metodologia: Sobre o Projeto/metodologia.md
+      
 
 extra_css:
   - css/extra.css

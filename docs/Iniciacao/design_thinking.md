@@ -22,7 +22,7 @@ O Design Thinking (DT) é uma abordagem para a resolução de problemas, centrad
 
 <span style="font-size:20px;">2025.2</span>  
 
-<img src="https://media.tenor.com/eSvQulvUm6wAAAAj/ralsei-deltarune.gif" alt="Descrição da imagem" width="100" />
+<img src="https://i.pinimg.com/originals/36/80/48/3680488ab71368a1fea7a7fc2bbbd8f5.gif" alt="Descrição da imagem" width="150" />
 
 
 ---
@@ -200,50 +200,92 @@ A plataforma tem como objetivo principal digitalizar e integrar todas as etapas 
 
 ###  Prototipagem
 
-**Descrição do Protótipo**
 
-Como a ideia foi transformada em um protótipo (esboço, modelo físico, digital, etc.)
+
+**🎯 Visão Geral**
+
+A plataforma será um sistema web responsivo, com acesso também por dispositivos móveis, voltado para centralizar e profissionalizar o programa de monitoria acadêmica. Ela atenderá às necessidades específicas de alunos, monitores, professores e coordenadores, oferecendo uma experiência intuitiva, organizada e eficiente.
+
+=== " Interface do Aluno"
+
+    - 📋 Visualização de vagas disponíveis por disciplina, horário e monitor responsável
+
+    - 📝 Candidatura rápida com preenchimento de dados e justificativa
+
+    - 📅 Agenda de monitorias com filtros por curso, matéria e dia da semana
+
+    - 📚 Área de materiais de apoio e conteúdos extras organizados por disciplina
+
+    - ⭐ Sistema de feedback pós-monitoria (avaliação do monitor, conteúdo e estrutura)
+
+    - 🔔 Notificações sobre novas vagas, alterações de horário e lembretes de sessões
+
+=== " Interface do Monitor"
+
+    - 📌 Gerenciamento de horários e temas das monitorias
+
+    - ✅ Aprovação ou reprovação de candidatos (com histórico e justificativa)
+
+    - 📤 Upload de materiais de apoio e conteúdos extras
+
+    - 📈 Acompanhamento dos feedbacks recebidos
+
+    - 📊 Relatórios de presença e engajamento dos alunos
+
+=== "  Interface do Professor/Coordenador"
+
+    - 🧠 Visão estratégica do programa: número de monitorias, alunos atendidos, disciplinas com maior demanda
+
+    - 📊 Relatórios automáticos com métricas de engajamento, desempenho e feedbacks
+
+    - 🔍 Gestão dos processos seletivos: visualização de candidatos, entrevistas, aprovações
+
+    - 📋 Visualização de candidatos à monitoria por disciplina
+
+    - ✅ Aprovação de monitores com base em histórico acadêmico e entrevistas
+
+    - 📂 Acesso a relatórios de desempenho e feedbacks dos alunos
+
 
 **Materiais Utilizados**
 
-Recursos necessários para criar o protótipo.
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 
-**Testes Realizados** 
 
-Como o protótipo foi testado.
 
----
 
-###  Teste
+###  Teste do Prototipo
+
+...
 
 **Feedback dos Usuários**
 
-O que os usuários acharam do protótipo.
+...
 
 **Ajustes Realizados** 
 
-Mudanças feitas com base no feedback.
+...
 
 **Resultados Finais** 
 
-Descrição da solução final.
+...
 
 ---
 
 ##  Conclusão
 
-**Resultados Obtidos** 
-
-O que foi alcançado com o projeto.
-
-**Próximos Passos** 
-
-O que ainda precisa ser feito ou implementado.
+...
 
 
-**Aprendizados**
 
-Lições aprendidas durante o processo.
+=== "Resultados Obtidos"
+    ...
+
+=== "Próximos Passos"
+    ...
+
+=== "Aprendizados"
+    ...
 
 ---
 
@@ -255,9 +297,9 @@ Lições aprendidas durante o processo.
 
 | Data       | Versão | Descrição            | Autor(es)                          |
 |------------|--------|----------------------|------------------------------------|
-| 04/09/2025 | 1.0    | Avancei até o tópico "Definicao" no Design Thinking. | Felipe Siaba |
-| XX/YY/ZZZZ | 1.0    |  | ??? |
-| XX/YY/ZZZZ | 1.0    | | ??? |
-| XX/YY/ZZZZ | 1.0    |  | ??? |
+| 04/09/2025 | 1.0    | Fiz o DT até o tópico "Fases do Design Thinkng". | Felipe Siaba |
+| 18/09/2025 | 1.1    | Edição de alguns topicos e mais algumas partes | Felipe Siaba |
+
+
 
 

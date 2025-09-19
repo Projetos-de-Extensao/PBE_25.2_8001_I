@@ -184,4 +184,4 @@ Através da aplicação da técnica de elicitação, foi possível identificar o
 
 | Data       | Versão | Descrição            | Autor(es)                          |
 |------------|--------|----------------------|------------------------------------|
-| 10/09/2025 | 1.0    | Criação do documento e formatacao do documento | Felipe Siaba |
+| 10/09/2025 | 1.0    | Criação do documento e formatação do documento | Felipe Siaba |
