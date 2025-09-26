@@ -13,7 +13,7 @@ A construção do protótipo de alta fidelidade auxilia a equipe de desenvolvime
 ## Metodologia
 
 
-O projeto teve início com os levantamentos preliminares realizados pela equipe, visando compreender as necessidades e objetivos da solução. Após uma série de discussões e análises, optamos pela utilização da ferramenta Figma para o desenvolvimento do protótipo de baixa fidelidade, permitindo uma visualização inicial da interface e facilitando ajustes colaborativos.
+O projeto teve início com os levantamentos preliminares realizados pela equipe, visando compreender as necessidades e objetivos da solução. Após uma série de discussões e análises, optamos pela utilização da ferramenta Figma para o desenvolvimento do protótipo de baixa fidelidade, permitindo uma visualização inicial da interface e facilitando ajustes colaborativos
 
 ---
 
