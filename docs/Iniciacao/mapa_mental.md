@@ -26,7 +26,7 @@ A equipe utilizou a ferramenta <b>Miro</b> para estruturar visualmente as ideias
 ### Mapa mental 1
 
 <figure>
-  <img src="docs/assets/Mapas_Mentais/Fluxograma%20(3).jpg" alt="Mapa Mental / Fluxograma do Sistema de Monitoria" width="700"/>
+  <img src="https://i.postimg.cc/rs8BPrsF/Fluxograma-3.jpg" alt="Mapa Mental / Fluxograma do Sistema de Monitoria" width="700"/>
   <figcaption align="center">Figura 1 – Mapa Mental / Fluxograma do Sistema de Monitoria</figcaption>
 </figure>
 
