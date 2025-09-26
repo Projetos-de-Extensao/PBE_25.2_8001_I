@@ -1,94 +1,126 @@
----
-id: diagrama_de_casos de uso
-title: Diagrama de Casos de Uso
----
+<img width="1360" height="1416" alt="sequencia_1" src="https://ibb.co/7tGRJcz9" />
 
-``` mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
-```
+UC01 – Registrar-se na plataforma
 
-### Descrição:
+Atores: Aluno, Monitor, Professor.
 
-- Contas
-	- Criação
-	- Entrada
-	- Alteração
-	- Recuperar Senha
-	- Exclusão Lógica
-	- Visualização
+Pré-condição: Nenhuma.
 
-- Perfis
-	- Edição
-	- Pesquisar
-	- Visualização
-	- Seguir/Deixar de Seguir
+Fluxo: O usuário acessa o cadastro, preenche seus dados, confirma o e-mail e, se for um professor, aguarda a validação do administrador.
 
-- Postagens (Público) 	 	
-	- Criação
-	- Exclusão
-	- Interação
-	- Visualização
+UC02 – Autenticar-se (login/recuperar senha)
 
-- Mensagens (Privado)
-	- Criação
-	- Exclusão
-	- Visualização
+Atores: Todos.
 
-- Galerias
-	- Albuns
-- Blogs
-- Grupos
+Pré-condição: Conta existente.
 
-### Criação de uma conta no sistema
+Fluxo: O usuário fornece e-mail e senha, e o sistema inicia a sessão.
 
-* Atores:
+Fluxo Alternativo: Se o usuário esquecer a senha, ele pode recuperá-la via e-mail.
 
-	- Usuário
-	- Sistema
+UC03 – Editar perfil
 
-- Pré-Condições:
-	- Nenhuma
+Atores: Todos.
 
-* Fluxo Básico:
-    1. Usuário fornece e-mail, senha e confirmações
-    2. Dados do Usuário são validados pelo Sistema
-    3. Dados do Usuário são encriptados pelo Sistema
-    4. Dados do Usuário são persistidos pelo Sistema
-    5. Sistema gera um link com prazo de expiração
-    6. Sistema envia e-mail de verificação, com o link, para o Usuário
-    7. Usuário confirma o e-mail antes do link expirar
-    8. Sistema confirma que o Cadastro do Usuário foi realizado com sucesso
-    9. Sistema redireciona o Usuário para a página de Entrada
+Pré-condição: Usuário logado.
 
-- Fluxos Alternativos:
-	- 2a. E-mail do Usuário é inválido
-		2a1. Sistema exibe mensagem de erro
-	- 2b. Senha do Usuário não respeita regras de segurança
-		- 2b1. Sistema exibe mensagem de erro
-	- 3a. Usuário tenta confirmar o e-mail depois de o link expirar
-		- 3a1. Sistema sugere que o Usuário realize um novo Cadastro
+Fluxo: O usuário altera seus dados pessoais.
 
-### Entrada do usuário no sistema
+Fluxo Alternativo: Um professor pode vincular departamentos e disciplinas ao seu perfil.
 
-- Atores:
-	- Usuário
-	- Sistema
+UC04 – Navegar e filtrar disciplinas/monitorias
 
-- Pré-Condições:
-	Usuário deve estar cadastrado
+Atores: Aluno, Monitor, Professor (ou visitante com visão restrita).
 
-- Fluxo Básico:
-    - 1. Usuário fornece e-mail e senha
-	- 2. Sistema autentica o Usuário
-	- 3. Sistema redireciona o Usuário para a página inicial
+Pré-condição: Logado ou visitante.
 
-- Fluxos Alternativos:
-	- 2a. Dados do Usuário Inválidos
-		- 2a1. Sistema exibe mensagem de erro
-	- 3a. Primeio acesso do Usuário
-		- 3a1. Sistema redireciona o Usuário para a página de edição de perfil
+Fluxo: O usuário navega pelas opções de disciplinas ou monitorias e pode filtrar a lista por semestre, modalidade ou campus.
+
+UC05 – Abrir vaga de monitoria
+
+Atores: Professor.
+
+Pré-condição: Professor validado pelo sistema.
+
+Fluxo: O professor publica uma vaga, definindo requisitos, período e o número de vagas disponíveis.
+
+Fluxo Alternativo: O professor pode salvar a vaga como rascunho ou editá-la posteriormente.
+
+UC06 – Candidatar-se à vaga
+
+Atores: Aluno (candidato).
+
+Pré-condição: Usuário logado e que atende aos requisitos da vaga.
+
+Fluxo: O aluno registra sua candidatura na vaga.
+
+Fluxo Alternativo: O aluno pode anexar seu histórico acadêmico ou retirar a candidatura.
+
+UC07 – Selecionar monitores
+
+Atores: Professor.
+
+Pré-condição: Candidaturas recebidas.
+
+Fluxo: O professor analisa as candidaturas e altera o status para “aprovado”, “negado” ou “aguardando”, e o sistema envia convites.
+
+UC08 – Vincular monitor à disciplina
+
+Atores: Professor, Admin.
+
+Pré-condição: Monitor aprovado.
+
+Fluxo: O vínculo entre o monitor e a disciplina é ativado, registrando datas e a carga horária.
+
+UC09 – Publicar agenda e agendar atendimentos
+
+Atores: Monitor (publica agenda), Aluno (agenda atendimento).
+
+Pré-condição: Vínculo de monitoria ativo.
+
+Fluxo: Um aluno agenda um horário disponível na agenda do monitor.
+
+Fluxo Alternativo: É possível cancelar o agendamento com justificativa.
+
+UC10 – Trocar mensagens/comentários
+
+Atores: Aluno, Monitor, Professor.
+
+Pré-condição: Usuário logado e relacionado à disciplina ou vaga.
+
+Fluxo: Os usuários trocam mensagens em um histórico associado ao contexto.
+
+UC11 – Avaliar monitoria (feedback 360)
+
+Atores: Aluno, Professor.
+
+Pré-condição: Atendimento realizado ou período de monitoria encerrado.
+
+Fluxo: O aluno e o professor registram suas avaliações sobre a monitoria.
+
+Fluxo Alternativo: A avaliação pode ser anônima, dependendo da configuração.
+
+UC12 – Receber notificações
+
+Atores: Todos.
+
+Fluxo: O sistema envia notificações para eventos importantes (nova vaga, mudança de status, lembretes de atendimento ou feedback).
+
+UC13 – Consultar regulamentos
+
+Atores: Todos.
+
+Fluxo: O usuário acessa e visualiza os documentos ou links com os regulamentos da plataforma.
+
+UC14 – Relatórios simples por disciplina
+
+Atores: Professor.
+
+Fluxo: O professor pode gerar relatórios que mostram dados como o número de monitores ativos, o total de atendimentos e a média das avaliações por disciplina.
+
+UC15 – Moderação/Admin
+
+Atores: Admin.
+
+Fluxo: O administrador pode aprovar novos professores, moderar ou ocultar conteúdo e gerenciar as políticas e termos de uso do sistema.
+
