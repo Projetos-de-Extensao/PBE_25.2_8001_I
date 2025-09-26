@@ -55,8 +55,6 @@ O mapa mental resume os requisitos do sistema de monitoria em um formato visual 
 ## Referências
 
 > Mapa Mental – Disponível em: https://miro.com  
-> Ferramentas para Mapas Mentais – Disponível em: https://www.xmind.net  
-> Plataforma de colaboração visual – Disponível em: https://www.canva.com  
 
 ---
 
