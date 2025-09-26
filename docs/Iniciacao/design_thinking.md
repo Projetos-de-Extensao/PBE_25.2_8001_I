@@ -48,7 +48,7 @@ Cria uma plataforma própria da monitoria:
 
 **Público-Alvo**
 
-Alunos, Monitores, Professores e Coordenadores
+Alunos, Monitores e Professores
 
 
 **Escopo** 
@@ -183,16 +183,6 @@ Sem um sistema digital integrado, tarefas como publicação de vagas, candidatur
 
 **Brainstorming**
 
-...
-
-
-**Seleção de Ideias**
-
-...
-
-**Ideias Selecionadas**
-
-...
 
 ---
 
