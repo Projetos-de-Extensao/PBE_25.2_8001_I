@@ -8,7 +8,7 @@ graph LR
   D --> B;
   B ---->|No| E[Yay!];
 ```
-### Caso de Uso: Fluxo completo de Monitoria
+#### Caso de Uso: Fluxo completo de Monitoria
 
 (Publicar vaga → Candidatura → Seleção → Vínculo → Atendimento → Feedback)
 
