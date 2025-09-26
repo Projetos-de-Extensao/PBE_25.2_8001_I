@@ -12,7 +12,7 @@ graph LR
 
 (Publicar vaga → Candidatura → Seleção → Vínculo → Atendimento → Feedback)
 
-Atores
+### Atores
 
 Professor – publica vaga, avalia candidatura.
 
@@ -107,3 +107,61 @@ VinculoMonitoria não criado.
 Candidatura marcada como Negada e notificações enviadas.
 
 Todas as ações relevantes registradas em log/auditoria.
+
+
+
+### Caso de Uso: Envio e Visualização de Mensagens
+
+(Aluno ↔ Monitor)
+
+### Atores
+
+Aluno – envia mensagens para o monitor.
+
+Monitor – recebe e visualiza mensagens do aluno.
+
+Sistema – valida, persiste e controla o status da mensagem.
+
+Notificação – envia alertas de nova mensagem ou de mensagem lida.
+
+### Pré-condições
+
+Aluno e Monitor possuem contas ativas no sistema.
+
+Ambos estão autenticados.
+
+Canal de mensagens está habilitado para ambos.
+
+### Fluxo Básico
+
+Aluno solicita envio de mensagem para Monitor.
+
+Sistema cria a mensagem no repositório de Mensagem.
+
+Mensagem confirma ao Sistema que foi salva/enviada.
+
+Sistema → Notificação: envia alerta ao Monitor (“Nova mensagem”).
+
+Monitor visualiza a mensagem no Sistema.
+
+Sistema marca mensagem como lida em Mensagem.
+
+Sistema → Notificação: informa ao Aluno que a mensagem foi visualizada.
+
+### Fluxos Alternativos
+
+1a. Usuário não autenticado: Sistema rejeita envio e solicita login.
+
+2a. Conteúdo da mensagem inválido (vazio, excede limite, contém caracteres proibidos): Sistema rejeita e pede correção ao Aluno.
+
+4a. Notificação indisponível: mensagem é salva normalmente, mas notificação não é entregue (Sistema tenta reenviar depois).
+
+5a. Mensagem inexistente ou já removida: Sistema retorna erro ao Monitor.
+
+### Pós-condições
+
+Mensagem registrada no repositório com status enviada ou lida.
+
+Notificações enviadas (quando possível).
+
+Aluno pode acompanhar o status de leitura das mensagens.
