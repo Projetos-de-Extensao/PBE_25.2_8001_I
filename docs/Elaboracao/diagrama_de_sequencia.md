@@ -11,8 +11,7 @@ graph LR
   D --> B;
   B ---->|No| E[Yay!];
 ```
-
-Caso de Uso: Fluxo completo de Monitoria
+### Caso de Uso: Fluxo completo de Monitoria
 
 (Publicar vaga → Candidatura → Seleção → Vínculo → Atendimento → Feedback)
 
@@ -28,7 +27,7 @@ Sistema – valida, persiste dados, orquestra fluxos.
 
 Notificação – componente que envia mensagens (e-mail, in-app, push).
 
-Pré-condições
+### Pré-condições
 
 Professor e Aluno possuem conta cadastrada.
 
@@ -38,7 +37,7 @@ Aluno está autenticado para se candidatar/registrar feedback.
 
 Disciplina existe e está ativa.
 
-Fluxo Básico
+### Fluxo Básico
 
 Professor autentica-se no Sistema.
 
@@ -74,7 +73,7 @@ Sistema salva Feedback.
 
 Sistema → Notificação: informa Monitor sobre novo feedback.
 
-Fluxos Alternativos
+### Fluxos Alternativos
 
 Falha de autenticação: Sistema rejeita login e pede novas credenciais.
 
@@ -94,7 +93,7 @@ Feedback inválido: Sistema rejeita e pede correção.
 
 Falha em notificações: fluxo principal segue, notificações podem ser reenviadas em background.
 
-Pós-condições
+### Pós-condições
 
 Se candidatura Aprovada:
 
