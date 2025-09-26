@@ -1,5 +1,6 @@
 
 <img width="1360" height="1416" alt="sequencia_1" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/diagrama_sequencia/sequencia_1.png?raw=true" />
+<img width="1360" height="1416" alt="sequencia_2" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/diagrama_sequencia/sequencia_2.png?raw=true" />
 
 
 ### Caso de Uso: Fluxo completo de Monitoria
