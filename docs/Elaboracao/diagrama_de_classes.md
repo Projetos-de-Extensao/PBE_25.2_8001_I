@@ -1,94 +1,194 @@
 ---
-id: diagrama_de_casos de uso
-title: Diagrama de Casos de Uso
+id: diagrama_de_classes
+title: Diagrama de Classes
 ---
 
-``` mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
+``` plantuml
+@startuml
+
+' Classes principais
+class Usuario {
+  - id: UUID
+  - nome: String
+  - email: String
+  - senha: String
+  - tipo: TipoUsuario
+  - status: StatusConta
+  + autenticar()
+  + recuperarSenha()
+  + editarPerfil()
+}
+
+enum TipoUsuario {
+  Aluno
+  Monitor
+  Professor
+  Admin
+}
+
+enum StatusConta {
+  Pendente
+  Ativa
+  Bloqueada
+}
+
+class Perfil {
+  - bio: String
+  - fotoPerfil: String
+  - departamentos: List<String>
+  + editar()
+  + visualizar()
+}
+
+class Disciplina {
+  - id: UUID
+  - nome: String
+  - codigo: String
+  - semestre: String
+  - modalidade: String
+  - campus: String
+}
+
+class VagaMonitoria {
+  - id: UUID
+  - disciplina: Disciplina
+  - professorResponsavel: Usuario
+  - requisitos: String
+  - numeroVagas: int
+  - status: StatusVaga
+  + publicar()
+  + editar()
+  + salvarRascunho()
+}
+
+enum StatusVaga {
+  Rascunho
+  Publicada
+  Encerrada
+}
+
+class Candidatura {
+  - id: UUID
+  - aluno: Usuario
+  - vaga: VagaMonitoria
+  - status: StatusCandidatura
+  - historicoEscolar: String
+  - cartaMotivacao: String
+  + anexarDocumentos()
+  + retirar()
+}
+
+enum StatusCandidatura {
+  Pendente
+  Aprovada
+  Negada
+}
+
+class Selecao {
+  - id: UUID
+  - candidatura: Candidatura
+  - avaliador: Usuario
+  - nota: Float
+  - comentario: String
+  + avaliar()
+}
+
+class VinculoMonitoria {
+  - id: UUID
+  - monitor: Usuario
+  - disciplina: Disciplina
+  - dataInicio: Date
+  - dataFim: Date
+  - cargaHoraria: int
+  + ativar()
+  + desativar()
+}
+
+class Atendimento {
+  - id: UUID
+  - monitor: Usuario
+  - aluno: Usuario
+  - dataHora: DateTime
+  - status: StatusAtendimento
+  + agendar()
+  + cancelar()
+}
+
+enum StatusAtendimento {
+  Agendado
+  Cancelado
+  NoShow
+}
+
+class Mensagem {
+  - id: UUID
+  - remetente: Usuario
+  - destinatario: Usuario
+  - conteudo: String
+  - dataEnvio: DateTime
+  + enviar()
+  + visualizar()
+}
+
+class Feedback {
+  - id: UUID
+  - avaliador: Usuario
+  - monitor: Usuario
+  - nota: Float
+  - comentario: String
+  - anonimo: Boolean
+  + registrar()
+}
+
+class Notificacao {
+  - id: UUID
+  - destinatario: Usuario
+  - tipo: String
+  - mensagem: String
+  - lida: Boolean
+  + enviar()
+  + marcarComoLida()
+}
+
+class Relatorio {
+  + gerarPorDisciplina(disciplina: Disciplina)
+  + exportarCSV()
+}
+
+class Admin {
+  + aprovarProfessor(usuario: Usuario)
+  + ocultarConteudo()
+  + gerenciarTermosPoliticas()
+  + verLogs()
+}
+
+' Relações
+Usuario "1" -- "1" Perfil : possui >
+Usuario "1" -- "*" Candidatura : faz >
+Usuario "1" -- "*" Mensagem : envia/recebe >
+Usuario "1" -- "*" Feedback : registra >
+Usuario "1" -- "*" Atendimento : agenda/atende >
+Usuario "1" -- "*" VinculoMonitoria : vinculado a >
+Usuario "1" -- "*" Selecao : realiza >
+Usuario "1" <|-- Admin
+Usuario "1" <|-- Professor
+Usuario "1" <|-- Aluno
+Usuario "1" <|-- Monitor
+
+VagaMonitoria "1" -- "1" Disciplina : relacionada a >
+VagaMonitoria "1" -- "1" Usuario : criada por >
+Candidatura "1" -- "1" VagaMonitoria : aplicada a >
+Candidatura "1" -- "1" Usuario : realizada por >
+Selecao "1" -- "1" Candidatura : avalia >
+VinculoMonitoria "1" -- "1" Usuario : monitor >
+VinculoMonitoria "1" -- "1" Disciplina : disciplina >
+Atendimento "1" -- "1" Usuario : monitor >
+Atendimento "1" -- "1" Usuario : aluno >
+Mensagem "1" -- "1" Usuario : remetente >
+Mensagem "1" -- "1" Usuario : destinatario >
+Feedback "1" -- "1" Usuario : avaliador >
+Feedback "1" -- "1" Usuario : monitor >
+
+@enduml
 ```
 
-### Descrição:
-
-- Contas
-	- Criação
-	- Entrada
-	- Alteração
-	- Recuperar Senha
-	- Exclusão Lógica
-	- Visualização
-
-- Perfis
-	- Edição
-	- Pesquisar
-	- Visualização
-	- Seguir/Deixar de Seguir
-
-- Postagens (Público) 	 	
-	- Criação
-	- Exclusão
-	- Interação
-	- Visualização
-
-- Mensagens (Privado)
-	- Criação
-	- Exclusão
-	- Visualização
-
-- Galerias
-	- Albuns
-- Blogs
-- Grupos
-
-### Criação de uma conta no sistema
-
-* Atores:
-
-	- Usuário
-	- Sistema
-
-- Pré-Condições:
-	- Nenhuma
-
-* Fluxo Básico:
-    1. Usuário fornece e-mail, senha e confirmações
-    2. Dados do Usuário são validados pelo Sistema
-    3. Dados do Usuário são encriptados pelo Sistema
-    4. Dados do Usuário são persistidos pelo Sistema
-    5. Sistema gera um link com prazo de expiração
-    6. Sistema envia e-mail de verificação, com o link, para o Usuário
-    7. Usuário confirma o e-mail antes do link expirar
-    8. Sistema confirma que o Cadastro do Usuário foi realizado com sucesso
-    9. Sistema redireciona o Usuário para a página de Entrada
-
-- Fluxos Alternativos:
-	- 2a. E-mail do Usuário é inválido
-		2a1. Sistema exibe mensagem de erro
-	- 2b. Senha do Usuário não respeita regras de segurança
-		- 2b1. Sistema exibe mensagem de erro
-	- 3a. Usuário tenta confirmar o e-mail depois de o link expirar
-		- 3a1. Sistema sugere que o Usuário realize um novo Cadastro
-
-### Entrada do usuário no sistema
-
-- Atores:
-	- Usuário
-	- Sistema
-
-- Pré-Condições:
-	Usuário deve estar cadastrado
-
-- Fluxo Básico:
-    - 1. Usuário fornece e-mail e senha
-	- 2. Sistema autentica o Usuário
-	- 3. Sistema redireciona o Usuário para a página inicial
-
-- Fluxos Alternativos:
-	- 2a. Dados do Usuário Inválidos
-		- 2a1. Sistema exibe mensagem de erro
-	- 3a. Primeio acesso do Usuário
-		- 3a1. Sistema redireciona o Usuário para a página de edição de perfil
