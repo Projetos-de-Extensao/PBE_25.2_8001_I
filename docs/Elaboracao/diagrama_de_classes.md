@@ -3,7 +3,12 @@ id: diagrama_de_classes
 title: Diagrama de Classes
 ---
 
-``` plantuml
+
+
+
+
+
+
 @startuml
 
 ' Classes principais
@@ -190,5 +195,3 @@ Feedback "1" -- "1" Usuario : avaliador >
 Feedback "1" -- "1" Usuario : monitor >
 
 @enduml
-```
-
