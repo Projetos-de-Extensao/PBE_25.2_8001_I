@@ -4,65 +4,64 @@ title: Brainstorm
 hide:
   - toc
 ---
- 
+
 <p align = "justify">
-O brainstorm é uma técnica de elicitação de requisitos que consiste em reunir a equipe e discutir sobre diversos tópicos gerais do projeto apresentados no documento problema de negócio. No brainstorm o diálogo é incentivado e críticas são evitadas para permitir que todos colaborem com suas próprias ideias.
+O brainstorm é uma técnica de elicitação de requisitos que consiste em reunir a equipe e discutir tópicos gerais do projeto apresentados no documento de problema de negócio. No brainstorm o diálogo é incentivado e críticas são evitadas para permitir que todos colaborem com suas próprias ideias.
 </p>
- 
+
 ---
 
 ## Metodologia
 <p align = "justify">
-A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .... e terminou..., onde o XXXX XXXX foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
+A equipe se reuniu para debater ideias gerais sobre o projeto . O integrante <b>Davi</b> foi o moderador responsável por conduzir e registrar o brainstorming, direcionando a equipe, organizando as contribuições em um quadro colaborativo no <b>Miro</b> e transcrevendo as respostas para este documento.
 </p>
- 
+
 ---
 
 ## Qual o objetivo principal da aplicação?
 
 <p align="justify">
-<b>XXXX</b> – Deve ser uma plataforma onde qualquer pessoa possa...
+Deve ser uma plataforma onde qualquer aluno possa <i>encontrar</i> monitorias e informações de disciplinas, horários e vagas abertas.
 </p>
 
 <p align="justify">
-<b>YYYY</b> – A plataforma deve fornece...
+A plataforma deve fornecer <i>transparência</i> no processo de seleção de monitores e facilitar a comunicação entre alunos, monitores e professores.
 </p>
 
 <p align="justify">
-<b>WWWW</b> – O objetivo da aplicação é....
+O objetivo da aplicação é <i>centralizar</i> processos hoje dispersos (divulgação de vagas, candidaturas, atendimentos e feedback).
 </p>
 
 <p align="justify">
-<b>ZZZZ</b> – O principal objetivo da aplicação é a...
+O principal objetivo da aplicação é <i>organizar e acompanhar</i> o ciclo completo da monitoria (abertura de vaga → seleção → atendimentos → avaliação).
 </p>
 
 <p align="justify">
-<b>KKK</b> – A plataforma deve gerenciar...
-
-
+A plataforma deve <i>gerenciar</i> notificações e lembretes (novas vagas, alterações de status, horários de atendimento e prazos de feedback).
 </p>
+
 ---
 
-## Como será o processo para cadastrar um novo cliente?
+## Como será o processo para cadastrar um novo cliente?  <!-- (aluno/monitor/professor) -->
 
 <p align="justify">
-<b>XXXX</b> – O moderador deverá fazer login na plataforma para acessar o painel de gerenciamento.
+O usuário acessa “Cadastre-se”, escolhe o perfil (Aluno, Candidato a Monitor, Professor) e informa nome, e-mail, curso e semestre.
 </p>
 
 <p align="justify">
-<b>YYYY</b> – O cliente poderá se cadastrar por meio de um formulário com dados pessoais e preferências.
+Confirma o e-mail e, ao entrar, tem acesso ao <i>perfil</i> com edição de dados e preferências (modalidade presencial/online, campus, áreas de interesse).
 </p>
 
 <p align="justify">
-<b>WWWW</b> – Com o usuário logado, ele deverá ter acesso a funcionalidades específicas como edição de perfil e histórico de atividades.
+Para Professor, o cadastro pode exigir <i>validação</i> do administrador antes de abrir vagas.
 </p>
 
 <p align="justify">
-<b>ZZZZ</b> – O cliente poderá visualizar produtos e eventos após o cadastro.
+Após o cadastro, o usuário visualiza disciplinas, vagas de monitoria e pode acompanhar candidaturas/atendimentos.
 </p>
 
 <p align="justify">
-<b>KKK</b> – O cliente receberá confirmação por e-mail e poderá acessar a plataforma com login e senha.
+O sistema envia confirmação e ativa <i>notificações</i> (in-app e/ou e-mail) conforme preferências do usuário.
 </p>
 
 ---
@@ -70,28 +69,27 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ## Como poderá cadastrar uma nova disciplina ou abrir uma vaga de monitoria?
 
 <p align="justify">
-<b>XXXX</b> – Ao cadastrar um produto, o cliente deverá preencher campos como nome, descrição, categoria, preço e imagens.
+Professor (ou Admin) acessa o painel e cadastra a disciplina (nome, código, descrição, semestre, modalidade).
 </p>
 
 <p align="justify">
-<b>YYYYY</b> – O produto terá atributos como disponibilidade, variações (ex: tamanho, cor) e vínculo com eventos específicos.
+Para abrir vaga: define requisitos (CR mínimo, conhecimentos), período de candidatura, nº de vagas e vínculo com a disciplina.
 </p>
 
 <p align="justify">
-<b>ZZZZ</b> – O produto poderá ser editado posteriormente, caso haja necessidade de atualização.
+A vaga pode ser <i>editada</i> posteriormente (requisitos, período, quantidade).
 </p>
 
 <p align="justify">
-<b>XXXX</b> – O produto será exibido na vitrine da plataforma após validação do moderador.
+A vaga é publicada após validação (quando aplicável) e fica visível para os alunos interessados.
 </p>
-
 
 ---
 
 ## Como seria a forma de o professor adicionar um novo monitor?
 
 <p align="justify">
-<b>XXX</b> – O cliente acessará um painel com formulário intuitivo para cadastrar produtos, com campos obrigatórios e opcionais.
+ No painel da disciplina, o professor avalia candidaturas recebidas, aprova/recusa e <i>vincula</i> o monitor selecionado, registrando datas de início/fim e carga horária.
 </p>
 
 ---
@@ -99,50 +97,47 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ## Como será o sistema de feedback entre alunos e monitores?
 
 <p align="justify">
-<b>YYYYY</b> – O produto terá atributos como disponibilidade, variações (ex: tamanho, cor) e vínculo com eventos específicos.
+Ao final de atendimentos (ou do período), o aluno avalia o monitor (disponibilidade, clareza, domínio, ajuda prestada) e pode deixar comentários.
 </p>
 
 <p align="justify">
-<b>ZZZZ</b> – O produto poderá ser editado posteriormente, caso haja necessidade de atualização.
+O professor também pode avaliar o desempenho do monitor na disciplina.
 </p>
 
 <p align="justify">
-<b>XXXX</b> – O produto será exibido na vitrine da plataforma após validação do moderador.
+O sistema calcula a <i>média</i> das avaliações e exibe no perfil do monitor; histórico de feedbacks fica disponível para consulta.
 </p>
 
 ---
 
-
-## Quais informações seriam interessantes para os usuarios?
+## Quais informações seriam interessantes para os usuários?
 
 <p align="justify">
-<b>XXX</b> – Informações sobre produtos, avaliações de outros usuários, recomendações e histórico de compras.
+Para alunos: lista e filtros de disciplinas/monitorias, vagas abertas, avaliações de monitores e agenda de atendimentos.
 </p>
 
 <p align="justify">
-<b>ZZZZ</b> – O cliente poderá acessar dados sobre torneios, como regulamentos, locais, datas e participantes.
+Para professores: monitores vinculados, status das vagas, relatórios simples (atendimentos, médias de avaliação).
 </p>
 
 <p align="justify">
-<b>WWWWs</b> – O usuário poderá visualizar scouts de partidas, regras dos torneios, locais e datas das competições.
+Para monitores: agenda, fila de solicitações de atendimento, feedback recebido e orientações/regulamentos do curso.
 </p>
 
 ---
-
-
 
 ## Outras perguntas pertinentes ao contexto
 
 <p align="justify">
-<b>XXXX</b> – Com a localização ativada, o sistema poderá sugerir produtos e eventos próximos ao cliente.
+Haverá níveis de acesso (Admin, Professor, Monitor, Aluno) e permissões específicas?
 </p>
 
 <p align="justify">
-<b>YYYY</b> – O cliente poderá configurar filtros personalizados para facilitar a navegação.
+Como tratar monitorias <i>remotas</i> e <i>híbridas</i> (links de reunião, presença)?
 </p>
 
 <p align="justify">
-<b>ZZZ</b> – O cliente poderá acessar suporte técnico e informações detalhadas sobre os eventos.
+Quais critérios mínimos para candidatura (CR, pré-requisitos) e como lidar com desistências?
 </p>
 
 ---
@@ -151,37 +146,34 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 
 | ID   | Descrição |
 |------|-----------|
-| BS01 | O cliente poderá visualizar produtos disponíveis. |
-| BS02 | O cliente poderá cadastrar novos produtos. |
-| BS03 | O cliente poderá editar produtos cadastrados. |
-| BS04 | O cliente poderá configurar filtros personalizados. |
-| BS05 | O cliente poderá acessar informações sobre torneios. |
-| BS06 | O cliente poderá visualizar scouts e regulamentos. |
-| BS07 | O cliente poderá se cadastrar na plataforma. |
-| BS08 | O cliente poderá acessar suporte técnico. |
-| BS09 | O cliente poderá receber notificações personalizadas. |
-| BS10 | O produto terá atributos como preço e variações. |
-| BS11 | O produto poderá ser vinculado a eventos. |
-| BS12 | O produto será exibido após validação. |
-| BS13 | O produto poderá ser avaliado por outros usuários. |
-| BS14 | O produto poderá ser compartilhado. |
-| BS15 | O produto poderá ser filtrado por localização. |
+| BS01 | O usuário poderá visualizar disciplinas e monitorias disponíveis. |
+| BS02 | Professores poderão cadastrar novas disciplinas. |
+| BS03 | Professores poderão editar disciplinas cadastradas. |
+| BS04 | Usuários poderão configurar filtros personalizados (semestre, professor, modalidade, campus). |
+| BS05 | O usuário poderá acessar informações sobre vagas de monitoria. |
+| BS06 | O usuário poderá visualizar regulamentos e orientações do programa. |
+| BS07 | O usuário poderá se cadastrar e autenticar na plataforma. |
+| BS08 | O usuário poderá acessar ajuda/suporte básico. |
+| BS09 | O usuário receberá notificações personalizadas (novas vagas, status, lembretes). |
+| BS10 | A disciplina terá atributos como nome, código, descrição e semestre. |
+| BS11 | Vagas serão vinculadas a disciplinas específicas. |
+| BS12 | Disciplinas/vagas poderão exigir validação antes da publicação. |
+| BS13 | Monitores poderão ser avaliados por alunos e professores. |
+| BS14 | Relatórios simples para professores (monitores, atendimentos, médias). |
+| BS15 | Conteúdo poderá ser filtrado por modalidade (presencial/online) e localização. |
 
 ---
 
 ## Conclusão
 
 <p align="justify">
-Através da aplicação da técnica de elicitação, foi possível identificar os principais requisitos funcionais e não funcionais da aplicação, com foco na experiência do cliente e na eficiência da gestão de produtos e eventos.
+A aplicação da técnica de elicitação via brainstorming (moderada por Davi e organizada no Miro) permitiu identificar requisitos funcionais e não funcionais adequados ao contexto acadêmico. O escopo prioriza simplicidade, transparência e eficiência na gestão do ciclo de monitorias (vagas, seleção, atendimentos e feedback), oferecendo valor direto para alunos, monitores e professores.
 </p>
 
-
- 
 ---
-
 
 ## Autor(es)
 
-| Data       | Versão | Descrição            | Autor(es)                          |
-|------------|--------|----------------------|------------------------------------|
-| 10/09/2025 | 1.0    | Criação do documento | xxxx |
+| Data       | Versão | Descrição              | Autor(es)        |
+|------------|--------|------------------------|------------------|
+| 10/09/2025 | 1.0    | Criação do documento   | Davi (moderador) |
