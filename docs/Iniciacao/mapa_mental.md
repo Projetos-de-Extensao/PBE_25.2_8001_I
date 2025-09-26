@@ -26,8 +26,8 @@ A equipe utilizou a ferramenta <b>Miro</b> para estruturar visualmente as ideias
 ### Mapa mental 1
 
 <figure>
-  <img src="https://imgur.com/a/550GHuw" alt="Mapa Mental do Sistema de Monitoria" width="700"/>
-  <figcaption align="center">Figura 1 – Mapa Mental do Sistema de Monitoria</figcaption>
+  <img src="docs/assets/Mapas_Mentais/Fluxograma%20(3).jpg" alt="Mapa Mental / Fluxograma do Sistema de Monitoria" width="700"/>
+  <figcaption align="center">Figura 1 – Mapa Mental / Fluxograma do Sistema de Monitoria</figcaption>
 </figure>
 
 <div class="result" markdown>
@@ -63,4 +63,4 @@ O mapa mental resume os requisitos do sistema de monitoria em um formato visual 
 | Data     | Versão | Descrição                   | Autor(es)        |
 |----------|--------|-----------------------------|------------------|
 | 10/09/25 | 1.0    | Criação do documento        | Davi (moderador) |
-| 12/09/25 | 2.0    | Adicionado Mapa mental 2    | Equipe           |
+| 25/09/25 | 2.0    | Adicionado Mapa mental 2    | Davi             |
