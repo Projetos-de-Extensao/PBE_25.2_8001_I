@@ -17,18 +17,46 @@ Iniciamos o projeto através dos levantamentos iniciais da equipe, após discuss
 
 ---
 
-### Tela Login
+### Tela Inicial
+
+![descrição](../assets/Prototipo/tela1.PNG)
+
+### Tela Criar a conta
+
+![descrição](../assets/Prototipo/tela2.PNG)
+
+### Tela Login 
+
+![descrição](../assets/Prototipo/tela3.PNG)
+
+### Tela do Aluno
+
+![descrição](../assets/Prototipo/tela4.PNG)
+
+### Tela Vagas da Monitoria
+
+![descrição](../assets/Prototipo/tela5.PNG)
+
+### Tela Monitoria Especifica
+
+![descrição](../assets/Prototipo/tela6.PNG)
+
+### Tela Dashboard
+
+![descrição](../assets/Prototipo/tela7.PNG)
+
+### Tela do Admin
+
+![descrição](../assets/Prototipo/tela11.PNG)
+
+### Tela Adicionar horas adicionais
+
+![descrição](../assets/Prototipo/tela8.PNG)
 
 
-### Tela Cadastro 
+### Tela Relatorio
 
-
-
-### Tela Esqueceu Senha
-
-
-
-### Tela do Feed
+![descrição](../assets/Prototipo/tela10.PNG)
 
 
 

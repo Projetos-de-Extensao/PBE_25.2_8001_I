@@ -206,35 +206,37 @@ A plataforma será um sistema web responsivo, com acesso também por dispositivo
 
 === " Interface do Aluno"
 
-    - 📋 Visualização de vagas disponíveis por disciplina, horário e monitor responsável
+    - Cadastro/Login
+    
+    - Configuração do perfil
 
-    - 📝 Candidatura rápida com preenchimento de dados e justificativa
+    - Visualização de vagas e perfils
 
-    - ⭐ Sistema de feedback pós-monitoria (avaliação do monitor, conteúdo e estrutura)
+    - Ferramento de busca
 
-    - 🔔 Notificações sobre novas vagas, alterações de horário e lembretes de sessões
+    - Feedback
 
-=== " Interface do Monitor"
+    - Notificações
 
-    - 📌 Gerenciamento de horários e temas das monitorias
+=== " Interface do Professor"
 
-    - 📈 Acompanhamento dos feedbacks recebidos
+    - Gestão das vagas
 
-    - 📊 Relatórios de presença e engajamento dos alunos
+    - Geração de Relatórios
 
-=== "  Interface do Professor/Coordenador"
+    - Avaliação dos candidatos 
 
-    - 🧠 Visão estratégica do programa: número de monitorias, alunos atendidos, disciplinas com maior demanda
+    - Notificações
 
-    - 📊 Relatórios automáticos com métricas de engajamento, desempenho e feedbacks
+    - Feedback
 
-    - 🔍 Gestão dos processos seletivos: visualização de candidatos, entrevistas, aprovações
+=== "  Interface do Admin"
 
-    - 📋 Visualização de candidatos à monitoria por disciplina
+    - Dashboard Geral
 
-    - ✅ Aprovação de monitores com base em histórico acadêmico e entrevistas
+    - Validação de horas
 
-    - 📂 Acesso a relatórios de desempenho e feedbacks dos alunos
+    - Gestão documental
 
 
 **Materiais Utilizados**
@@ -246,7 +248,15 @@ A plataforma será um sistema web responsivo, com acesso também por dispositivo
 
 ###  Teste do Prototipo
 
-...
+O protótipo da plataforma de monitoria acadêmica foi testado com 3 perfis de usuários:
+
+- Alunos (exploração de vagas e candidatura)
+
+- Monitores (registro de horas e feedbacks)
+
+- Professores/Coordenadores (gestão de processos seletivos e relatórios)
+
+Os testes foram realizados em ambiente controlado, em dispositivos desktop, simulando os principais fluxos da plataforma.
 
 **Feedback dos Usuários**
 
