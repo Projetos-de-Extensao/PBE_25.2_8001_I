@@ -2,7 +2,7 @@
 
 UC01 – Registrar-se na plataforma
 
-Atores: Aluno, Monitor, Professor.
+Atores: Aluno, Monitor, Professor
 
 Pré-condição: Nenhuma.
 
