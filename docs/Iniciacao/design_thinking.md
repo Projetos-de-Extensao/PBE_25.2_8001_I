@@ -248,50 +248,40 @@ A plataforma será um sistema web responsivo, com acesso também por dispositivo
 
 ###  Teste do Prototipo
 
-O protótipo da plataforma de monitoria acadêmica foi testado com 3 perfis de usuários:
-
-- Alunos (exploração de vagas e candidatura)
-
-- Monitores (registro de horas e feedbacks)
-
-- Professores/Coordenadores (gestão de processos seletivos e relatórios)
-
-Os testes foram realizados em ambiente controlado, em dispositivos desktop, simulando os principais fluxos da plataforma.
+O protótipo será submetido a testes com usuários reais para validar sua usabilidade e a eficácia na resolução dos problemas centrais, considerando os principais casos de uso previamente definidos.
 
 **Feedback dos Usuários**
 
-...
+O protótipo será apresentado a usuários reais com o objetivo de avaliar a clareza da interface, a facilidade de uso e a adequação da solução às suas necessidades práticas.
+
 
 **Ajustes Realizados** 
 
-...
+A partir das contribuições coletadas, serão implementadas melhorias na interface, nos fluxos de navegação e nas funcionalidades, garantindo maior usabilidade e alinhamento com as expectativas dos usuários antes da entrega final.
 
 **Resultados Finais** 
 
-...
-
----
+O produto final consistirá em uma plataforma web completa, capaz de atender a todos os critérios de aceitação: permitir que alunos submetam candidaturas de forma estruturada, possibilitar que coordenadores gerenciem todo o processo de ponta a ponta e assegurar que o sistema envie notificações automáticas e gere relatórios de maneira eficiente.
 
 ##  Conclusão
 
-...
+O desenvolvimento de uma plataforma própria para a gestão da monitoria acadêmica representa um passo decisivo rumo à profissionalização e à modernização desse programa. Ao centralizar processos que antes eram conduzidos de forma manual e descentralizada, a solução proposta elimina falhas de comunicação, reduz a burocracia e garante maior transparência em todas as etapas — desde a publicação de vagas até o acompanhamento do desempenho dos monitores.
+
+A aplicação dos princípios do Design Thinking permitiu compreender profundamente as dores e necessidades de alunos, monitores, professores e coordenadores, resultando em uma solução construída de forma colaborativa e centrada no usuário. O protótipo validado demonstrou que a plataforma é capaz de atender às expectativas dos diferentes perfis, oferecendo clareza, eficiência e confiabilidade.
+
+Com a implementação final, espera-se alcançar benefícios concretos, como:
+
+- Maior transparência nos processos seletivos.
+
+- Agilidade e eficiência na gestão de candidaturas, horas e relatórios.
+
+- Valorização da experiência de alunos e monitores, fortalecendo o engajamento.
+
+- Base de dados consolidada, que apoia decisões estratégicas e garante escalabilidade do programa.
+
+Assim, a plataforma não apenas resolve os problemas atuais, mas também cria as condições para que a monitoria cresça de forma sustentável, tornando-se uma ferramenta pedagógica ainda mais relevante para a instituição e para a formação dos estudantes.
 
 
-
-=== "Resultados Obtidos"
-    ...
-
-=== "Próximos Passos"
-    ...
-
-=== "Aprendizados"
-    ...
-
----
-
-## Anexos
-
----
 
 ## Autores
 
@@ -299,6 +289,7 @@ Os testes foram realizados em ambiente controlado, em dispositivos desktop, simu
 |------------|--------|----------------------|------------------------------------|
 | 04/09/2025 | 1.0    | Fiz o DT até o tópico "Fases do Design Thinkng". | Felipe Siaba |
 | 18/09/2025 | 1.1    | Edição de alguns topicos e mais algumas partes | Felipe Siaba |
+| 26/09/2025 | 1.2    | Edição de alguns topicos e mais algumas partes | Felipe Siaba |
 
 
 
