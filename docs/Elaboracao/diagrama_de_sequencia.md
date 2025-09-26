@@ -1,13 +1,7 @@
 
+<img width="1360" height="1416" alt="sequencia_1" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/diagrama_sequencia/sequencia_1.png?raw=true" />
 
-``` mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
-```
+
 ### Caso de Uso: Fluxo completo de Monitoria
 
 (Publicar vaga → Candidatura → Seleção → Vínculo → Atendimento → Feedback)
