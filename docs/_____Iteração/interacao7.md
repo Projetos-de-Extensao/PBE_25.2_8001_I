@@ -37,7 +37,7 @@ title: Iteração 7
 ### Pontos Positivos
 
 ![pontos positivos](../assets/Iterações/S1-positivos.png)
-
+  
 ### Pontos Negativos
 
 ![pontos negativos](../assets/Iterações/S1-negativos.png)

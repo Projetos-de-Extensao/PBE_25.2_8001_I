@@ -8,7 +8,6 @@ nav:
   - Home: index.md
   - Iniciação: 
       - Index: Iniciacao/index.md
-      - Pesquisa: Iniciacao/pesquisa.md
       - Design Thinking: Iniciacao/design_thinking.md
       - Brainstorming: Iniciacao/Brainstorm.md
       - 5w2h: Iniciacao/5w2h.md

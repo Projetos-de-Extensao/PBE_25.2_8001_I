@@ -4,7 +4,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/languages/count/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/commit-activity/m/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
-  <img src="https://img.shields.io/bitbucket/issues/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
+  <img src="https://img.shields.io/github/issues/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/last-commit/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
 </p>
 
