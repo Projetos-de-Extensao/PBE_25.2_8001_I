@@ -4,9 +4,8 @@ title: Diagrama de Classes
 ---
 
 
-
-
-
+<img width="3001" height="1212" alt="diagrama-de-classes" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/Diagrama_de_Classes/diagrama-de-classes.png
+" />
 
 
 @startuml
