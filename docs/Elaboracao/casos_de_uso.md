@@ -1,4 +1,4 @@
-<img width="1360" height="1416" alt="sequencia_1" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/Casos_de_Uso/ChatGPT%20Image%2026%20de%20set.%20de%202025,%2000_58_14%20(1).png?raw=true" />
+<img width="700" height="600" alt="sequencia_1" src="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/blob/main/docs/assets/Casos_de_Uso/ChatGPT%20Image%2026%20de%20set.%20de%202025,%2000_58_14%20(1).png?raw=true" />
 
 UC01 – Registrar-se na plataforma
 
