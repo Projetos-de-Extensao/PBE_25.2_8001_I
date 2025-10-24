@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from .models import Content
+from .models import VagaMonitoria
 
-class ContentSerializer(serializers.ModelSerializer):
+class VagaMonitoriaSerializer(serializers.ModelSerializer):
+    professor_nome = serializers.ReadOnlyField(source='professor.username')
+
     class Meta:
-        model = Content
-        fields = '__all__'
+        model = VagaMonitoria
+        fields = ['id', 'titulo', 'descricao', 'disciplina', 'professor', 'professor_nome', 'data_criacao', 'disponivel']
+        read_only_fields = ['id', 'data_criacao', 'professor_nome']

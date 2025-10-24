@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from .views import ContentViewSet
+from .views import VagaMonitoriaViewSet
 
 router = DefaultRouter()
-router.register(r'contents', ContentViewSet)
+router.register(r'vagas', VagaMonitoriaViewSet, basename='vaga-monitoria')
 
 urlpatterns = router.urls

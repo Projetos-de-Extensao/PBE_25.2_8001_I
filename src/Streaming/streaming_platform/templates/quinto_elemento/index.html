@@ -14,16 +14,10 @@
     <div class="form-section">
         <h2>Adicionar Novo Conteúdo</h2>
         <form id="contentForm">
-            <input type="text" id="title" placeholder="Título" required>
-            <input type="text" id="description" placeholder="Descrição" required>
-            <input type="url" id="file_url" placeholder="URL do arquivo" required>
-            <input type="url" id="thumbnail_url" placeholder="URL da miniatura" >
-            <select id="content_type">
-                <option value="video">Vídeo</option>
-                <option value="audio">Áudio</option>
-            </select>
-            <label for="is_public">Público?</label>
-            <input type="checkbox" id="is_public" checked>
+            <input type="text" id="Vaga" placeholder="Vaga" required>
+            <input type="text" id="Curso" placeholder="Curso" required>
+            <input type="url" id="professor" placeholder="Professor Responsável" required>
+            <input type="url" id="n_vagas" placeholder="Número de Vagas" >
             <input type="text" id="creator" value="1" placeholder="Criador Admin = 1" required> 
             <button type="submit">Adicionar Conteúdo</button>
         </form>
@@ -36,10 +30,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Título</th>
-                    <th>Descrição</th>
-                    <th>Tipo</th>
-                    <th>Público</th>
+                    <th>Vaga</th>
+                    <th>Curso</th>
+                    <th>Professor Responsável</th>
+                    <th>Número de Vagas</th>
                     <th>Criador</th>
                 </tr>
             </thead>
