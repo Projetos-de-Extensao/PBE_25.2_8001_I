@@ -20,4 +20,5 @@ class Content(models.Model):
     creator = models.ForeignKey(User, related_name='contents', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return self.title 
+    
