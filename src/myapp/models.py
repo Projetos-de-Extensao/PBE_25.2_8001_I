@@ -11,3 +11,14 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome
+    
+
+class VagaMonitoria(models.Model):
+    disciplina = models.CharField(max_length=100)
+    pre_requisitos = models.TextField()
+    responsabilidades = models.TextField()
+    numero_vagas = models.PositiveIntegerField()
+    
+
+    def __str__(self):
+        return f"{self.disciplina} ({self.numero_vagas} vagas)"
