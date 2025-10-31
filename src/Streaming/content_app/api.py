@@ -2,21 +2,21 @@
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Produto
-from .serializers import ProdutoSerializer
+from .models import VagaMonitoria
+from .serializers import VagaMonitoriaSerializer
 
-class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()
-    serializer_class = ProdutoSerializer
+class VagaMonitoriaViewSet(viewsets.ModelViewSet):
+    queryset = VagaMonitoria.objects.all()
+    serializer_class = VagaMonitoriaSerializer
 
     @action(detail=False, methods=['get'])
     def disponiveis(self, request):
-        produtos = Produto.objects.filter(disponivel=True)
-        serializer = self.get_serializer(produtos, many=True)
+        vagas = VagaMonitoria.objects.filter(disponivel=True)
+        serializer = self.get_serializer(vagas, many=True)
         return Response(serializer.data)
 
-class ProdutosBaratosAPIView(generics.ListAPIView):
-    serializer_class = ProdutoSerializer
+class VagaMonitoriaAPIView(generics.ListAPIView):
+    serializer_class = VagaMonitoriaSerializer
 
     def get_queryset(self):
-        return Produto.objects.filter(preco__lt=1000)
+        return VagaMonitoria.objects.filter(preco__lt=1000)
