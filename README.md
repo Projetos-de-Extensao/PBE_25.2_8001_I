@@ -45,11 +45,12 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 
 ### 🔧 Ferramentas
 
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=vsc&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Python](https://img.shields.io/badge/Python-FFEE8C?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+
 
 
 
@@ -65,8 +66,8 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 #### Você instalou a versão mais recente:
 
 -  Git
-- Visual Studio Code instalado
-- Python instalado (versão 3.8 ou superior)
+- Visual Studio Code 
+- Python (versão 3.8 ou superior)
 - Extensão Python para VS Code (recomendado)
 
   
@@ -100,11 +101,12 @@ ou
 ```ruby
 python -m venv venv
 ```
-
 #### Inicie o servidor
+
 ```ruby
 python manage.py runserver
 ```
+
 > [!TIP]
 > Normalmente o servidor é iniciado na porta 8000. Para acessá-lo, abra o navegador e digite: http://localhost:8000/
 
