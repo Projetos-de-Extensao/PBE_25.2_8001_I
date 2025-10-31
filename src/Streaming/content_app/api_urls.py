@@ -8,5 +8,5 @@ router.register(r'vagas',  VagaMonitoriaViewSet, basename='vaga-monitoria')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('produtos/baratos/', VagaMonitoriaAPIView(), name='produtos-baratos'),
+    path('vagas', VagaMonitoriaAPIView(), name='vaga-monitoria-api'),
 ]
