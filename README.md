@@ -86,9 +86,9 @@ Para instalar o nosso projeto siga estas etapas:
 git clone https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I.git
 ```
 
-#### Baixe o Django
+#### Baixe o Requisitos
 ```ruby
-pip install django
+pip install -r requirements.txt
 ```
 
 #### Configure o Venv
