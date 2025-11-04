@@ -46,11 +46,12 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 ### 🔧 Ferramentas
 
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=vsc&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Git](https://img.shields.io/badge/Git-f14e32?style=for-the-badge&logo=git&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-FFEE8C?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
-![HTML](https://img.shields.io/badge/HTML-E86100?style=for-the-badge&logo=html5&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E86100?style=for-the-badge&logo=html5&logoColor=white)
+
 
 
 
