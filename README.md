@@ -1,21 +1,31 @@
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=110&section=header"/>
-
-### [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=E0E0E0&size=45&center=true&vCenter=true&pause=1500&width=1000&lines=Bem-vindo+ao+nosso+Github!;Gestão+Acadêmica+de+Monitoria+IBMEC;Quinto+Elemento;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
-
 
 <p align="center">
   <img src="https://img.shields.io/github/languages/count/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/repo-size/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/commit-activity/m/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/last-commit/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
+  <img src="https://forthebadge.com/images/badges/0-percent-optimized.svg" height="28" />
+  
   
 </p>
 
 <p align="center">
-  <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" />
+  <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" width="200" height="200" />
 
+   [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffa198&size=30&center=true&font=Poppins&vCenter=true&pause=1500&width=1500&lines=Bem-vindo+ao+nosso+Github!;Sistema+de+Monitorias+da+IBMEC;Quinto+Elemento+:D;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
   
-  > Mais do que uma iniciativa voltada à resolução de questões operacionais, este projeto representa um marco no processo de profissionalização e aprimoramento da monitoria acadêmica, promovendo uma experiência mais integrada, transparente e confiável para alunos, monitores e professores, contribuindo para a elevação do padrão de qualidade e excelência do programa de monitoria.
+  <p align="center">
+    Uma API backend para gerenciar e otimizar monitorias acadêmicas!
+  <br />
+    <a href="https://projetos-de-extensao.github.io/PBE_25.2_8001_I/"><strong>Explore o MKdocs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I">Visualizar Demo</a>
+    &middot;
+    <a href="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I/issues/new?labels=bug&template=bug-report---.md">Reportar Bug</a>
+    &middot;
+    <a href="https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I"">Apresentação</a
+    
 </p>
 
 
@@ -32,7 +42,7 @@
 
 ---
 
-### 📌 Sobre 
+### 📌 Sobre o Projeto
 
 Nos últimos períodos, o programa de Monitoria tem registrado um crescimento expressivo na demanda por parte dos estudantes. Entretanto, esse avanço não tem sido acompanhado pela implementação de uma estrutura tecnológica adequada. A ausência de um sistema próprio tem gerado diversos desafios que impactam diretamente a eficiência, a organização e a confiabilidade das atividades.
 
@@ -54,13 +64,9 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 
 
 
-
-
-
-
-
  Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
+<img src="https://www.whatsthehost.com/wp-content/uploads/2020/08/internet.gif"  alt="commit gif looping" width="200" height="200" />
 
 
 ### 💻 Pré-requisitos
@@ -74,8 +80,6 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 
   
 #### Você tem uma máquina Windows / Linux / Mac
-
-
 
 
 ---
@@ -128,7 +132,9 @@ python manage.py runserver
 
 
 
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=150&section=footer"/>
+
+
+
 
 
 
