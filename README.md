@@ -12,7 +12,7 @@
 <p align="center">
   <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" width="200" height="200" />
 
-   [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffa198&size=30&center=true&font=Poppins&vCenter=true&pause=1500&width=1500&lines=Bem-vindo+ao+nosso+Github!;Sistema+de+Monitorias+da+IBMEC;Quinto+Elemento+:D;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
+   [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffa198&size=35&center=true&font=Poppins&vCenter=true&pause=1500&width=1500&lines=Bem-vindo+ao+nosso+Github!;Sistema+de+Monitorias+da+IBMEC;Quinto+Elemento+:D;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
   
   <p align="center">
     Uma API backend para gerenciar e otimizar monitorias acadêmicas!
