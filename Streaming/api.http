@@ -1,4 +1,6 @@
 # Instale a extensão REST Client no VS Code.
 
-GET http://localhost:8000/api/
+GET http://localhost:8000/api/vagas/
 Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+

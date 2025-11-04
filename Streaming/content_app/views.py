@@ -5,7 +5,7 @@ from .models import VagaMonitoria
 from .serializers import VagaMonitoriaSerializer
 
 class VagaMonitoriaViewSet(viewsets.ModelViewSet):
-    queryset = VagaMonitoria.objects.all().order_by('-data_criacao')
+    queryset = VagaMonitoria.objects.all()
     serializer_class = VagaMonitoriaSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 

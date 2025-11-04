@@ -1,8 +1,10 @@
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import VagaMonitoriaViewSet
-from rest_framework import serializers
 
 router = DefaultRouter()
-router.register(r'vagas', VagaMonitoriaViewSet, basename='vaga-monitoria')
+router.register(r'vagas', VagaMonitoriaViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]
