@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro de Candidato{% endblock %}
+
+{% block hero_title %}Cadastro de Candidato{% endblock %}
+{% block hero_subtitle %}Preencha o formulário para se candidatar à monitoria{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    .required-field::after {
+        content: "*";
+        color: red;
+        margin-left: 4px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container bg-white">
+                        <h2 class="text-center mb-2">Cadastro de Candidato</h2>
+                        {% if vaga %}
+                            <p class="text-center text-muted mb-4">Candidatar-se para: <strong>{{ vaga.titulo }}</strong> — {{ vaga.disciplina }}</p>
+                        {% else %}
+                            <div class="mb-4"></div>
+                        {% endif %}
+                        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                
+                <div class="mb-3">
+                    <label for="nome" class="form-label required-field">Nome Completo</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                    <div class="invalid-feedback">
+                        Por favor, insira seu nome completo.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label required-field">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="invalid-feedback">
+                        Por favor, insira um e-mail válido.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="curso" class="form-label required-field">Curso</label>
+                    <input type="text" class="form-control" id="curso" name="curso" required>
+                    <div class="invalid-feedback">
+                        Por favor, insira seu curso.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="historico_escolar" class="form-label required-field">Histórico Escolar (PDF)</label>
+                    <input type="file" class="form-control" id="historico_escolar" name="historico_escolar" accept=".pdf" required>
+                    <div class="form-text">Por favor, envie seu histórico escolar em formato PDF.</div>
+                    <div class="invalid-feedback">
+                        Por favor, envie seu histórico escolar.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="curriculo" class="form-label required-field">Currículo (PDF)</label>
+                    <input type="file" class="form-control" id="curriculo" name="curriculo" accept=".pdf" required>
+                    <div class="form-text">Por favor, envie seu currículo em formato PDF.</div>
+                    <div class="invalid-feedback">
+                        Por favor, envie seu currículo.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="carta_motivacao" class="form-label required-field">Carta de Motivação</label>
+                    <textarea class="form-control" id="carta_motivacao" name="carta_motivacao" rows="5" required 
+                              placeholder="Escreva aqui sua carta de motivação, explicando por que você está interessado na vaga..."></textarea>
+                    <div class="invalid-feedback">
+                        Por favor, escreva sua carta de motivação.
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn btn-secondary me-md-2" onclick="window.location.href='{% url 'listar_vagas' %}'">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Cadastrar Candidato</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+{% endblock %}

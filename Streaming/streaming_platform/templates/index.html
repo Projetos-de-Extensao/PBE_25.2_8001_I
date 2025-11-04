@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block hero_subtitle %}Conectando alunos e oportunidades de monitoria{% endblock %}
+
+{% block content %}
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Vagas Card -->
+            <div class="col-md-6">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <h3 class="card-title mb-3">Vagas Disponíveis</h3>
+                        <p class="card-text mb-4">Explore as vagas de monitoria disponíveis em diversas disciplinas.</p>
+                        <a href="{% url 'listar_vagas' %}" class="btn btn-primary">Ver Vagas</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área do Candidato Card -->
+            <div class="col-md-6">
+                <div class="card feature-card">
+                    <div class="card-body text-center p-4">
+                        <h3 class="card-title mb-3">Área do Candidato</h3>
+                        <p class="card-text mb-4">Candidate-se às vagas de monitoria disponíveis.</p>
+                        <a href="{% url 'cadastrar_candidato' %}" class="btn btn-success">Cadastrar-se</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -10,17 +10,19 @@ router = DefaultRouter()
 router.register(r'vagas', VagaMonitoriaViewSet, basename='vaga-monitoria')
 
 urlpatterns = [
+    path('', views.index, name='index'),
+    path('vagas/', views.listar_vagas, name='listar_vagas'),
+    path('cadastrar/', views.cadastrar_candidato, name='cadastrar_candidato'),
+    path('cadastrar/<int:vaga_id>/', views.cadastrar_candidato, name='cadastrar_candidato_vaga'),
+
     path('admin/', admin.site.urls),
 
     # API principal
     path('api/', include(router.urls)),
 
-    # Endpoint alternativo com APIView (se necessário)
+    # Endpoint alternativo com APIView
     path('api/vagas/custom/', VagaMonitoriaAPIView.as_view(), name='vaga-monitoria-api'),
 
     # Token de autenticação
     path('api/token/', obtain_auth_token, name='api_token_auth'),
-
-    # URLs adicionais do content_app (se houver)
-    path('api/', include('content_app.urls')),
 ]

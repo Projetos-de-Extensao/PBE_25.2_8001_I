@@ -23,8 +23,8 @@
 
  O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
 
-- [ ] Portal de Vagas
-- [ ] Cadastro de Candidatos
+- [X] Portal de Vagas
+- [X] Cadastro de Candidatos
 - [ ] Seleção e Comunicação
 - [ ] Geração de Relatórios Básicos
 - [ ] Registro de Frequência e Horas
@@ -49,6 +49,7 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-FFEE8C?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E86100?style=for-the-badge&logo=html5&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 
 
@@ -84,13 +85,8 @@ Para instalar o nosso projeto siga estas etapas:
 #### Clone o repositório
 ```ruby
 git clone https://github.com/Projetos-de-Extensao/PBE_25.2_8001_I.git
-```
 
-#### Baixe o Requisitos
-```ruby
-pip install -r requirements.txt
 ```
-
 #### Configure o Venv
 ```ruby
 ctrl +shift + P
@@ -101,6 +97,17 @@ ou
 ```ruby
 python -m venv venv
 ```
+
+#### Baixe o Requisitos
+```ruby
+pip install -r requirements.txt
+```
+
+#### Entra na pasta do Backend
+```ruby
+cd Streaming
+```
+
 #### Inicie o servidor
 
 ```ruby

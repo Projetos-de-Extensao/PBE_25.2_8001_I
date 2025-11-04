@@ -15,3 +15,23 @@ class VagaMonitoria(models.Model):
     def __str__(self):
         return f"{self.titulo} - {self.disciplina} " #({self.numero_vagas} vaga(s))
     
+
+class Candidato(models.Model):
+    nome = models.CharField(max_length=100)
+    email = models.EmailField()
+    curso = models.CharField(max_length=100)
+    historico_escolar = models.FileField(upload_to='documentos/')
+    curriculo = models.FileField(upload_to='documentos/')
+    carta_motivacao = models.TextField()
+
+    def __str__(self):
+        return self.nome
+
+
+class Candidatura(models.Model):
+    candidato = models.ForeignKey(Candidato, on_delete=models.CASCADE)
+    vaga = models.ForeignKey(VagaMonitoria, on_delete=models.CASCADE)
+    data_candidatura = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.candidato.nome} - {self.vaga.disciplina}"
