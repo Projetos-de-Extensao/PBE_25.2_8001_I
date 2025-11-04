@@ -1,6 +1,6 @@
 <img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=110&section=header"/>
 
-### [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffffff&size=45&center=true&vCenter=true&pause=1500&width=1000&lines=Bem-vindo+ao+nosso+Github!;Gestão+Acadêmica+de+Monitoria+IBMEC;Quinto+Elemento;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
+### [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=E0E0E0&size=45&center=true&vCenter=true&pause=1500&width=1000&lines=Bem-vindo+ao+nosso+Github!;Gestão+Acadêmica+de+Monitoria+IBMEC;Quinto+Elemento;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
 
 
 <p align="center">
