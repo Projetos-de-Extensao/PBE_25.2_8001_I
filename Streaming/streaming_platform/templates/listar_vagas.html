@@ -7,55 +7,136 @@
 
 {% block extra_css %}
 <style>
-    .page-container { max-width: 1000px; margin: 30px auto; }
-    .vaga-card { box-shadow: 0 0 8px rgba(0,0,0,0.06); border-radius: 8px; height: 100%; }
-    .vaga-card .card-body { padding: 1rem 1.25rem; display: flex; flex-direction: column; }
+    .page-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+    .vaga-card {
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: none;
+        border-radius: 12px;
+        transition: transform 0.2s;
+        margin-bottom: 1.5rem; /* aumenta espaçamento vertical entre cards */
+    }
+    .vaga-card:hover {
+        transform: translateY(-5px);
+    }
+    .vaga-card .card-body {
+        padding: 1.5rem;
+    }
+    .vaga-badge {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+        border-radius: 20px;
+    }
+    .disciplina-tag {
+        background-color: #e9ecef;
+        color: #495057;
+        padding: 0.3em 0.8em;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-left: 8px;
+    }
+    /* reforça gap vertical das linhas (caso o utilitário bootstrap não aplique em alguns contextos) */
+    .row.g-4 {
+        row-gap: 2rem;
+    }
+    /* evita quebra de layout com textos muito longos */
+    .vaga-card h4,
+    .vaga-card p,
+    .vaga-card .disciplina-tag {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    /* alinhar botão na coluna direita como nos outros cards */
+    @media (min-width: 768px) {
+        .vaga-card .action-col {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-  <div class="container page-container">
+<div class="container page-container">
     {% if messages %}
-      <div class="mt-3">
+    <div class="mt-3">
         {% for message in messages %}
-          <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
-      </div>
+    </div>
     {% endif %}
+
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Vagas de Monitoria</h2>
-      <div>
-      </div>
+        <h2 class="mb-0">Vagas de Monitoria</h2>
+        <div>
+            <!-- Espaço para futuros filtros ou ações -->
+        </div>
     </div>
 
-    <div class="row g-3">
-      {% if vagas %}
+    <div class="row g-4">
+        {% if vagas %}
         {% for vaga in vagas %}
-          <div class="col-12">
-            <div class="card vaga-card bg-white h-100">
-              <div class="card-body">
-                <div>
-                  <h5 class="card-title">{{ vaga.titulo }} <small class="text-muted">- {{ vaga.disciplina }}</small></h5>
-                  <p class="mb-1"><strong>Pré-requisitos:</strong> {{ vaga.prerequisitos }}</p>
-                  <p class="mb-1"><strong>Responsabilidades:</strong> {{ vaga.responsabilidades }}</p>
-                  <p class="mb-0"><strong>Vagas disponíveis:</strong> {{ vaga.numero_vagas }}</p>
-                </div>
-                <div class="mt-3 text-end mt-auto">
-                  {% if vaga.disponivel %}
-                    <a href="{% url 'cadastrar_candidato_vaga' vaga.id %}" class="btn btn-success">Candidatar-se</a>
-                  {% else %}
-                    <span class="badge bg-secondary">Indisponível</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      {% else %}
         <div class="col-12">
-          <div class="alert alert-info">Nenhuma vaga disponível no momento.</div>
+            <div class="card vaga-card bg-white">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9 col-12">
+                            <h4 class="card-title mb-3">
+                                {{ vaga.titulo }}
+                                <span class="disciplina-tag">{{ vaga.disciplina }}</span>
+                            </h4>
+                            <div class="mb-3">
+                                <h6 class="text-primary mb-2">Pré-requisitos:</h6>
+                                <p class="mb-3">{{ vaga.prerequisitos }}</p>
+                                
+                                <h6 class="text-primary mb-2">Responsabilidades:</h6>
+                                <p class="mb-3">{{ vaga.responsabilidades }}</p>
+                                
+                                <div class="d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill text-secondary me-2" viewBox="0 0 16 16">
+                                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                                    </svg>
+                                    <span class="text-secondary">{{ vaga.numero_vagas }} vaga{{ vaga.numero_vagas|pluralize }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-12 action-col mt-3 mt-md-0">
+                            {% if vaga.disponivel %}
+                            <a href="{% url 'cadastrar_candidato_vaga' vaga.id %}" class="btn btn-success btn-lg">
+                                Candidatar-se
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right ms-2" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                </svg>
+                            </a>
+                            {% else %}
+                            <span class="vaga-badge bg-secondary text-white">Indisponível</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      {% endif %}
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle me-2" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+                <div>Nenhuma vaga disponível no momento.</div>
+            </div>
+        </div>
+        {% endif %}
     </div>
-  </div>
+</div>
 {% endblock %}

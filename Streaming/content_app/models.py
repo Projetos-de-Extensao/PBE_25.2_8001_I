@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User  # se for usar o usuário padrão do Django
 
 class VagaMonitoria(models.Model):
-    titulo = models.CharField(max_length=30)
+    titulo = models.CharField(max_length=100)
     disciplina = models.CharField(max_length=100)
     prerequisitos = models.TextField()
     responsabilidades = models.TextField()

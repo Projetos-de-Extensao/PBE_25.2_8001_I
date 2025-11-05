@@ -9,10 +9,30 @@ from .serializers import VagaMonitoriaSerializer
 def index(request):
     return render(request, 'index.html')
 
+def area_candidato(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        candidato = get_object_or_404(Candidato, email=email)
+        candidaturas = Candidatura.objects.filter(candidato=candidato)
+        return render(request, 'area_candidato.html', {
+            'candidato': candidato,
+            'candidaturas': candidaturas,
+            'email_form_submitted': True
+        })
+    return render(request, 'area_candidato.html', {'email_form_submitted': False})
+
 def listar_vagas(request):
      vagas = VagaMonitoria.objects.all()
      return render(request, 'listar_vagas.html', {'vagas': vagas})
 
+
+@login_required
+def prof_index(request):
+    # Simple dashboard for professors — later can check request.user permissions
+    minhas_vagas = VagaMonitoria.objects.filter(professor=request.user)
+    return render(request, 'profIndex.html', {'minhas_vagas': minhas_vagas})
+
+@login_required
 @login_required
 def cadastrar_candidato(request, vaga_id=None):
     vaga = None

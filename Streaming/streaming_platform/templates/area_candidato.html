@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Área do Candidato{% endblock %}
+
+{% block hero_title %}Área do Candidato{% endblock %}
+{% block hero_subtitle %}Acompanhe suas candidaturas e atualize seus dados{% endblock %}
+
+{% block extra_css %}
+<style>
+    .area-candidato-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 30px;
+    }
+    .card {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    .status-badge {
+        padding: 0.5em 1em;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    .status-approved {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .status-rejected {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .email-form {
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container area-candidato-container">
+    {% if not email_form_submitted %}
+        <div class="card">
+            <div class="card-body">
+                <div class="email-form">
+                    <h4 class="mb-4">Acesse suas Candidaturas</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-mail cadastrado</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-2" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                            Buscar Candidaturas
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {% if candidato %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Dados do Candidato</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ candidato.nome }}</p>
+                            <p><strong>E-mail:</strong> {{ candidato.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Curso:</strong> {{ candidato.curso }}</p>
+                            <p>
+                                <a href="{{ candidato.curriculo.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text me-2" viewBox="0 0 16 16">
+                                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                    </svg>
+                                    Ver Currículo
+                                </a>
+                                <a href="{{ candidato.historico_escolar.url }}" class="btn btn-sm btn-outline-primary ms-2" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text me-2" viewBox="0 0 16 16">
+                                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                    </svg>
+                                    Ver Histórico
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mb-4">Minhas Candidaturas</h4>
+            
+            {% if candidaturas %}
+                {% for candidatura in candidaturas %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title mb-3">{{ candidatura.vaga.titulo }}</h5>
+                                    <p class="text-muted mb-2">Disciplina: {{ candidatura.vaga.disciplina }}</p>
+                                    <p class="mb-0">Data da candidatura: {{ candidatura.data_candidatura|date:"d/m/Y" }}</p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <span class="status-badge status-pending">Candidatura em Análise</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle me-2" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    Você ainda não possui candidaturas.
+                </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{% url 'listar_vagas' %}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-2" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                    Explorar Novas Vagas
+                </a>
+                <a href="{% url 'area_candidato' %}" class="btn btn-outline-secondary">Consultar Outro E-mail</a>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
