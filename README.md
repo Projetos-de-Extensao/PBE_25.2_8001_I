@@ -76,7 +76,7 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 -  Git
 - Visual Studio Code 
 - Python (versão 3.8 ou superior)
-- Extensão Python para VS Code (recomendado)
+- Extensão Python para VS Code 
 
   
 #### Você tem uma máquina Windows / Linux / Mac
