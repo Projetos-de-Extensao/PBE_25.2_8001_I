@@ -24,7 +24,12 @@ from .permissions import (
     is_coordinator,
     is_student,
 )
-from .serializers import CandidaturaSerializer, DisciplinaSerializer, VagaMonitoriaSerializer
+from .serializers import (
+    AvaliacaoCandidaturaSerializer,
+    CandidaturaSerializer,
+    DisciplinaSerializer,
+    VagaMonitoriaSerializer,
+)
 from .utils import registrar_auditoria
 
 
@@ -414,3 +419,39 @@ class CandidaturaViewSet(viewsets.ModelViewSet):
         candidatura.save(update_fields=["status", "feedback", "ultima_atualizacao_status", "updated_at"])
         registrar_auditoria(request.user, f"status_candidatura_{novo_status}", candidatura)
         return Response(CandidaturaSerializer(candidatura, context=self.get_serializer_context()).data)
+
+    @action(detail=True, methods=["get", "post"], permission_classes=[IsCoordinator])
+    def avaliacoes(self, request, pk=None):
+        candidatura = self.get_object()
+        if request.method == "GET":
+            avaliacoes = candidatura.avaliacoes.select_related("avaliador")
+            serializer = AvaliacaoCandidaturaSerializer(
+                avaliacoes,
+                many=True,
+                context=self.get_serializer_context(),
+            )
+            return Response(serializer.data)
+
+        context = {
+            **self.get_serializer_context(),
+            "candidatura": candidatura,
+            "avaliador": request.user,
+        }
+        serializer = AvaliacaoCandidaturaSerializer(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        avaliacao = serializer.save()
+        created = serializer.context.get("avaliacao_created", False)
+
+        registrar_auditoria(
+            request.user,
+            f"avaliacao_candidatura_{avaliacao.resultado}",
+            avaliacao,
+            descricao=f"Candidatura #{candidatura.pk}",
+        )
+
+        output_serializer = AvaliacaoCandidaturaSerializer(
+            avaliacao,
+            context=self.get_serializer_context(),
+        )
+        status_code = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        return Response(output_serializer.data, status=status_code)

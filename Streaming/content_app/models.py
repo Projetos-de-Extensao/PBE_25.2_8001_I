@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -116,13 +117,20 @@ class CandidaturaStatus(models.TextChoices):
     SUBMETIDA = "submitted", _("Submetida")
     EM_ANALISE = "in_review", _("Em Análise")
     APROVADA = "approved", _("Aprovada")
+    LISTA_ESPERA = "waitlist", _("Lista de Espera")
     REJEITADA = "rejected", _("Rejeitada")
     CANCELADA = "cancelled", _("Cancelada")
 
 
+class ResultadoAvaliacao(models.TextChoices):
+    APROVADO = "approved", _("Aprovado")
+    LISTA_ESPERA = "waitlist", _("Lista de Espera")
+    REPROVADO = "reproved", _("Reprovado")
+
+
 class Candidatura(TempoRegistro):
-    candidato_nome = models.CharField(max_length=100)
-    candidato_email = models.EmailField()
+    candidato_nome = models.CharField(max_length=100, blank=True)
+    candidato_email = models.EmailField(null=True, blank=True)
     candidato_curso = models.CharField(max_length=100, blank=True)
     candidato_periodo = models.CharField(max_length=30, blank=True)
     candidato_cr = models.DecimalField(
@@ -143,7 +151,13 @@ class Candidatura(TempoRegistro):
 
     class Meta:
         ordering = ["-created_at"]
-        unique_together = ("candidato_email", "vaga")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("vaga", "candidato_email"),
+                condition=Q(candidato_email__isnull=False),
+                name="unique_candidatura_vaga_email_not_null",
+            )
+        ]
 
     def __str__(self) -> str:
         return f"{self.candidato_nome} - {self.vaga.titulo}"
@@ -155,6 +169,89 @@ class Candidatura(TempoRegistro):
         if self.status == CandidaturaStatus.EM_ANALISE and self.vaga.permitir_edicao_submetida:
             return True
         return False
+
+    def aplicar_resultado_avaliacao(self, avaliacao: "AvaliacaoCandidatura") -> None:
+        status_por_resultado = {
+            ResultadoAvaliacao.APROVADO: CandidaturaStatus.APROVADA,
+            ResultadoAvaliacao.LISTA_ESPERA: CandidaturaStatus.LISTA_ESPERA,
+            ResultadoAvaliacao.REPROVADO: CandidaturaStatus.REJEITADA,
+        }
+        novo_status = status_por_resultado.get(avaliacao.resultado)
+        if not novo_status:
+            return
+
+        mensagem_final = avaliacao.mensagem_final
+        campos_atualizados = ["status", "ultima_atualizacao_status", "updated_at"]
+        if mensagem_final:
+            self.feedback = mensagem_final
+            campos_atualizados.append("feedback")
+
+        self.status = novo_status
+        self.ultima_atualizacao_status = timezone.now()
+        self.save(update_fields=campos_atualizados)
+
+    def save(self, *args, **kwargs):
+        email = (self.candidato_email or "").strip().lower()
+        self.candidato_email = email or None
+        if self.candidato_nome is None:
+            self.candidato_nome = ""
+        super().save(*args, **kwargs)
+
+
+class AvaliacaoCandidatura(TempoRegistro):
+    candidatura = models.ForeignKey(
+        Candidatura,
+        on_delete=models.CASCADE,
+        related_name="avaliacoes",
+    )
+    avaliador = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="avaliacoes_realizadas",
+    )
+    resultado = models.CharField(max_length=20, choices=ResultadoAvaliacao.choices)
+    nota = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0")), MaxValueValidator(Decimal("10"))],
+    )
+    comentario = models.TextField(blank=True)
+    mensagem_personalizada = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        unique_together = ("candidatura", "avaliador")
+
+    def __str__(self) -> str:
+        resultado = self.get_resultado_display()
+        return f"{self.candidatura} - {self.avaliador} ({resultado})"
+
+    @property
+    def mensagem_padrao(self) -> str:
+        nome = self.candidatura.candidato_nome or "Candidato(a)"
+        vaga = self.candidatura.vaga.titulo
+        mensagens = {
+            ResultadoAvaliacao.APROVADO: f"Parabéns {nome}, você foi aprovado(a) para a vaga {vaga}.",
+            ResultadoAvaliacao.LISTA_ESPERA: (
+                f"{nome}, sua candidatura à vaga {vaga} foi colocada na lista de espera. "
+                "Entraremos em contato caso uma oportunidade seja aberta."
+            ),
+            ResultadoAvaliacao.REPROVADO: (
+                f"{nome}, agradecemos seu interesse na vaga {vaga}, mas sua candidatura não foi selecionada desta vez."
+            ),
+        }
+        return mensagens.get(self.resultado, "").strip()
+
+    @property
+    def mensagem_final(self) -> str:
+        personalizada = (self.mensagem_personalizada or "").strip()
+        return personalizada or self.mensagem_padrao
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.candidatura.aplicar_resultado_avaliacao(self)
 
 
 class AuditoriaRegistro(models.Model):

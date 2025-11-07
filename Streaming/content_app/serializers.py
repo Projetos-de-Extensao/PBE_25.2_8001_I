@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import (
+    AvaliacaoCandidatura,
     Candidatura,
     CandidaturaStatus,
     Departamento,
@@ -159,6 +160,60 @@ class VagaMonitoriaSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class AvaliacaoCandidaturaSerializer(serializers.ModelSerializer):
+    avaliador = UsuarioResumoSerializer(read_only=True)
+    resultado_display = serializers.CharField(source="get_resultado_display", read_only=True)
+    mensagem_padrao = serializers.SerializerMethodField()
+    mensagem_final = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AvaliacaoCandidatura
+        fields = (
+            "id",
+            "resultado",
+            "resultado_display",
+            "nota",
+            "comentario",
+            "mensagem_personalizada",
+            "mensagem_padrao",
+            "mensagem_final",
+            "avaliador",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "resultado_display",
+            "mensagem_padrao",
+            "mensagem_final",
+            "avaliador",
+            "created_at",
+            "updated_at",
+        )
+
+    def get_mensagem_padrao(self, obj):
+        return obj.mensagem_padrao
+
+    def get_mensagem_final(self, obj):
+        return obj.mensagem_final
+
+    def create(self, validated_data):
+        candidatura = self.context["candidatura"]
+        avaliador = self.context["avaliador"]
+        avaliacao, created = AvaliacaoCandidatura.objects.update_or_create(
+            candidatura=candidatura,
+            avaliador=avaliador,
+            defaults=validated_data,
+        )
+        self.context["avaliacao_created"] = created
+        return avaliacao
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
 class CandidaturaSerializer(serializers.ModelSerializer):
     vaga = VagaMonitoriaSerializer(read_only=True)
     vaga_id = serializers.PrimaryKeyRelatedField(
@@ -191,6 +246,15 @@ class CandidaturaSerializer(serializers.ModelSerializer):
             "ultima_atualizacao_status",
         )
         read_only_fields = ("created_at", "updated_at", "ultima_atualizacao_status")
+        extra_kwargs = {
+            "candidato_nome": {"required": False, "allow_blank": True, "default": ""},
+            "candidato_email": {
+                "required": False,
+                "allow_blank": True,
+                "allow_null": True,
+                "default": None,
+            },
+        }
 
     def validate(self, attrs):
         vaga = attrs.get("vaga", getattr(self.instance, "vaga", None))
@@ -200,10 +264,12 @@ class CandidaturaSerializer(serializers.ModelSerializer):
         if status == CandidaturaStatus.CANCELADA and not attrs.get("motivo_cancelamento"):
             raise serializers.ValidationError({"motivo_cancelamento": "Informe o motivo do cancelamento."})
         email = attrs.get("candidato_email", getattr(self.instance, "candidato_email", None))
-        if not email:
-            raise serializers.ValidationError({"candidato_email": "Informe um e-mail válido."})
-        email = email.strip().lower()
-        attrs["candidato_email"] = email
+        if email:
+            email = email.strip().lower()
+            attrs["candidato_email"] = email
+        else:
+            attrs["candidato_email"] = None
+        email = attrs["candidato_email"]
 
         candidato_cr = attrs.get("candidato_cr", getattr(self.instance, "candidato_cr", None))
         if vaga and vaga.cr_minimo and candidato_cr is not None and candidato_cr < vaga.cr_minimo:

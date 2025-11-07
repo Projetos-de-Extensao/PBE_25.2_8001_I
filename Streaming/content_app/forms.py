@@ -20,6 +20,8 @@ class CandidaturaPublicForm(forms.ModelForm):
                 campo.widget.attrs.setdefault("class", "form-control")
             else:
                 campo.widget.attrs.setdefault("class", "form-control")
+            if nome != "vaga":
+                campo.required = False
 
     class Meta:
         model = Candidatura
@@ -39,8 +41,9 @@ class CandidaturaPublicForm(forms.ModelForm):
         }
 
     def clean_candidato_email(self):
-        email = self.cleaned_data.get("candidato_email", "")
-        return email.strip().lower()
+        email = self.cleaned_data.get("candidato_email") or ""
+        email = email.strip().lower()
+        return email or None
 
 
 class VagaMonitoriaForm(forms.ModelForm):

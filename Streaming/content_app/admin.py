@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import (
     AuditoriaRegistro,
+    AvaliacaoCandidatura,
     Candidatura,
     Departamento,
     Disciplina,
@@ -84,6 +85,35 @@ class CandidaturaAdmin(admin.ModelAdmin):
     list_filter = ("status", "vaga__disciplina__departamento", "vaga__disciplina__semestre")
     search_fields = ("candidato_nome", "candidato_email", "vaga__titulo")
     list_select_related = ("vaga", "vaga__disciplina")
+
+
+@admin.register(AvaliacaoCandidatura)
+class AvaliacaoCandidaturaAdmin(admin.ModelAdmin):
+    list_display = ("candidatura", "avaliador", "resultado", "nota", "updated_at")
+    list_filter = ("resultado", "avaliador")
+    search_fields = (
+        "candidatura__candidato_nome",
+        "candidatura__vaga__titulo",
+        "avaliador__username",
+        "avaliador__email",
+    )
+    autocomplete_fields = ("candidatura", "avaliador")
+    readonly_fields = ("created_at", "updated_at", "mensagem_padrao_preview", "mensagem_final_preview")
+    fieldsets = (
+        (None, {"fields": ("candidatura", "avaliador", "resultado", "nota", "comentario", "mensagem_personalizada")}),
+        ("Comunicado", {"fields": ("mensagem_padrao_preview", "mensagem_final_preview")}),
+        ("Metadados", {"fields": ("created_at", "updated_at")}),
+    )
+
+    def mensagem_padrao_preview(self, obj):
+        return obj.mensagem_padrao
+
+    mensagem_padrao_preview.short_description = "Mensagem padrão"
+
+    def mensagem_final_preview(self, obj):
+        return obj.mensagem_final
+
+    mensagem_final_preview.short_description = "Mensagem final"
 
 
 @admin.register(AuditoriaRegistro)
