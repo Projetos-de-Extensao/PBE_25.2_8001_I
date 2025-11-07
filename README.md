@@ -155,9 +155,8 @@ Após iniciar o servidor, acesse:
 **Admin**
 
 ```ruby
-Username: Admin
-Email: admin@casa.com
-Senha: Admin
+Username: admin
+Senha: adminstrador
 ```
 
 
