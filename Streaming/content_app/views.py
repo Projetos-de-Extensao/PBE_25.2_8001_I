@@ -131,6 +131,7 @@ def listar_vagas(request):
 
 
 @login_required
+@login_required
 def prof_index(request):
     minhas_vagas = (
         VagaMonitoria.objects.select_related("disciplina")
@@ -138,7 +139,49 @@ def prof_index(request):
         .annotate(total_candidaturas=Count("candidaturas"))
         .order_by("-created_at")
     )
-    return render(request, "profIndex.html", {"minhas_vagas": minhas_vagas})
+    return render(request, "professor/prof_Index.html", {"minhas_vagas": minhas_vagas})
+
+
+@login_required
+def prof_gerenciar_vagas(request):
+    """View para gerenciar vagas de monitoria"""
+    minhas_vagas = (
+        VagaMonitoria.objects.select_related("disciplina")
+        .filter(disciplina__coordenador=request.user)
+        .annotate(total_candidaturas=Count("candidaturas"))
+        .order_by("-created_at")
+    )
+    return render(request, "professor/prof_gerenciarVagas.html", {"minhas_vagas": minhas_vagas})
+
+
+@login_required  
+def prof_gerenciar_candidaturas(request):
+    """View para gerenciar candidaturas"""
+    candidaturas = (
+        Candidatura.objects.select_related("vaga", "vaga__disciplina")
+        .filter(vaga__disciplina__coordenador=request.user)
+        .order_by("-created_at")
+    )
+    return render(request, "professor/prof_gerenciarCandidatura.html", {"candidaturas": candidaturas})
+
+
+@login_required
+def prof_relatorios(request):
+    """View para exibir relatórios"""
+    # Estatísticas básicas
+    total_vagas = VagaMonitoria.objects.filter(disciplina__coordenador=request.user).count()
+    total_candidaturas = Candidatura.objects.filter(vaga__disciplina__coordenador=request.user).count()
+    candidaturas_aprovadas = Candidatura.objects.filter(
+        vaga__disciplina__coordenador=request.user,
+        status=CandidaturaStatus.APROVADA
+    ).count()
+    
+    context = {
+        'total_vagas': total_vagas,
+        'total_candidaturas': total_candidaturas,
+        'candidaturas_aprovadas': candidaturas_aprovadas,
+    }
+    return render(request, "professor/prof_relatorio.html", context)
 
 
 def cadastrar_candidato(request, vaga_id=None):

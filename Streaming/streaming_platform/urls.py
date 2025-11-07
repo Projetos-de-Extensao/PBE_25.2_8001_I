@@ -23,8 +23,12 @@ urlpatterns = [
     path("cadastrar/<int:vaga_id>/", views.cadastrar_candidato, name="cadastrar_candidato_vaga"),
     path("area-candidato/", views.area_candidato, name="area_candidato"),
     path("professor/", views.prof_index, name="prof_index"),
+    path("professor/vagas/", views.prof_gerenciar_vagas, name="prof_gerenciar_vagas"),
+    path("professor/candidaturas/", views.prof_gerenciar_candidaturas, name="prof_gerenciar_candidaturas"),
+    path("professor/relatorios/", views.prof_relatorios, name="prof_relatorios"),
 
     path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
 
     path("api/", include(router.urls)),
     path("api/token/", obtain_auth_token, name="api_token_auth"),

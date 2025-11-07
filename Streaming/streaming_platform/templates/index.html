@@ -21,19 +21,20 @@
             </div>
         </div>
 
-        <!-- Nova candidatura Card -->
+        <!-- Área do Candidato (substitui o card de nova candidatura) -->
         <div class="col-md-6">
             <div class="card feature-card h-100">
                 <div class="card-body text-center p-4">
                     <div class="mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-plus text-success" viewBox="0 0 16 16">
-                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-badge text-success" viewBox="0 0 16 16">
+                            <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3z"/>
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3z"/>
+                            <path fill-rule="evenodd" d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         </svg>
                     </div>
-                    <h3 class="card-title mb-3">Envie sua candidatura</h3>
-                    <p class="card-text mb-4">Preencha seus dados básicos, anexe documentos e acompanhe o status de cada envio.</p>
-                    <a href="{% url 'cadastrar_candidato' %}" class="btn btn-success">Nova candidatura</a>
+                    <h3 class="card-title mb-3">Área do Candidato</h3>
+                    <p class="card-text mb-4">Verifique suas candidaturas, acompanhe o status e atualize seus dados.</p>
+                    <a href="{% url 'area_candidato' %}" class="btn btn-success">Acessar área</a>
                 </div>
             </div>
         </div>
@@ -54,7 +55,7 @@
                     <p class="mb-3">{{ vaga.prerequisitos|truncatewords:20 }}</p>
                     <div class="mt-auto d-flex justify-content-between align-items-center">
                         <span class="badge bg-primary">{{ vaga.quantidade_vagas }} vaga{{ vaga.quantidade_vagas|pluralize }}</span>
-                        <a href="{% url 'cadastrar_candidato_vaga' vaga.id %}" class="btn btn-outline-primary btn-sm">Quero me candidatar</a>
+                        <a href="{% url 'listar_vagas' %}" class="btn btn-outline-primary btn-sm">Ver vagas</a>
                     </div>
                 </div>
             </div>

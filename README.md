@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/github/last-commit/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   
   
-#
+##
   
   
   
@@ -17,12 +17,13 @@
 <p align="center">
   <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" width="250" height="250" />
   <br />
-  <img src="https://forthebadge.com/images/badges/0-percent-optimized.svg" height="30" />
+  
 
-   
+   <h3 align="center">Sistema Web de Gestão de Monitorias</h3>
   
   <p align="center">
     Uma API backend para gerenciar e otimizar monitorias acadêmicas!
+    
   <br />
     <a href="https://projetos-de-extensao.github.io/PBE_25.2_8001_I/"><strong>Explore o MKdocs »</strong></a>
     <br />
@@ -36,18 +37,13 @@
 </p>
 
 
-### ⚙️ Ajustes e melhorias
+## 🤝 Integrantes
 
- O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
+#### Agradecemos às seguintes pessoas que contribuíram para este projeto:
 
-- [X] **Portal de Vagas** 
-- [ ] **Cadastro de Candidatos** 
-- [ ] **Seleção e Comunicação** 
-- [ ] **Geração de Relatórios Básicos** 
-- [ ] **Registro de Frequência e Horas** 
-- [ ] **Dashboard de Gestão**
+ [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/fegoiaba.png" width="60"/>](https://github.com/fegoiaba)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) [<img src="https://github.com/LFCMerino.png" width="60"/>](https://github.com/LFCMerino) 
 
-
+ 
 ## 📌 Sobre o Projeto
 
 Nos últimos períodos, o programa de Monitoria tem registrado um crescimento expressivo na demanda por parte dos estudantes. Entretanto, esse avanço não tem sido acompanhado pela implementação de uma estrutura tecnológica adequada. A ausência de um sistema próprio tem gerado diversos desafios que impactam diretamente a eficiência, a organização e a confiabilidade das atividades.
@@ -67,15 +63,7 @@ Desenvolver uma plataforma digital exclusiva para a Monitoria da faculdade, visa
 
 A gestão descentralizada da Monitoria gera falhas recorrentes, como erros operacionais, retrabalho e problemas de comunicação. Para resolver esses desafios, propomos a criação de um sistema web institucional que centralize os processos, organize as informações e padronize o fluxo de trabalho. Com isso, a Monitoria ganha mais eficiência, transparência e profissionalismo, fortalecendo sua presença na comunidade acadêmica.
 
-
-
-## 🤝 Integrantes
-
-#### Agradecemos às seguintes pessoas que contribuíram para este projeto:
-
- [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/fegoiaba.png" width="60"/>](https://github.com/fegoiaba)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) [<img src="https://github.com/LFCMerino.png" width="60"/>](https://github.com/LFCMerino) 
-
- ## 🔧 Ferramentas
+## 🔧 Ferramentas
 
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=vsc&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-f14e32?style=for-the-badge&logo=git&logoColor=white)
@@ -83,8 +71,6 @@ A gestão descentralizada da Monitoria gera falhas recorrentes, como erros opera
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML-E86100?style=for-the-badge&logo=html5&logoColor=white)
-
-
 
 
 ## 🚀 Iniciando o Projeto 
@@ -151,6 +137,26 @@ Após iniciar o servidor, acesse:
 | http://localhost:8000/professor/ | Painel do Professor |
 
 ### 🔑 Credenciais de Teste
+
+**Aluno**
+
+```ruby
+Username: aluno
+Senha: estudante
+```
+
+**Professor**
+
+```ruby
+Username: professor
+Senha: educador
+```
+**Coordenador**
+
+```ruby
+Username: coordenador
+Senha: monitoria
+```
 
 **Admin**
 

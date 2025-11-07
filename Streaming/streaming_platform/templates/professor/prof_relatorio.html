@@ -1,0 +1,629 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios - Professor{% endblock %}
+
+{% block extra_css %}
+<style>
+	/* Professor-specific theme */
+	:root {
+		--prof-primary: #372e83;
+		--prof-accent: #4d3fca;
+		--prof-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		--prof-hover: rgba(55, 46, 131, 0.1);
+		--prof-text: #64748b;
+		--prof-bg: rgba(255, 255, 255, 0.9);
+	}
+	
+	/* Modern HUD Navigation */
+	.professor-nav-hud {
+		background: linear-gradient(135deg, #f8f9ff 0%, #e8ecf7 100%);
+		backdrop-filter: blur(10px);
+		position: relative;
+		z-index: 100;
+	}
+	
+	.nav-hud-container {
+		padding: 1rem 0;
+	}
+	
+	.nav-tabs-custom {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0.5rem;
+
+		backdrop-filter: blur(20px);
+		
+	}
+	
+	.nav-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none !important;
+    color: var(--prof-text);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1; /* garante alinhamento vertical da fonte */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: transparent;
+    text-align: center;
+}
+	
+	.nav-tab:hover {
+		color: rgb(84, 152, 255) !important;
+		background: var(--prof-hover) !important;
+		transform: translateY(-3px);
+		text-decoration: none !important;
+		
+	}
+	
+	.nav-tab:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(55, 46, 131, 0.2);
+	}
+	
+	.nav-tab.active {
+    color: rgb(2, 103, 255) !important;
+    transform: translateY(-1px);
+    font-weight: 600;
+}
+	
+	.nav-tab.active:hover {
+		background: var(--prof-gradient) !important;
+		transform: translateY(-3px);
+	}
+	
+	.nav-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		font-size: 1rem;
+		text-align: center;
+	}
+	
+	.nav-label {
+		font-size: 0.9rem;
+		font-weight: 600;
+		white-space: nowrap;
+		text-align: center;
+		line-height: 1.2;
+	}
+	
+	.nav-indicator {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0;
+		height: 3px;
+		background: var(--prof-gradient);
+		border-radius: 2px;
+		transition: width 0.3s ease;
+	}
+	
+	.nav-tab.active .nav-indicator {
+		width: 60%;
+	}
+	
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.nav-tabs-custom {
+			flex-wrap: wrap;
+			gap: 0.25rem;
+		}
+		
+		.nav-tab {
+			min-width: auto;
+			flex: 1;
+			padding: 0.75rem 1rem;
+		}
+		
+		.nav-label {
+			display: none;
+		}
+		
+		.nav-icon {
+			font-size: 1.1rem;
+		}
+	}
+	
+	.hero-section {
+		background: linear-gradient(135deg, var(--prof-primary), #6a3fb3);
+		color: #363636;
+		padding: 2.5rem 0;
+	}
+	.stats-card {
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(75,46,131,0.08);
+		transition: transform .15s ease;
+		border: none;
+	}
+	.stats-card:hover { transform: translateY(-4px); }
+	.stats-number {
+		font-size: 2.5rem;
+		font-weight: 700;
+		background: linear-gradient(45deg, var(--prof-primary), var(--prof-accent));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.chart-container {
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(75,46,131,0.08);
+		padding: 1.5rem;
+	}
+	.filter-panel {
+		background: #f8f9fa;
+		border-radius: 12px;
+		padding: 1.5rem;
+		margin-bottom: 2rem;
+	}
+	.export-btn {
+		background: var(--prof-primary);
+		border-color: var(--prof-primary);
+		color: white;
+	}
+	.export-btn:hover {
+		background: #3e236f;
+		border-color: #3e236f;
+		color: white;
+	}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block hero_title %}Relatórios e Estatísticas{% endblock %}
+{% block hero_subtitle %}Análise completa das suas vagas e candidaturas{% endblock %}
+
+{% block content %}
+<!-- Professor Navigation HUD -->
+<div class="professor-nav-hud mb-4">
+	<div class="container">
+		<div class="nav-hud-container">
+			<div class="nav-tabs-custom">
+				<a class="nav-tab" href="{% url 'prof_index' %}">
+					<div class="nav-icon">
+						<i class="fas fa-home"></i>
+					</div>
+					<span class="nav-label">Início</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab" href="{% url 'prof_gerenciar_vagas' %}">
+					<div class="nav-icon">
+						<i class="fas fa-briefcase"></i>
+					</div>
+					<span class="nav-label">Gerenciar Vagas</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab" href="{% url 'prof_gerenciar_candidaturas' %}">
+					<div class="nav-icon">
+						<i class="fas fa-users"></i>
+					</div>
+					<span class="nav-label">Candidaturas</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab active" href="{% url 'prof_relatorios' %}">
+					<div class="nav-icon">
+						<i class="fas fa-chart-bar"></i>
+					</div>
+					<span class="nav-label">Relatórios</span>
+					<div class="nav-indicator"></div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container mb-5">
+	<!-- Breadcrumb -->
+	
+	<!-- Painel de Filtros -->
+    <h3>Relatório</h3>
+	<div class="filter-panel">
+		<div class="row align-items-end">
+			<div class="col-md-3">
+				<label class="form-label">Período</label>
+				<select class="form-select">
+					<option value="30">Últimos 30 dias</option>
+					<option value="90">Últimos 3 meses</option>
+					<option value="365">Último ano</option>
+					<option value="custom">Período personalizado</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<label class="form-label">Disciplina</label>
+				<select class="form-select">
+					<option value="">Todas</option>
+					{% comment %} {% for disciplina in disciplinas %}
+					<option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+					{% endfor %} {% endcomment %}
+				</select>
+			</div>
+			<div class="col-md-3">
+				<label class="form-label">Status da Vaga</label>
+				<select class="form-select">
+					<option value="">Todos</option>
+					<option value="publicada">Publicadas</option>
+					<option value="finalizada">Finalizadas</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<button class="btn export-btn w-100">
+					<i class="bi bi-arrow-clockwise"></i> Atualizar
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Cards de Estatísticas -->
+	<div class="row g-4 mb-5">
+		<div class="col-md-3">
+			<div class="card stats-card text-center p-4">
+				<div class="stats-number">{{ total_vagas|default:"0" }}</div>
+				<h6 class="text-muted mb-0">Total de Vagas</h6>
+				<small class="text-success">
+					<i class="bi bi-arrow-up"></i> +12% este mês
+				</small>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card stats-card text-center p-4">
+				<div class="stats-number">{{ total_candidaturas|default:"0" }}</div>
+				<h6 class="text-muted mb-0">Candidaturas Recebidas</h6>
+				<small class="text-success">
+					<i class="bi bi-arrow-up"></i> +8% este mês
+				</small>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card stats-card text-center p-4">
+				<div class="stats-number">{{ media_candidatos|default:"0"|floatformat:1 }}</div>
+				<h6 class="text-muted mb-0">Média por Vaga</h6>
+				<small class="text-warning">
+					<i class="bi bi-dash"></i> 0% este mês
+				</small>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card stats-card text-center p-4">
+				<div class="stats-number">{{ taxa_aprovacao|default:"0"|floatformat:1 }}%</div>
+				<h6 class="text-muted mb-0">Taxa de Aprovação</h6>
+				<small class="text-danger">
+					<i class="bi bi-arrow-down"></i> -2% este mês
+				</small>
+			</div>
+		</div>
+	</div>
+
+	<!-- Gráficos -->
+	<div class="row g-4 mb-5">
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-4">Candidaturas por Mês</h5>
+				<div style="height: 250px; position: relative;">
+					<canvas id="candidaturasChart"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-4">Status das Candidaturas</h5>
+				<div style="height: 250px; position: relative;">
+					<canvas id="statusChart"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row g-4 mb-5">
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-4">Vagas por Disciplina</h5>
+				<div style="height: 200px; position: relative;">
+					<canvas id="disciplinasChart"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-4">CR dos Candidatos</h5>
+				<div style="height: 200px; position: relative;">
+					<canvas id="crChart"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Tabela Detalhada -->
+	<div class="chart-container">
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<h5>Relatório Detalhado por Vaga</h5>
+			<div class="btn-group">
+				<button class="btn btn-outline-success">
+					<i class="bi bi-file-excel"></i> Excel
+				</button>
+				<button class="btn btn-outline-danger">
+					<i class="bi bi-filetype-pdf"></i> PDF
+				</button>
+				<button class="btn btn-outline-primary">
+					<i class="bi bi-filetype-csv"></i> CSV
+				</button>
+			</div>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead class="table-light">
+					<tr>
+						<th>Vaga</th>
+						<th>Disciplina</th>
+						<th>Status</th>
+						<th>Candidaturas</th>
+						<th>Aprovadas</th>
+						<th>Taxa de Aprovação</th>
+						<th>CR Médio</th>
+						<th>Período</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if vagas_detalhadas %}
+					{% for vaga in vagas_detalhadas %}
+					<tr>
+						<td>{{ vaga.titulo }}</td>
+						<td>{{ vaga.disciplina.nome }}</td>
+						<td>
+							<span class="badge bg-{{ vaga.status|lower }}">{{ vaga.get_status_display }}</span>
+						</td>
+						<td>{{ vaga.total_candidaturas|default:"0" }}</td>
+						<td>{{ vaga.candidaturas_aprovadas|default:"0" }}</td>
+						<td>
+							{% if vaga.total_candidaturas > 0 %}
+							{{ vaga.taxa_aprovacao|floatformat:1 }}%
+							{% else %}
+							-
+							{% endif %}
+						</td>
+						<td>{{ vaga.cr_medio|default:"-"|floatformat:1 }}</td>
+						<td>{{ vaga.inscricoes_inicio|date:"d/m" }} - {{ vaga.inscricoes_fim|date:"d/m/Y" }}</td>
+					</tr>
+					{% endfor %}
+					{% else %}
+					<tr>
+						<td colspan="8" class="text-center text-muted py-4">
+							Nenhum dado disponível para o período selecionado
+						</td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Insights e Recomendações -->
+	<div class="row g-4 mt-4">
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-3">💡 Insights</h5>
+				<div class="list-group list-group-flush">
+					<div class="list-group-item border-0 px-0">
+						<div class="d-flex align-items-center">
+							<div class="flex-shrink-0 me-3">
+								<div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+									<i class="bi bi-arrow-up"></i>
+								</div>
+							</div>
+							<div>
+								<h6 class="mb-1">Aumento nas candidaturas</h6>
+								<p class="mb-0 text-muted">As vagas de programação tiveram 25% mais candidatos este mês.</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item border-0 px-0">
+						<div class="d-flex align-items-center">
+							<div class="flex-shrink-0 me-3">
+								<div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+									<i class="bi bi-exclamation-triangle"></i>
+								</div>
+							</div>
+							<div>
+								<h6 class="mb-1">CR abaixo do esperado</h6>
+								<p class="mb-0 text-muted">Considere revisar os critérios de CR mínimo para algumas disciplinas.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="chart-container">
+				<h5 class="mb-3">📈 Recomendações</h5>
+				<div class="list-group list-group-flush">
+					<div class="list-group-item border-0 px-0">
+						<div class="d-flex align-items-center">
+							<div class="flex-shrink-0 me-3">
+								<div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+									<i class="bi bi-lightbulb"></i>
+								</div>
+							</div>
+							<div>
+								<h6 class="mb-1">Otimizar prazos</h6>
+								<p class="mb-0 text-muted">Vagas com prazo de 2 semanas têm melhor engajamento.</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item border-0 px-0">
+						<div class="d-flex align-items-center">
+							<div class="flex-shrink-0 me-3">
+								<div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+									<i class="bi bi-calendar-event"></i>
+								</div>
+							</div>
+							<div>
+								<h6 class="mb-1">Melhor período para publicação</h6>
+								<p class="mb-0 text-muted">Publique vagas no início do semestre para maior alcance.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+// Configuração dos gráficos
+document.addEventListener('DOMContentLoaded', function() {
+	// Gráfico de Candidaturas por Mês (Otimizado)
+	const candidaturasCtx = document.getElementById('candidaturasChart').getContext('2d');
+	new Chart(candidaturasCtx, {
+		type: 'bar',
+		data: {
+			labels: ['Jan', 'Fev', 'Mar', 'Abr'],
+			datasets: [{
+				label: 'Candidaturas',
+				data: [12, 19, 8, 15],
+				backgroundColor: '#372e83',
+				borderColor: '#372e83',
+				borderWidth: 1
+			}]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			interaction: {
+				intersect: false,
+			},
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 5
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: false
+				}
+			},
+			animation: {
+				duration: 1000
+			}
+		}
+	});
+
+	// Gráfico de Status das Candidaturas (Otimizado)
+	const statusCtx = document.getElementById('statusChart').getContext('2d');
+	new Chart(statusCtx, {
+		type: 'doughnut',
+		data: {
+			labels: ['Aprovadas', 'Rejeitadas', 'Em Avaliação'],
+			datasets: [{
+				data: [45, 25, 30],
+				backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+				borderWidth: 2,
+				borderColor: '#fff'
+			}]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			plugins: {
+				legend: {
+					position: 'bottom',
+					labels: {
+						padding: 10,
+						usePointStyle: true
+					}
+				}
+			},
+			animation: {
+				duration: 1000
+			}
+		}
+	});
+
+	// Gráfico de Vagas por Disciplina (Otimizado)
+	const disciplinasCtx = document.getElementById('disciplinasChart').getContext('2d');
+	new Chart(disciplinasCtx, {
+		type: 'bar',
+		data: {
+			labels: ['Programação', 'Matemática', 'Física'],
+			datasets: [{
+				label: 'Vagas',
+				data: [8, 5, 3],
+				backgroundColor: ['#372e83', '#4d3fca', '#6a3fb3'],
+				borderRadius: 4
+			}]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 2
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: false
+				}
+			},
+			animation: {
+				duration: 800
+			}
+		}
+	});
+
+	// Gráfico de CR dos Candidatos (Otimizado)
+	const crCtx = document.getElementById('crChart').getContext('2d');
+	new Chart(crCtx, {
+		type: 'bar',
+		data: {
+			labels: ['7.0-8.0', '8.0-9.0', '9.0-10.0'],
+			datasets: [{
+				label: 'Candidatos',
+				data: [15, 25, 10],
+				backgroundColor: '#4d3fca',
+				borderRadius: 4
+			}]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			scales: {
+				y: {
+					beginAtZero: true,
+					ticks: {
+						stepSize: 5
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: false
+				}
+			},
+			animation: {
+				duration: 800
+			}
+		}
+	});
+});
+</script>
+
+{% endblock %}

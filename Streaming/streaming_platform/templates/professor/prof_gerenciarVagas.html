@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Vagas - Professor{% endblock %}
+
+{% block extra_css %}
+<style>
+	/* Professor-specific theme */
+	:root {
+		--prof-primary: #372e83;
+		--prof-accent: #4d3fca;
+		--prof-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		--prof-hover: rgba(55, 46, 131, 0.1);
+		--prof-text: #64748b;
+		--prof-bg: rgba(255, 255, 255, 0.9);
+	}
+	
+	/* Modern HUD Navigation */
+	.professor-nav-hud {
+		background: linear-gradient(135deg, #f8f9ff 0%, #e8ecf7 100%);
+		backdrop-filter: blur(10px);
+		position: relative;
+		z-index: 100;
+	}
+	
+	.nav-hud-container {
+		padding: 1rem 0;
+	}
+	
+	.nav-tabs-custom {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0.5rem;
+
+		backdrop-filter: blur(20px);
+		
+	}
+	
+	.nav-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none !important;
+    color: var(--prof-text);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1; /* garante alinhamento vertical da fonte */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: transparent;
+    text-align: center;
+}
+	
+	.nav-tab:hover {
+		color: rgb(84, 152, 255) !important;
+		background: var(--prof-hover) !important;
+		transform: translateY(-3px);
+		text-decoration: none !important;
+		
+	}
+	
+	.nav-tab:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(55, 46, 131, 0.2);
+	}
+	
+	.nav-tab.active {
+    color: rgb(2, 103, 255) !important;
+    transform: translateY(-1px);
+    font-weight: 600;
+}
+	
+	.nav-tab.active:hover {
+		background: var(--prof-gradient) !important;
+		transform: translateY(-3px);
+	}
+	
+	.nav-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		font-size: 1rem;
+		text-align: center;
+	}
+	
+	.nav-label {
+		font-size: 0.9rem;
+		font-weight: 600;
+		white-space: nowrap;
+		text-align: center;
+		line-height: 1.2;
+	}
+	
+	.nav-indicator {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0;
+		height: 3px;
+		background: var(--prof-gradient);
+		border-radius: 2px;
+		transition: width 0.3s ease;
+	}
+	
+	.nav-tab.active .nav-indicator {
+		width: 60%;
+	}
+	
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.nav-tabs-custom {
+			flex-wrap: wrap;
+			gap: 0.25rem;
+		}
+		
+		.nav-tab {
+			min-width: auto;
+			flex: 1;
+			padding: 0.75rem 1rem;
+		}
+		
+		.nav-label {
+			display: none;
+		}
+		
+		.nav-icon {
+			font-size: 1.1rem;
+		}
+	}
+	
+	.hero-section {
+		background: linear-gradient(135deg, var(--prof-primary), #6a3fb3);
+		color: #363636;
+		padding: 2.5rem 0;
+	}
+	.vaga-card {
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(75,46,131,0.08);
+		transition: transform .15s ease;
+	}
+	.vaga-card:hover { transform: translateY(-4px); }
+	.status-badge {
+		font-size: 0.8em;
+		padding: 0.25rem 0.6rem;
+		border-radius: 999px;
+		font-weight: 600;
+	}
+	.status-publicada { background: #d4edda; color: #155724; }
+	.status-rascunho { background: #fff3cd; color: #856404; }
+	.status-finalizada { background: #f8d7da; color: #721c24; }
+	.create-btn { background: var(--prof-primary); border-color: var(--prof-primary); }
+	.create-btn:hover { background: #3e236f; border-color: #3e236f }
+</style>
+{% endblock %}
+
+{% block hero_title %}Gerenciar Vagas{% endblock %}
+{% block hero_subtitle %}Crie, edite e gerencie suas vagas de monitoria{% endblock %}
+
+{% block content %}
+<!-- Professor Navigation HUD -->
+<div class="professor-nav-hud mb-4">
+	<div class="container">
+		<div class="nav-hud-container">
+			<div class="nav-tabs-custom">
+				<a class="nav-tab" href="{% url 'prof_index' %}">
+					<div class="nav-icon">
+						<i class="fas fa-home"></i>
+					</div>
+					<span class="nav-label">Início</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab active" href="{% url 'prof_gerenciar_vagas' %}">
+					<div class="nav-icon">
+						<i class="fas fa-briefcase"></i>
+					</div>
+					<span class="nav-label">Gerenciar Vagas</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab" href="{% url 'prof_gerenciar_candidaturas' %}">
+					<div class="nav-icon">
+						<i class="fas fa-users"></i>
+					</div>
+					<span class="nav-label">Candidaturas</span>
+					<div class="nav-indicator"></div>
+				</a>
+				<a class="nav-tab" href="{% url 'prof_relatorios' %}">
+					<div class="nav-icon">
+						<i class="fas fa-chart-bar"></i>
+					</div>
+					<span class="nav-label">Relatórios</span>
+					<div class="nav-indicator"></div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container mb-5">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<h3>Minhas Vagas</h3>
+			<p class="text-muted mb-0">{{ minhas_vagas.count|default:"0" }} vaga{{ minhas_vagas.count|pluralize }} encontrada{{ minhas_vagas.count|pluralize }}</p>
+		</div>
+		<div>
+			<button class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#filtroModal">
+				<i class="bi bi-funnel"></i> Filtrar
+			</button>
+			<a href="#" class="btn btn-lg btn-primary create-btn">
+				<i class="bi bi-plus-circle me-2"></i>Nova Vaga
+			</a>
+		</div>
+	</div>
+
+	<!-- Filtros rápidos -->
+	<div class="row mb-4">
+		<div class="col-12">
+			<div class="btn-group" role="group">
+				<input type="radio" class="btn-check" name="status-filter" id="all" checked>
+				<label class="btn btn-outline-secondary" for="all">Todas</label>
+				
+				<input type="radio" class="btn-check" name="status-filter" id="publicadas">
+				<label class="btn btn-outline-success" for="publicadas">Publicadas</label>
+				
+				<input type="radio" class="btn-check" name="status-filter" id="rascunho">
+				<label class="btn btn-outline-warning" for="rascunho">Rascunhos</label>
+				
+				<input type="radio" class="btn-check" name="status-filter" id="finalizadas">
+				<label class="btn btn-outline-danger" for="finalizadas">Finalizadas</label>
+			</div>
+		</div>
+	</div>
+
+	<!-- Lista de vagas -->
+	{% if minhas_vagas %}
+	<div class="row g-4">
+		{% for vaga in minhas_vagas %}
+		<div class="col-lg-6">
+			<div class="card vaga-card h-100">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<h5 class="mb-0">{{ vaga.titulo }}</h5>
+					<span class="status-badge status-{{ vaga.status|lower }}">{{ vaga.get_status_display }}</span>
+				</div>
+				<div class="card-body">
+					<h6 class="text-muted">{{ vaga.disciplina.nome }}</h6>
+					<p class="mb-3">{{ vaga.prerequisitos|truncatewords:15 }}</p>
+					
+					<div class="row text-center mb-3">
+						<div class="col-4">
+							<div class="fw-bold">{{ vaga.quantidade_vagas }}</div>
+							<small class="text-muted">Vagas</small>
+						</div>
+						<div class="col-4">
+							<div class="fw-bold">{{ vaga.total_candidaturas|default:"0" }}</div>
+							<small class="text-muted">Candidatos</small>
+						</div>
+						<div class="col-4">
+							<div class="fw-bold">{{ vaga.carga_horaria_semanal }}h</div>
+							<small class="text-muted">Semanais</small>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<small class="text-muted">Inscrições:</small>
+						<div class="fw-bold">{{ vaga.inscricoes_inicio|date:"d/m/Y" }} a {{ vaga.inscricoes_fim|date:"d/m/Y" }}</div>
+					</div>
+				</div>
+				<div class="card-footer bg-transparent">
+					<div class="btn-group w-100">
+						<a href="#" class="btn btn-outline-primary">
+							<i class="bi bi-eye"></i> Ver
+						</a>
+						<a href="#" class="btn btn-outline-secondary">
+							<i class="bi bi-pencil"></i> Editar
+						</a>
+						<button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#candidaturasModal-{{ vaga.id }}">
+							<i class="bi bi-people"></i> Candidatos
+						</button>
+						<div class="btn-group">
+							<button class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown">
+								<i class="bi bi-three-dots"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="#"><i class="bi bi-files"></i> Duplicar</a></li>
+								<li><a class="dropdown-item" href="#"><i class="bi bi-download"></i> Exportar</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash"></i> Arquivar</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% else %}
+	<div class="text-center py-5">
+		<div class="mb-4">
+			<i class="bi bi-journal-plus display-1 text-muted"></i>
+		</div>
+		<h4>Nenhuma vaga encontrada</h4>
+		<p class="text-muted mb-4">Comece criando sua primeira vaga de monitoria</p>
+		<a href="#" class="btn btn-primary create-btn">Criar primeira vaga</a>
+	</div>
+	{% endif %}
+</div>
+
+<!-- Modal de Filtros -->
+<div class="modal fade" id="filtroModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Filtrar Vagas</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="mb-3">
+						<label class="form-label">Status</label>
+						<select class="form-select">
+							<option value="">Todos</option>
+							<option value="publicada">Publicada</option>
+							<option value="rascunho">Rascunho</option>
+							<option value="finalizada">Finalizada</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Disciplina</label>
+						<select class="form-select">
+							<option value="">Todas</option>
+							{% comment %} {% for disciplina in disciplinas %}
+							<option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+							{% endfor %} {% endcomment %}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Período de Inscrição</label>
+						<div class="row">
+							<div class="col">
+								<input type="date" class="form-control" placeholder="De">
+							</div>
+							<div class="col">
+								<input type="date" class="form-control" placeholder="Até">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary">Aplicar Filtros</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
