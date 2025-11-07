@@ -137,7 +137,7 @@ python manage.py runserver
 ```
 
 
-### 🌐 URLs Locais Disponíveis
+## 🌐 URLs Locais Disponíveis
 
 Após iniciar o servidor, acesse:
 
@@ -149,6 +149,16 @@ Após iniciar o servidor, acesse:
 | http://localhost:8000/admin/ | Painel administrativo Django |
 | http://localhost:8000/vagas/ | Portal de vagas público  |
 | http://localhost:8000/professor/ | Painel do Professor |
+
+### 🔑 Credenciais de Teste
+
+**Admin**
+
+```ruby
+Username: Admin
+Email: admin@casa.com
+Senha: Admin
+```
 
 
 
