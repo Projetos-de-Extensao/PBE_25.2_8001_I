@@ -1,18 +1,25 @@
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffa198&size=45&center=true&font=Poppins&vCenter=true&pause=1500&width=1500&lines=Bem-vindo+ao+nosso+Github!+:D;Sistema+Web+de+Gestão+de+Monitorias;Quinto+Elemento;Projeto+Back-End+2025.2+-+Ibmec+CASA;)](https://git.io/typing-svg)
 
 <p align="center">
   <img src="https://img.shields.io/github/languages/count/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
+  <img src="https://img.shields.io/github/stars/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/repo-size/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/commit-activity/m/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
   <img src="https://img.shields.io/github/last-commit/Projetos-de-Extensao/PBE_25.2_8001_I?style=for-the-badge" />
-  <img src="https://forthebadge.com/images/badges/0-percent-optimized.svg" height="28" />
+  
+  
+#
+  
   
   
 </p>
 
 <p align="center">
-  <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" width="200" height="200" />
+  <img src="https://img1.picmix.com/output/stamp/normal/8/3/4/2/2432438_48352.gif"  alt="commit gif looping" width="250" height="250" />
+  <br />
+  <img src="https://forthebadge.com/images/badges/0-percent-optimized.svg" height="30" />
 
-   [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=ffa198&size=35&center=true&font=Poppins&vCenter=true&pause=1500&width=1500&lines=Bem-vindo+ao+nosso+Github!;Sistema+de+Monitorias+da+IBMEC;Quinto+Elemento+:D;Projeto+Back-End+2025.2)](https://git.io/typing-svg)
+   
   
   <p align="center">
     Uma API backend para gerenciar e otimizar monitorias acadêmicas!
@@ -33,27 +40,42 @@
 
  O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
 
-- [X] Portal de Vagas
-- [X] Cadastro de Candidatos
-- [ ] Seleção e Comunicação
-- [ ] Geração de Relatórios Básicos
-- [ ] Registro de Frequência e Horas
-- [ ] Dashboard de Gestão
+- [X] **Portal de Vagas** 
+- [ ] **Cadastro de Candidatos** 
+- [ ] **Seleção e Comunicação** 
+- [ ] **Geração de Relatórios Básicos** 
+- [ ] **Registro de Frequência e Horas** 
+- [ ] **Dashboard de Gestão**
 
----
 
-### 📌 Sobre o Projeto
+## 📌 Sobre o Projeto
 
 Nos últimos períodos, o programa de Monitoria tem registrado um crescimento expressivo na demanda por parte dos estudantes. Entretanto, esse avanço não tem sido acompanhado pela implementação de uma estrutura tecnológica adequada. A ausência de um sistema próprio tem gerado diversos desafios que impactam diretamente a eficiência, a organização e a confiabilidade das atividades.
 
-O projeto tem como objetivo desenvolver uma plataforma digital exclusiva para a Monitoria da faculdade, com o propósito de centralizar processos, aprimorar a comunicação, reduzir falhas operacionais e proporcionar uma experiência mais eficiente e profissional para alunos e monitores.
+### 🎯 Objetivo
 
-Com os processos e informações sendo gerenciados de maneira descentralizada, a operação torna-se suscetível a erros, retrabalhos e falhas de comunicação, comprometendo a qualidade do serviço prestado. Dessa forma, a criação de um site institucional surge como uma solução estratégica para modernizar a gestão da Monitoria e fortalecer sua atuação dentro da comunidade acadêmica.
+Desenvolver uma plataforma digital exclusiva para a Monitoria da faculdade, visando melhorar a comunicação entre alunos e monitores, reduzir falhas operacionais e eliminar erros causados pelo antigo processo manual, tornando a experiência mais eficiente e profissional. O projeto contém:
+
+-  🌐 **Portal de Vagas** 
+-  📝 **Cadastro de Candidatos** 
+-  📩 **Seleção e Comunicação** 
+-  📊 **Geração de Relatórios Básicos** 
+-  ⏱️ **Registro de Frequência e Horas** 
+-  📈 **Dashboard de Gestão**
+
+###  ✨ Solução Oferecida
+
+A gestão descentralizada da Monitoria gera falhas recorrentes, como erros operacionais, retrabalho e problemas de comunicação. Para resolver esses desafios, propomos a criação de um sistema web institucional que centralize os processos, organize as informações e padronize o fluxo de trabalho. Com isso, a Monitoria ganha mais eficiência, transparência e profissionalismo, fortalecendo sua presença na comunidade acadêmica.
 
 
----
 
-### 🔧 Ferramentas
+## 🤝 Integrantes
+
+#### Agradecemos às seguintes pessoas que contribuíram para este projeto:
+
+ [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/fegoiaba.png" width="60"/>](https://github.com/fegoiaba)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) [<img src="https://github.com/LFCMerino.png" width="60"/>](https://github.com/LFCMerino) 
+
+ ## 🔧 Ferramentas
 
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=vsc&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-f14e32?style=for-the-badge&logo=git&logoColor=white)
@@ -64,28 +86,21 @@ Com os processos e informações sendo gerenciados de maneira descentralizada, a
 
 
 
- Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
-<img src="https://www.whatsthehost.com/wp-content/uploads/2020/08/internet.gif"  alt="commit gif looping" width="200" height="200" />
+## 🚀 Iniciando o Projeto 
 
+Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
-### 💻 Pré-requisitos
-
-#### Você instalou a versão mais recente:
-
--  Git
-- Visual Studio Code 
-- Python (versão 3.8 ou superior)
-- Extensão Python para VS Code 
-
-  
-#### Você tem uma máquina Windows / Linux / Mac
+### 🖥️ Pré-requisitos
+ 
+- **Git** instalado
+- **Python 3.10** instalado
+- **Extensão Python** para VS Code 
 
 
----
-### 🚀 Instalando o Projeto
+Para iniciar o projeto no seu ambiente local, siga estas etapas:
 
-Para instalar o nosso projeto siga estas etapas:
+### 📦 Instalação Local
 
 #### Clone o repositório
 ```ruby
@@ -107,6 +122,8 @@ python -m venv venv
 ```ruby
 pip install -r requirements.txt
 ```
+### 📂 Executando o Projeto Localmente
+
 
 #### Entra na pasta do Backend
 ```ruby
@@ -119,16 +136,28 @@ cd Streaming
 python manage.py runserver
 ```
 
-> [!TIP]
-> Normalmente o servidor é iniciado na porta 8000. Para acessá-lo, abra o navegador e digite: http://localhost:8000/
 
----
+### 🌐 URLs Locais Disponíveis
 
-### 🤝 Colaboradores
+Após iniciar o servidor, acesse:
 
-#### Agradecemos às seguintes pessoas que contribuíram para este projeto:
 
- [<img src="https://github.com/BernardoCicchelli.png" width="60"/>](https://github.com/BernardoCicchelli)  [<img src="https://github.com/deivmec.png" width="60"/>](https://github.com/deivmec) [<img src="https://github.com/fegoiaba.png" width="60"/>](https://github.com/fegoiaba)  [<img src="https://github.com/vinimarinhooo.png" width="60"/>](https://github.com/vinimarinhooo) [<img src="https://github.com/LFCMerino.png" width="60"/>](https://github.com/LFCMerino) 
+| URL | Descrição |
+|-----|-----------|
+| http://localhost:8000/ | Página inicial |
+| http://localhost:8000/login/ | Login no sistema |
+| http://localhost:8000/admin/ | Painel administrativo Django |
+| http://localhost:8000/vagas/ | Portal de vagas público  |
+| http://localhost:8000/professor/ | Painel do Professor |
+
+
+
+
+## 📝 Licença
+
+Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+
+
 
 
 
