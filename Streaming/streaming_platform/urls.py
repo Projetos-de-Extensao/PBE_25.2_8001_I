@@ -15,7 +15,9 @@ router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
 
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("index/", views.index, name="index"),
     path("vagas/", views.listar_vagas, name="listar_vagas"),
     path("cadastrar/", views.cadastrar_candidato, name="cadastrar_candidato"),
     path("cadastrar/<int:vaga_id>/", views.cadastrar_candidato, name="cadastrar_candidato_vaga"),
@@ -23,7 +25,6 @@ urlpatterns = [
     path("professor/", views.prof_index, name="prof_index"),
 
     path("admin/", admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),
 
     path("api/", include(router.urls)),
     path("api/token/", obtain_auth_token, name="api_token_auth"),

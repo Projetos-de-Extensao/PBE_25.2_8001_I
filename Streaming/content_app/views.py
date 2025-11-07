@@ -9,6 +9,8 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+from django.contrib.auth import authenticate, login, logout
+
 
 from .forms import CandidaturaPublicForm
 from .models import (
@@ -26,6 +28,51 @@ from .permissions import (
 )
 from .serializers import CandidaturaSerializer, DisciplinaSerializer, VagaMonitoriaSerializer
 from .utils import registrar_auditoria
+
+
+def login_view(request):
+    """
+    View customizada para login na raiz do servidor
+    """
+    # Se o usuário já está autenticado, redireciona para index
+    if request.user.is_authenticated:
+        return redirect('index')
+    
+    # Se for POST, processa o login
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Autentica o usuário
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            # Login bem-sucedido
+            login(request, user)
+            
+            # Verifica se há um 'next' parameter (para redirecionar para página solicitada)
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+            
+            # Caso contrário, redireciona para index
+            return redirect('index')
+        else:
+            # Credenciais inválidas
+            messages.error(request, 'Usuário ou senha inválidos.')
+            return render(request, 'login.html', {'error': 'Credenciais inválidas'})
+    
+    # Se for GET, apenas mostra o formulário de login
+    return render(request, 'login.html')
+
+
+def logout_view(request):
+    """
+    View customizada para logout
+    """
+    logout(request)
+    messages.success(request, 'Você saiu com sucesso.')
+    return redirect('login')
 
 
 def index(request):
