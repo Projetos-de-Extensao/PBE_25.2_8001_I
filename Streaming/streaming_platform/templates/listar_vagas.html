@@ -91,7 +91,12 @@
                         <div class="col-md-9 col-12">
                             <h4 class="card-title mb-3">
                                 {{ vaga.titulo }}
-                                <span class="disciplina-tag">{{ vaga.disciplina }}</span>
+                                <span class="disciplina-tag">
+                                    {{ vaga.disciplina.nome }}
+                                    {% if vaga.disciplina.departamento %}
+                                        · {{ vaga.disciplina.departamento.sigla }}
+                                    {% endif %}
+                                </span>
                             </h4>
                             <div class="mb-3">
                                 <h6 class="text-primary mb-2">Pré-requisitos:</h6>
@@ -99,17 +104,38 @@
                                 
                                 <h6 class="text-primary mb-2">Responsabilidades:</h6>
                                 <p class="mb-3">{{ vaga.responsabilidades }}</p>
-                                
+                                <div class="row text-secondary small mb-3">
+                                    <div class="col-sm-6 mb-2">
+                                        <strong>Período mínimo:</strong> {{ vaga.periodo_minimo|default:"-" }}
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <strong>CR mínimo:</strong> {{ vaga.cr_minimo|default:"-" }}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <strong>Carga horária semanal:</strong> {{ vaga.carga_horaria_semanal }}h
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <strong>Bolsa:</strong>
+                                        {% if vaga.bolsa_valor %}
+                                            R$ {{ vaga.bolsa_valor }}
+                                        {% else %}
+                                            Não informada
+                                        {% endif %}
+                                    </div>
+                                </div>
                                 <div class="d-flex align-items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill text-secondary me-2" viewBox="0 0 16 16">
                                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
                                     </svg>
-                                    <span class="text-secondary">{{ vaga.numero_vagas }} vaga{{ vaga.numero_vagas|pluralize }}</span>
+                                    <span class="text-secondary">{{ vaga.quantidade_vagas }} vaga{{ vaga.quantidade_vagas|pluralize }}</span>
+                                </div>
+                                <div class="mt-2 text-secondary small">
+                                    <strong>Inscrições:</strong> {{ vaga.inscricoes_inicio|date:"d/m/Y" }} até {{ vaga.inscricoes_fim|date:"d/m/Y" }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 col-12 action-col mt-3 mt-md-0">
-                            {% if vaga.disponivel %}
+                            {% if vaga.inscricoes_abertas %}
                             <a href="{% url 'cadastrar_candidato_vaga' vaga.id %}" class="btn btn-success btn-lg">
                                 Candidatar-se
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right ms-2" viewBox="0 0 16 16">
@@ -117,7 +143,7 @@
                                 </svg>
                             </a>
                             {% else %}
-                            <span class="vaga-badge bg-secondary text-white">Indisponível</span>
+                            <span class="vaga-badge bg-secondary text-white">Inscrições Encerradas</span>
                             {% endif %}
                         </div>
                     </div>

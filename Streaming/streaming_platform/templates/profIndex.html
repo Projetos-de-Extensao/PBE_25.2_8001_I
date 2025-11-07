@@ -50,7 +50,7 @@
 		<div class="col-md-4">
 			<div class="card p-4 h-100">
 				<h5 class="mb-2">Candidaturas recebidas</h5>
-				<p class="text-muted">Acompanhe os candidatos que se inscreveram nas suas vagas.</p>
+				<p class="text-muted">Acompanhe as candidaturas recebidas para cada vaga.</p>
 				<a href="#" class="mt-auto btn btn-sm btn-outline-primary">Ver Candidaturas</a>
 			</div>
 		</div>
@@ -71,9 +71,9 @@
 			<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 				<div>
 					<strong>{{ vaga.titulo }}</strong>
-					<div class="text-muted">{{ vaga.disciplina }}</div>
+					<div class="text-muted">{{ vaga.disciplina.nome }} · {{ vaga.get_status_display }}</div>
 				</div>
-				<span class="prof-badge">{{ vaga.numero_vagas }} vagas</span>
+				<span class="prof-badge">{{ vaga.quantidade_vagas }} vaga{{ vaga.quantidade_vagas|pluralize }}</span>
 			</a>
 			{% endfor %}
 		</div>

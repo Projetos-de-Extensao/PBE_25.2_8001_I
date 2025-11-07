@@ -1,34 +1,32 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
-from content_app.api import VagaMonitoriaViewSet, VagaMonitoriaAPIView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from content_app import views
-from django.contrib.auth import views as auth_views
+from content_app.api import CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
 
 
 router = DefaultRouter()
-router.register(r'vagas', VagaMonitoriaViewSet, basename='vaga-monitoria')
+router.register(r"disciplinas", DisciplinaViewSet, basename="disciplina")
+router.register(r"vagas", VagaMonitoriaViewSet, basename="vaga")
+router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
+
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('vagas/', views.listar_vagas, name='listar_vagas'),
-    path('cadastrar/', views.cadastrar_candidato, name='cadastrar_candidato'),
-    path('cadastrar/<int:vaga_id>/', views.cadastrar_candidato, name='cadastrar_candidato_vaga'),
-    path('area-candidato/', views.area_candidato, name='area_candidato'),
-    path('professor/', views.prof_index, name='prof_index'),
+    path("", views.index, name="index"),
+    path("vagas/", views.listar_vagas, name="listar_vagas"),
+    path("cadastrar/", views.cadastrar_candidato, name="cadastrar_candidato"),
+    path("cadastrar/<int:vaga_id>/", views.cadastrar_candidato, name="cadastrar_candidato_vaga"),
+    path("area-candidato/", views.area_candidato, name="area_candidato"),
+    path("professor/", views.prof_index, name="prof_index"),
 
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
 
-    # Authentication URLs (login, logout, password reset)
-    path('accounts/', include('django.contrib.auth.urls')),
-
-    # API principal
-    path('api/', include(router.urls)),
-
-    # Endpoint alternativo com APIView
-    path('api/vagas/custom/', VagaMonitoriaAPIView.as_view(), name='vaga-monitoria-api'),
-
-    # Token de autenticação
-    path('api/token/', obtain_auth_token, name='api_token_auth'),
+    path("api/", include(router.urls)),
+    path("api/token/", obtain_auth_token, name="api_token_auth"),
+    path("api/jwt/", TokenObtainPairView.as_view(), name="jwt_obtain_pair"),
+    path("api/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
 ]

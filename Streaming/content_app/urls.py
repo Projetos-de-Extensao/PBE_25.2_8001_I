@@ -1,11 +1,10 @@
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from django.contrib import admin
-from .views import VagaMonitoriaViewSet
+
+from .api import CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
 
 router = DefaultRouter()
-router.register(r'vagas', VagaMonitoriaViewSet)
+router.register(r"disciplinas", DisciplinaViewSet, basename="disciplina")
+router.register(r"vagas", VagaMonitoriaViewSet, basename="vaga")
+router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
