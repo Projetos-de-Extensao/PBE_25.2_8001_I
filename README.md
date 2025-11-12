@@ -52,10 +52,10 @@ Nos últimos períodos, o programa de Monitoria tem registrado um crescimento ex
 
 Desenvolver uma plataforma digital exclusiva para a Monitoria da faculdade, visando melhorar a comunicação entre alunos e monitores, reduzir falhas operacionais e eliminar erros causados pelo antigo processo manual, tornando a experiência mais eficiente e profissional. O projeto contém:
 
--  🌐 **Portal de Vagas** 
--  📝 **Cadastro de Candidatos** 
--  📩 **Seleção e Comunicação** 
--  📊 **Geração de Relatórios Básicos** 
+- [x] 🌐 **Portal de Vagas** 
+- [x] 📝 **Cadastro de Candidatos** 
+- 📩 **Seleção e Comunicação** 
+- 📊 **Geração de Relatórios Básicos** 
 -  ⏱️ **Registro de Frequência e Horas** 
 -  📈 **Dashboard de Gestão**
 
