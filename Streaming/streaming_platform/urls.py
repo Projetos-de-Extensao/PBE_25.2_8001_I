@@ -17,6 +17,7 @@ router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
 urlpatterns = [
     path("", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("accounts/logout/", views.logout_view, name="accounts_logout"),
     path("index/", views.index, name="index"),
     path("vagas/", views.listar_vagas, name="listar_vagas"),
     path("cadastrar/", views.cadastrar_candidato, name="cadastrar_candidato"),

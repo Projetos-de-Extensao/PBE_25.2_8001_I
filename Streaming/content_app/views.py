@@ -51,7 +51,7 @@ def login_view(request):
             login(request, user)
             
             # Verifica se há um 'next' parameter (para redirecionar para página solicitada)
-            next_url = request.GET.get('next')
+            next_url = request.POST.get('next') or request.GET.get('next')
             if next_url:
                 return redirect(next_url)
             
@@ -60,10 +60,14 @@ def login_view(request):
         else:
             # Credenciais inválidas
             messages.error(request, 'Usuário ou senha inválidos.')
-            return render(request, 'login.html', {'error': 'Credenciais inválidas'})
+            contexto = {
+                'error': 'Credenciais inválidas',
+                'next': request.POST.get('next') or '',
+            }
+            return render(request, 'login.html', contexto)
     
     # Se for GET, apenas mostra o formulário de login
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'next': request.GET.get('next') or ''})
 
 
 def logout_view(request):
@@ -75,6 +79,7 @@ def logout_view(request):
     return redirect('login')
 
 
+@login_required
 def index(request):
     vagas_publicadas = (
         VagaMonitoria.objects.select_related("disciplina", "disciplina__departamento")
@@ -108,6 +113,7 @@ def area_candidato(request):
     return render(request, "area_candidato.html", contexto)
 
 
+@login_required
 def listar_vagas(request):
     hoje = timezone.now().date()
     vagas = (
