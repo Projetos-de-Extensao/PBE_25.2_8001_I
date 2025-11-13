@@ -135,6 +135,7 @@ Após iniciar o servidor, acesse:
 | http://localhost:8000/admin/ | Painel administrativo Django |
 | http://localhost:8000/vagas/ | Portal de vagas público  |
 | http://localhost:8000/professor/ | Painel do Professor |
+|  http://127.0.0.1:8000/api/avaliacoes/ | Avaliações API |
 
 ### 🔑 Credenciais de Teste
 
