@@ -2,10 +2,12 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import (
+    AvaliacaoCandidato,
     Candidatura,
     CandidaturaStatus,
     Departamento,
     Disciplina,
+    ResultadoSelecaoChoices,
     VagaMonitoria,
     VagaMonitoriaStatus,
 )
@@ -167,6 +169,7 @@ class CandidaturaSerializer(serializers.ModelSerializer):
         write_only=True,
     )
     status_display = serializers.CharField(source="get_status_display", read_only=True)
+    avaliacoes = serializers.SerializerMethodField()
 
     class Meta:
         model = Candidatura
@@ -186,11 +189,17 @@ class CandidaturaSerializer(serializers.ModelSerializer):
             "status_display",
             "feedback",
             "motivo_cancelamento",
+            "avaliacoes",
             "created_at",
             "updated_at",
             "ultima_atualizacao_status",
         )
-        read_only_fields = ("created_at", "updated_at", "ultima_atualizacao_status")
+        read_only_fields = ("created_at", "updated_at", "ultima_atualizacao_status", "avaliacoes")
+
+    def get_avaliacoes(self, obj):
+        from .serializers import AvaliacaoCandidatoResumoSerializer
+        avaliacoes = obj.avaliacoes.all()
+        return AvaliacaoCandidatoResumoSerializer(avaliacoes, many=True).data
 
     def validate(self, attrs):
         vaga = attrs.get("vaga", getattr(self.instance, "vaga", None))
@@ -222,3 +231,83 @@ class CandidaturaSerializer(serializers.ModelSerializer):
         if not instance.pode_editar:
             raise serializers.ValidationError("A candidatura não pode mais ser editada.")
         return super().update(instance, validated_data)
+
+
+class AvaliacaoCandidatoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para avaliações de candidatos
+    """
+    avaliador = UsuarioResumoSerializer(read_only=True)
+    candidatura = CandidaturaSerializer(read_only=True)
+    candidatura_id = serializers.PrimaryKeyRelatedField(
+        queryset=Candidatura.objects.all(),
+        source="candidatura",
+        write_only=True,
+    )
+    resultado_display = serializers.CharField(source="get_resultado_display", read_only=True)
+
+    class Meta:
+        model = AvaliacaoCandidato
+        fields = (
+            "id",
+            "candidatura",
+            "candidatura_id",
+            "avaliador",
+            "nota",
+            "criterios_avaliacao",
+            "comentarios",
+            "resultado",
+            "resultado_display",
+            "mensagem_resultado",
+            "resultado_comunicado",
+            "data_comunicacao",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("avaliador", "data_comunicacao", "created_at", "updated_at")
+
+    def validate(self, attrs):
+        resultado = attrs.get("resultado")
+        mensagem = attrs.get("mensagem_resultado", "")
+        
+        # Se definir resultado, exige mensagem
+        if resultado and not mensagem:
+            raise serializers.ValidationError({
+                "mensagem_resultado": "É obrigatório incluir uma mensagem ao definir o resultado."
+            })
+        
+        # Validar nota se fornecida
+        nota = attrs.get("nota")
+        if nota is not None and (nota < 0 or nota > 10):
+            raise serializers.ValidationError({
+                "nota": "A nota deve estar entre 0 e 10."
+            })
+        
+        return attrs
+
+    def create(self, validated_data):
+        # Adiciona o avaliador automaticamente
+        validated_data["avaliador"] = self.context["request"].user
+        return super().create(validated_data)
+
+
+class AvaliacaoCandidatoResumoSerializer(serializers.ModelSerializer):
+    """
+    Serializer simplificado para listagem de avaliações
+    """
+    avaliador_nome = serializers.CharField(source="avaliador.get_full_name", read_only=True)
+    resultado_display = serializers.CharField(source="get_resultado_display", read_only=True)
+
+    class Meta:
+        model = AvaliacaoCandidato
+        fields = (
+            "id",
+            "avaliador_nome",
+            "nota",
+            "resultado",
+            "resultado_display",
+            "resultado_comunicado",
+            "data_comunicacao",
+            "created_at",
+        )
+        read_only_fields = fields

@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}Avaliar Candidato{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-3">
+                <i class="bi bi-star-fill"></i> 
+                {% if avaliacao_existente %}
+                    Editar Avaliação
+                {% else %}
+                    Avaliar Candidato
+                {% endif %}
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'prof_index' %}">Início</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'prof_avaliar_candidatos' candidatura.vaga.pk %}">Candidatos</a></li>
+                    <li class="breadcrumb-item active">{{ candidatura.candidato_nome }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Informações do Candidato</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Nome:</strong><br>
+                            {{ candidatura.candidato_nome }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Email:</strong><br>
+                            <a href="mailto:{{ candidatura.candidato_email }}">{{ candidatura.candidato_email }}</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Curso:</strong><br>
+                            {{ candidatura.candidato_curso|default:"Não informado" }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <strong>Período:</strong><br>
+                            {{ candidatura.candidato_periodo|default:"Não informado" }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <strong>CR:</strong><br>
+                            {% if candidatura.candidato_cr %}
+                                <span class="badge bg-info">{{ candidatura.candidato_cr }}</span>
+                            {% else %}
+                                Não informado
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <strong>Vaga:</strong><br>
+                            {{ candidatura.vaga.titulo }} - {{ candidatura.vaga.disciplina.codigo }}
+                        </div>
+                    </div>
+                    {% if candidatura.carta_motivacao %}
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <strong>Carta de Motivação:</strong>
+                            <div class="p-3 bg-light rounded mt-2">
+                                {{ candidatura.carta_motivacao|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-12">
+                            <strong>Documentos:</strong><br>
+                            <div class="btn-group mt-2">
+                                {% if candidatura.historico_escolar %}
+                                <a href="{{ candidatura.historico_escolar.url }}" 
+                                   class="btn btn-outline-primary" 
+                                   target="_blank">
+                                    <i class="bi bi-file-earmark-text"></i> Histórico Escolar
+                                </a>
+                                {% endif %}
+                                {% if candidatura.curriculo %}
+                                <a href="{{ candidatura.curriculo.url }}" 
+                                   class="btn btn-outline-primary" 
+                                   target="_blank">
+                                    <i class="bi bi-file-person"></i> Currículo
+                                </a>
+                                {% endif %}
+                                {% if not candidatura.historico_escolar and not candidatura.curriculo %}
+                                <span class="text-muted">Nenhum documento anexado</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check"></i> 
+                        {% if avaliacao_existente %}Editar{% else %}Registrar{% endif %} Avaliação
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.candidatura }}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nota.id_for_label }}" class="form-label">
+                                    {{ form.nota.label }}
+                                </label>
+                                {{ form.nota }}
+                                {% if form.nota.errors %}
+                                <div class="text-danger small">{{ form.nota.errors }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Opcional: nota de 0 a 10</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.resultado.id_for_label }}" class="form-label">
+                                    {{ form.resultado.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ form.resultado }}
+                                {% if form.resultado.errors %}
+                                <div class="text-danger small">{{ form.resultado.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.comentarios.id_for_label }}" class="form-label">
+                                {{ form.comentarios.label }}
+                            </label>
+                            {{ form.comentarios }}
+                            {% if form.comentarios.errors %}
+                            <div class="text-danger small">{{ form.comentarios.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">Observações internas sobre o candidato</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.mensagem_resultado.id_for_label }}" class="form-label">
+                                {{ form.mensagem_resultado.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.mensagem_resultado }}
+                            {% if form.mensagem_resultado.errors %}
+                            <div class="text-danger small">{{ form.mensagem_resultado.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">Esta mensagem será enviada ao candidato</small>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Atenção:</strong> Ao definir um resultado, o status da candidatura será atualizado automaticamente.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'prof_avaliar_candidatos' candidatura.vaga.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> 
+                                {% if avaliacao_existente %}Atualizar{% else %}Registrar{% endif %} Avaliação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Critérios de Avaliação</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Conhecimento técnico</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Experiência anterior</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Motivação e interesse</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Disponibilidade de horário</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Desempenho acadêmico (CR)</li>
+                    </ul>
+                </div>
+            </div>
+
+            {% if avaliacao_existente %}
+            <div class="card mt-3">
+                <div class="card-header bg-warning">
+                    <h6 class="mb-0">Avaliação Existente</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Criada em:</strong> {{ avaliacao_existente.created_at|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Última atualização:</strong> {{ avaliacao_existente.updated_at|date:"d/m/Y H:i" }}</p>
+                    {% if avaliacao_existente.resultado_comunicado %}
+                    <p class="text-success">
+                        <i class="bi bi-check-circle"></i> Resultado já comunicado em {{ avaliacao_existente.data_comunicacao|date:"d/m/Y H:i" }}
+                    </p>
+                    {% else %}
+                    <p class="text-warning">
+                        <i class="bi bi-exclamation-triangle"></i> Resultado ainda não comunicado
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import (
     AuditoriaRegistro,
+    AvaliacaoCandidato,
     Candidatura,
     Departamento,
     Disciplina,
@@ -102,3 +103,41 @@ class AuditoriaRegistroAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+@admin.register(AvaliacaoCandidato)
+class AvaliacaoCandidatoAdmin(admin.ModelAdmin):
+    list_display = (
+        "candidatura",
+        "avaliador",
+        "nota",
+        "resultado",
+        "resultado_comunicado",
+        "created_at",
+    )
+    list_filter = ("resultado", "resultado_comunicado", "avaliador")
+    search_fields = (
+        "candidatura__candidato_nome",
+        "candidatura__candidato_email",
+        "avaliador__username",
+        "avaliador__first_name",
+        "avaliador__last_name",
+    )
+    list_select_related = ("candidatura", "candidatura__vaga", "avaliador")
+    readonly_fields = ("created_at", "updated_at", "data_comunicacao")
+    
+    fieldsets = (
+        ("Informações Básicas", {
+            "fields": ("candidatura", "avaliador", "nota")
+        }),
+        ("Avaliação", {
+            "fields": ("criterios_avaliacao", "comentarios")
+        }),
+        ("Resultado", {
+            "fields": ("resultado", "mensagem_resultado", "resultado_comunicado", "data_comunicacao")
+        }),
+        ("Datas", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",)
+        }),
+    )

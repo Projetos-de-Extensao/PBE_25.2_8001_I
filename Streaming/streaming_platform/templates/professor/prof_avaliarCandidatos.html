@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Avaliar Candidatos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-3">
+                <i class="bi bi-clipboard-check"></i> 
+                {% if vaga %}
+                    Avaliar Candidatos - {{ vaga.titulo }}
+                {% else %}
+                    Avaliar Candidatos
+                {% endif %}
+            </h2>
+            {% if vaga %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'prof_index' %}">Início</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'prof_gerenciar_vagas' %}">Vagas</a></li>
+                    <li class="breadcrumb-item active">{{ vaga.titulo }}</li>
+                </ol>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if vaga %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ vaga.titulo }}</h5>
+            <p class="card-text">
+                <strong>Disciplina:</strong> {{ vaga.disciplina.codigo }} - {{ vaga.disciplina.nome }}<br>
+                <strong>Vagas:</strong> {{ vaga.quantidade_vagas }}<br>
+                <strong>Status:</strong> <span class="badge bg-info">{{ vaga.get_status_display }}</span>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Candidaturas ({{ total }})</h5>
+            {% if vaga %}
+            <a href="{% url 'prof_gerenciar_vagas' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if candidaturas %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Candidato</th>
+                            <th>Email</th>
+                            <th>Curso</th>
+                            <th>CR</th>
+                            {% if not vaga %}
+                            <th>Vaga</th>
+                            {% endif %}
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Avaliação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidatura in candidaturas %}
+                        <tr>
+                            <td>{{ candidatura.candidato_nome }}</td>
+                            <td>{{ candidatura.candidato_email }}</td>
+                            <td>{{ candidatura.candidato_curso|default:"-" }}</td>
+                            <td>{{ candidatura.candidato_cr|default:"-" }}</td>
+                            {% if not vaga %}
+                            <td>{{ candidatura.vaga.titulo }}</td>
+                            {% endif %}
+                            <td>
+                                {% if candidatura.status == "submitted" %}
+                                    <span class="badge bg-secondary">Submetida</span>
+                                {% elif candidatura.status == "in_review" %}
+                                    <span class="badge bg-warning text-dark">Em Análise</span>
+                                {% elif candidatura.status == "approved" %}
+                                    <span class="badge bg-success">Aprovada</span>
+                                {% elif candidatura.status == "waitlist" %}
+                                    <span class="badge bg-info">Lista de Espera</span>
+                                {% elif candidatura.status == "rejected" %}
+                                    <span class="badge bg-danger">Rejeitada</span>
+                                {% else %}
+                                    <span class="badge bg-dark">{{ candidatura.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ candidatura.created_at|date:"d/m/Y" }}</td>
+                            <td>
+                                {% if candidatura.avaliado_por_mim %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Avaliado
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-hourglass-split"></i> Pendente
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'prof_avaliar_candidato_form' candidatura.id %}" 
+                                       class="btn btn-primary" 
+                                       title="{% if candidatura.avaliado_por_mim %}Editar Avaliação{% else %}Avaliar{% endif %}">
+                                        <i class="bi bi-{% if candidatura.avaliado_por_mim %}pencil{% else %}star{% endif %}"></i>
+                                    </a>
+                                    {% if candidatura.historico_escolar %}
+                                    <a href="{{ candidatura.historico_escolar.url }}" 
+                                       class="btn btn-outline-secondary" 
+                                       target="_blank"
+                                       title="Ver Histórico">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if candidatura.curriculo %}
+                                    <a href="{{ candidatura.curriculo.url }}" 
+                                       class="btn btn-outline-secondary" 
+                                       target="_blank"
+                                       title="Ver Currículo">
+                                        <i class="bi bi-file-person"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> 
+                Não há candidaturas {% if vaga %}para esta vaga{% endif %}.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

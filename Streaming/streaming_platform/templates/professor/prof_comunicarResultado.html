@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Comunicar Resultado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-send"></i> Comunicar Resultado ao Candidato
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Atenção:</strong> Você está prestes a comunicar o resultado da seleção ao candidato.
+                    </div>
+
+                    <h6 class="mb-3">Informações da Avaliação</h6>
+                    
+                    <div class="mb-3">
+                        <strong>Candidato:</strong><br>
+                        {{ avaliacao.candidatura.candidato_nome }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Email:</strong><br>
+                        {{ avaliacao.candidatura.candidato_email }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Vaga:</strong><br>
+                        {{ avaliacao.candidatura.vaga.titulo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Resultado:</strong><br>
+                        {% if avaliacao.resultado == "approved" %}
+                            <span class="badge bg-success fs-6">Aprovado</span>
+                        {% elif avaliacao.resultado == "waitlist" %}
+                            <span class="badge bg-info fs-6">Lista de Espera</span>
+                        {% elif avaliacao.resultado == "rejected" %}
+                            <span class="badge bg-danger fs-6">Reprovado</span>
+                        {% endif %}
+                    </div>
+
+                    {% if avaliacao.nota %}
+                    <div class="mb-3">
+                        <strong>Nota:</strong><br>
+                        {{ avaliacao.nota }}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <strong>Mensagem que será enviada:</strong>
+                        <div class="p-3 bg-light rounded mt-2">
+                            {{ avaliacao.mensagem_resultado|linebreaks }}
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'prof_avaliar_candidatos' avaliacao.candidatura.vaga.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send"></i> Confirmar e Comunicar Resultado
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Candidatura, VagaMonitoria, VagaMonitoriaStatus
+from .models import AvaliacaoCandidato, Candidatura, ResultadoSelecaoChoices, VagaMonitoria, VagaMonitoriaStatus
 
 
 class CandidaturaPublicForm(forms.ModelForm):
@@ -88,3 +88,56 @@ class VagaMonitoriaForm(forms.ModelForm):
         if status not in dict(VagaMonitoriaStatus.choices):
             raise forms.ValidationError("Status inválido para a vaga.")
         return status
+
+
+class AvaliacaoCandidatoForm(forms.ModelForm):
+    """
+    Formulário para professores avaliarem candidatos
+    """
+    class Meta:
+        model = AvaliacaoCandidato
+        fields = [
+            "candidatura",
+            "nota",
+            "criterios_avaliacao",
+            "comentarios",
+            "resultado",
+            "mensagem_resultado",
+        ]
+        widgets = {
+            "candidatura": forms.HiddenInput(),
+            "comentarios": forms.Textarea(attrs={"rows": 4, "class": "form-control"}),
+            "mensagem_resultado": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+            "nota": forms.NumberInput(attrs={"class": "form-control", "min": "0", "max": "10", "step": "0.01"}),
+            "resultado": forms.Select(attrs={"class": "form-select"}),
+        }
+        labels = {
+            "nota": "Nota (0 a 10)",
+            "criterios_avaliacao": "Critérios de Avaliação (JSON)",
+            "comentarios": "Comentários e Observações",
+            "resultado": "Resultado da Seleção",
+            "mensagem_resultado": "Mensagem para o Candidato",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Adiciona classes CSS aos campos
+        for nome, campo in self.fields.items():
+            if nome != "candidatura" and "class" not in campo.widget.attrs:
+                if isinstance(campo.widget, forms.Select):
+                    campo.widget.attrs["class"] = "form-select"
+                else:
+                    campo.widget.attrs["class"] = "form-control"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        resultado = cleaned_data.get("resultado")
+        mensagem = cleaned_data.get("mensagem_resultado")
+
+        # Se definir resultado, exige mensagem
+        if resultado and not mensagem:
+            raise forms.ValidationError(
+                "É obrigatório incluir uma mensagem ao definir o resultado da seleção."
+            )
+
+        return cleaned_data

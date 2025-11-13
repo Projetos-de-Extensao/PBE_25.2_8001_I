@@ -5,13 +5,14 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from content_app import views
-from content_app.api import CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
+from content_app.api import AvaliacaoCandidatoViewSet, CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
 
 
 router = DefaultRouter()
 router.register(r"disciplinas", DisciplinaViewSet, basename="disciplina")
 router.register(r"vagas", VagaMonitoriaViewSet, basename="vaga")
 router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
+router.register(r"avaliacoes", AvaliacaoCandidatoViewSet, basename="avaliacao")
 
 
 urlpatterns = [
@@ -27,6 +28,10 @@ urlpatterns = [
     path("professor/vagas/", views.prof_gerenciar_vagas, name="prof_gerenciar_vagas"),
     path("professor/candidaturas/", views.prof_gerenciar_candidaturas, name="prof_gerenciar_candidaturas"),
     path("professor/relatorios/", views.prof_relatorios, name="prof_relatorios"),
+    path("professor/avaliar/", views.prof_avaliar_candidatos, name="prof_avaliar_candidatos"),
+    path("professor/avaliar/<int:vaga_id>/", views.prof_avaliar_candidatos, name="prof_avaliar_candidatos"),
+    path("professor/avaliar/candidato/<int:candidatura_id>/", views.prof_avaliar_candidato_form, name="prof_avaliar_candidato_form"),
+    path("professor/comunicar/<int:avaliacao_id>/", views.prof_comunicar_resultado, name="prof_comunicar_resultado"),
 
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),

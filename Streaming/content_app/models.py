@@ -116,6 +116,7 @@ class CandidaturaStatus(models.TextChoices):
     SUBMETIDA = "submitted", _("Submetida")
     EM_ANALISE = "in_review", _("Em Análise")
     APROVADA = "approved", _("Aprovada")
+    LISTA_ESPERA = "waitlist", _("Lista de Espera")
     REJEITADA = "rejected", _("Rejeitada")
     CANCELADA = "cancelled", _("Cancelada")
 
@@ -170,3 +171,88 @@ class AuditoriaRegistro(models.Model):
 
     def __str__(self) -> str:
         return f"{self.acao} - {self.modelo} ({self.criado_em:%Y-%m-%d %H:%M})"
+
+
+class ResultadoSelecaoChoices(models.TextChoices):
+    APROVADO = "approved", _("Aprovado")
+    LISTA_ESPERA = "waitlist", _("Lista de Espera")
+    REPROVADO = "rejected", _("Reprovado")
+
+
+class AvaliacaoCandidato(TempoRegistro):
+    """
+    Modelo para registro de avaliações de candidatos por professores
+    """
+    candidatura = models.ForeignKey(
+        Candidatura, 
+        on_delete=models.CASCADE, 
+        related_name="avaliacoes"
+    )
+    avaliador = models.ForeignKey(
+        User, 
+        on_delete=models.PROTECT, 
+        related_name="avaliacoes_realizadas"
+    )
+    nota = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0")), MaxValueValidator(Decimal("10"))],
+        help_text="Nota da avaliação (0 a 10)"
+    )
+    criterios_avaliacao = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Critérios específicos avaliados (ex: conhecimento técnico, motivação, etc)"
+    )
+    comentarios = models.TextField(
+        blank=True,
+        help_text="Comentários e observações sobre o candidato"
+    )
+    resultado = models.CharField(
+        max_length=20,
+        choices=ResultadoSelecaoChoices.choices,
+        null=True,
+        blank=True,
+        help_text="Resultado final da seleção"
+    )
+    mensagem_resultado = models.TextField(
+        blank=True,
+        help_text="Mensagem padronizada a ser enviada ao candidato"
+    )
+    resultado_comunicado = models.BooleanField(
+        default=False,
+        help_text="Indica se o resultado já foi comunicado ao candidato"
+    )
+    data_comunicacao = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Data em que o resultado foi comunicado"
+    )
+    
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Avaliação de Candidato"
+        verbose_name_plural = "Avaliações de Candidatos"
+        unique_together = ("candidatura", "avaliador")
+
+    def __str__(self) -> str:
+        return f"Avaliação de {self.candidatura.candidato_nome} por {self.avaliador.get_full_name()}"
+
+    def save(self, *args, **kwargs):
+        # Atualiza o status da candidatura baseado no resultado
+        if self.resultado and not self.pk:
+            if self.resultado == ResultadoSelecaoChoices.APROVADO:
+                self.candidatura.status = CandidaturaStatus.APROVADA
+            elif self.resultado == ResultadoSelecaoChoices.LISTA_ESPERA:
+                self.candidatura.status = CandidaturaStatus.LISTA_ESPERA
+            elif self.resultado == ResultadoSelecaoChoices.REPROVADO:
+                self.candidatura.status = CandidaturaStatus.REJEITADA
+            self.candidatura.save()
+        
+        # Registra data de comunicação
+        if self.resultado_comunicado and not self.data_comunicacao:
+            self.data_comunicacao = timezone.now()
+        
+        super().save(*args, **kwargs)

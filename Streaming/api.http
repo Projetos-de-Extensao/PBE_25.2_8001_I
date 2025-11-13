@@ -3,4 +3,93 @@
 GET http://localhost:8000/api/vagas/
 Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
 
+###
+
+# ====================================
+# AVALIAÇÕES - Sistema de Seleção
+# ====================================
+
+### Listar todas as avaliações
+GET http://localhost:8000/api/avaliacoes/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Buscar avaliações pendentes
+GET http://localhost:8000/api/avaliacoes/pendentes/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Criar nova avaliação
+POST http://localhost:8000/api/avaliacoes/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+Content-Type: application/json
+
+{
+  "candidatura_id": 1,
+  "nota": 8.5,
+  "criterios_avaliacao": {
+    "conhecimento_tecnico": 9,
+    "motivacao": 8,
+    "experiencia": 7,
+    "disponibilidade": 9
+  },
+  "comentarios": "Candidato demonstrou excelente conhecimento técnico e grande motivação para a monitoria.",
+  "resultado": "approved",
+  "mensagem_resultado": "Parabéns! Você foi aprovado para a vaga de monitoria. Em breve entraremos em contato com mais informações sobre os próximos passos."
+}
+
+### Buscar avaliação específica
+GET http://localhost:8000/api/avaliacoes/1/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Atualizar avaliação
+PUT http://localhost:8000/api/avaliacoes/1/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+Content-Type: application/json
+
+{
+  "candidatura_id": 1,
+  "nota": 9.0,
+  "comentarios": "Após revisão, aumentei a nota devido ao excelente desempenho.",
+  "resultado": "approved",
+  "mensagem_resultado": "Parabéns! Você foi aprovado para a vaga de monitoria com nota excelente."
+}
+
+### Comunicar resultado ao candidato
+POST http://localhost:8000/api/avaliacoes/1/comunicar_resultado/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Avaliação em lote
+POST http://localhost:8000/api/avaliacoes/avaliar_lote/
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+Content-Type: application/json
+
+{
+  "avaliacoes": [
+    {
+      "candidatura_id": 2,
+      "nota": 7.5,
+      "resultado": "waitlist",
+      "mensagem_resultado": "Você foi colocado em nossa lista de espera. Entraremos em contato caso uma vaga seja disponibilizada."
+    },
+    {
+      "candidatura_id": 3,
+      "nota": 6.0,
+      "resultado": "rejected",
+      "mensagem_resultado": "Agradecemos seu interesse na vaga de monitoria. Infelizmente, não foi possível aprová-lo neste momento. Encorajamos você a se candidatar novamente em futuras oportunidades."
+    }
+  ]
+}
+
+### Filtrar avaliações por resultado
+GET http://localhost:8000/api/avaliacoes/?resultado=approved
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Filtrar avaliações não comunicadas
+GET http://localhost:8000/api/avaliacoes/?resultado_comunicado=false
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+### Filtrar avaliações por vaga
+GET http://localhost:8000/api/avaliacoes/?candidatura__vaga_id=1
+Authorization: Token 6ae284dd196a3c811f12529297d11692a78a5b35
+
+###
 

@@ -12,11 +12,13 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 
 
-from .forms import CandidaturaPublicForm
+from .forms import CandidaturaPublicForm, AvaliacaoCandidatoForm
 from .models import (
+    AvaliacaoCandidato,
     Candidatura,
     CandidaturaStatus,
     Disciplina,
+    ResultadoSelecaoChoices,
     VagaMonitoria,
     VagaMonitoriaStatus,
 )
@@ -26,7 +28,12 @@ from .permissions import (
     is_coordinator,
     is_student,
 )
-from .serializers import CandidaturaSerializer, DisciplinaSerializer, VagaMonitoriaSerializer
+from .serializers import (
+    AvaliacaoCandidatoSerializer,
+    CandidaturaSerializer, 
+    DisciplinaSerializer, 
+    VagaMonitoriaSerializer
+)
 from .utils import registrar_auditoria
 
 
@@ -188,6 +195,153 @@ def prof_relatorios(request):
         'candidaturas_aprovadas': candidaturas_aprovadas,
     }
     return render(request, "professor/prof_relatorio.html", context)
+
+
+@login_required
+def prof_avaliar_candidatos(request, vaga_id=None):
+    """
+    View para professores listarem e avaliarem candidatos de uma vaga específica
+    """
+    if not is_coordinator(request.user):
+        messages.error(request, "Acesso restrito a coordenadores.")
+        return redirect("index")
+    
+    # Se vaga_id foi fornecido, busca a vaga
+    vaga = None
+    if vaga_id:
+        vaga = get_object_or_404(
+            VagaMonitoria,
+            pk=vaga_id,
+            disciplina__coordenador=request.user
+        )
+    
+    # Busca candidaturas da vaga (ou todas do professor)
+    candidaturas = Candidatura.objects.select_related(
+        "vaga", "vaga__disciplina"
+    ).prefetch_related("avaliacoes", "avaliacoes__avaliador")
+    
+    if vaga:
+        candidaturas = candidaturas.filter(vaga=vaga)
+    else:
+        candidaturas = candidaturas.filter(vaga__disciplina__coordenador=request.user)
+    
+    candidaturas = candidaturas.order_by("-created_at")
+    
+    # Adiciona informação se já foi avaliado pelo professor atual
+    for candidatura in candidaturas:
+        candidatura.avaliado_por_mim = candidatura.avaliacoes.filter(
+            avaliador=request.user
+        ).exists()
+    
+    context = {
+        "candidaturas": candidaturas,
+        "vaga": vaga,
+        "total": candidaturas.count(),
+    }
+    
+    return render(request, "professor/prof_avaliarCandidatos.html", context)
+
+
+@login_required
+def prof_avaliar_candidato_form(request, candidatura_id):
+    """
+    View para formulário de avaliação de um candidato específico
+    """
+    if not is_coordinator(request.user):
+        messages.error(request, "Acesso restrito a coordenadores.")
+        return redirect("index")
+    
+    candidatura = get_object_or_404(
+        Candidatura.objects.select_related("vaga", "vaga__disciplina"),
+        pk=candidatura_id,
+        vaga__disciplina__coordenador=request.user
+    )
+    
+    # Verifica se já existe avaliação deste professor para este candidato
+    avaliacao_existente = AvaliacaoCandidato.objects.filter(
+        candidatura=candidatura,
+        avaliador=request.user
+    ).first()
+    
+    if request.method == "POST":
+        form = AvaliacaoCandidatoForm(request.POST, instance=avaliacao_existente)
+        
+        if form.is_valid():
+            with transaction.atomic():
+                avaliacao = form.save(commit=False)
+                avaliacao.candidatura = candidatura
+                avaliacao.avaliador = request.user
+                avaliacao.save()
+                
+                # Atualiza status da candidatura se resultado foi definido
+                if avaliacao.resultado:
+                    if avaliacao.resultado == ResultadoSelecaoChoices.APROVADO:
+                        candidatura.status = CandidaturaStatus.APROVADA
+                    elif avaliacao.resultado == ResultadoSelecaoChoices.LISTA_ESPERA:
+                        candidatura.status = CandidaturaStatus.LISTA_ESPERA
+                    elif avaliacao.resultado == ResultadoSelecaoChoices.REPROVADO:
+                        candidatura.status = CandidaturaStatus.REJEITADA
+                    candidatura.save()
+                
+                registrar_auditoria(
+                    request.user, 
+                    "avaliar_candidato" if not avaliacao_existente else "atualizar_avaliacao",
+                    avaliacao
+                )
+                
+                messages.success(request, "Avaliação registrada com sucesso!")
+                return redirect("prof_avaliar_candidatos", vaga_id=candidatura.vaga.pk)
+    else:
+        initial_data = {"candidatura": candidatura}
+        form = AvaliacaoCandidatoForm(instance=avaliacao_existente, initial=initial_data)
+    
+    context = {
+        "form": form,
+        "candidatura": candidatura,
+        "avaliacao_existente": avaliacao_existente,
+    }
+    
+    return render(request, "professor/prof_avaliarForm.html", context)
+
+
+@login_required
+def prof_comunicar_resultado(request, avaliacao_id):
+    """
+    View para marcar resultado como comunicado
+    """
+    if not is_coordinator(request.user):
+        messages.error(request, "Acesso restrito a coordenadores.")
+        return redirect("index")
+    
+    avaliacao = get_object_or_404(
+        AvaliacaoCandidato.objects.select_related("candidatura", "candidatura__vaga"),
+        pk=avaliacao_id,
+        avaliador=request.user
+    )
+    
+    if not avaliacao.resultado:
+        messages.error(request, "Defina um resultado antes de comunicar ao candidato.")
+        return redirect("prof_avaliar_candidatos", vaga_id=avaliacao.candidatura.vaga.pk)
+    
+    if avaliacao.resultado_comunicado:
+        messages.info(request, "Este resultado já foi comunicado.")
+        return redirect("prof_avaliar_candidatos", vaga_id=avaliacao.candidatura.vaga.pk)
+    
+    if request.method == "POST":
+        avaliacao.resultado_comunicado = True
+        avaliacao.data_comunicacao = timezone.now()
+        avaliacao.save(update_fields=["resultado_comunicado", "data_comunicacao", "updated_at"])
+        
+        registrar_auditoria(request.user, "comunicar_resultado", avaliacao)
+        
+        messages.success(request, f"Resultado comunicado para {avaliacao.candidatura.candidato_nome}!")
+        return redirect("prof_avaliar_candidatos", vaga_id=avaliacao.candidatura.vaga.pk)
+    
+    context = {
+        "avaliacao": avaliacao,
+    }
+    
+    return render(request, "professor/prof_comunicarResultado.html", context)
 
 
 def cadastrar_candidato(request, vaga_id=None):
@@ -510,3 +664,143 @@ class CandidaturaViewSet(viewsets.ModelViewSet):
         candidatura.save(update_fields=["status", "feedback", "ultima_atualizacao_status", "updated_at"])
         registrar_auditoria(request.user, f"status_candidatura_{novo_status}", candidatura)
         return Response(CandidaturaSerializer(candidatura, context=self.get_serializer_context()).data)
+
+
+class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para avaliações de candidatos
+    Permite professores criar, visualizar e gerenciar avaliações
+    """
+    serializer_class = AvaliacaoCandidatoSerializer
+    permission_classes = [IsCoordinator]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ("candidatura__candidato_nome", "candidatura__candidato_email")
+    ordering_fields = ("created_at", "nota", "resultado")
+    filterset_fields = {
+        "resultado": ["exact"],
+        "resultado_comunicado": ["exact"],
+        "candidatura__vaga_id": ["exact"],
+        "candidatura__status": ["exact"],
+        "avaliador_id": ["exact"],
+    }
+
+    def get_queryset(self):
+        queryset = AvaliacaoCandidato.objects.select_related(
+            "candidatura",
+            "candidatura__vaga",
+            "candidatura__vaga__disciplina",
+            "avaliador"
+        )
+        user = self.request.user
+        if is_admin(user):
+            return queryset
+        if is_coordinator(user):
+            # Professores veem apenas avaliações de suas disciplinas
+            return queryset.filter(candidatura__vaga__disciplina__coordenador=user)
+        return queryset.none()
+
+    def perform_create(self, serializer):
+        avaliacao = serializer.save(avaliador=self.request.user)
+        registrar_auditoria(self.request.user, "criar_avaliacao", avaliacao)
+
+    def perform_update(self, serializer):
+        avaliacao = serializer.save()
+        registrar_auditoria(self.request.user, "atualizar_avaliacao", avaliacao)
+
+    @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
+    def comunicar_resultado(self, request, pk=None):
+        """
+        Marca o resultado como comunicado ao candidato
+        """
+        avaliacao = self.get_object()
+        
+        if not avaliacao.resultado:
+            return Response(
+                {"detail": "Defina um resultado antes de comunicar ao candidato."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if avaliacao.resultado_comunicado:
+            return Response(
+                {"detail": "Este resultado já foi comunicado."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        avaliacao.resultado_comunicado = True
+        avaliacao.data_comunicacao = timezone.now()
+        avaliacao.save(update_fields=["resultado_comunicado", "data_comunicacao", "updated_at"])
+        
+        registrar_auditoria(request.user, "comunicar_resultado_avaliacao", avaliacao)
+        
+        return Response({
+            "detail": "Resultado comunicado com sucesso.",
+            "data_comunicacao": avaliacao.data_comunicacao
+        })
+
+    @action(detail=False, methods=["get"], permission_classes=[IsCoordinator])
+    def pendentes(self, request):
+        """
+        Lista candidaturas que ainda não têm avaliação do professor atual
+        """
+        user = request.user
+        
+        # Busca vagas do professor
+        vagas_professor = VagaMonitoria.objects.filter(
+            disciplina__coordenador=user,
+            status__in=[VagaMonitoriaStatus.EM_AVALIACAO, VagaMonitoriaStatus.PUBLICADA]
+        )
+        
+        # Busca candidaturas dessas vagas que não têm avaliação do professor
+        candidaturas_pendentes = Candidatura.objects.filter(
+            vaga__in=vagas_professor,
+            status__in=[CandidaturaStatus.SUBMETIDA, CandidaturaStatus.EM_ANALISE]
+        ).exclude(
+            avaliacoes__avaliador=user
+        ).select_related("vaga", "vaga__disciplina")
+        
+        serializer = CandidaturaSerializer(
+            candidaturas_pendentes,
+            many=True,
+            context=self.get_serializer_context()
+        )
+        
+        return Response({
+            "total": candidaturas_pendentes.count(),
+            "candidaturas": serializer.data
+        })
+
+    @action(detail=False, methods=["post"], permission_classes=[IsCoordinator])
+    def avaliar_lote(self, request):
+        """
+        Permite avaliar múltiplos candidatos de uma vez
+        """
+        avaliacoes_data = request.data.get("avaliacoes", [])
+        
+        if not avaliacoes_data:
+            return Response(
+                {"detail": "Nenhuma avaliação fornecida."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        avaliacoes_criadas = []
+        erros = []
+        
+        with transaction.atomic():
+            for idx, avaliacao_data in enumerate(avaliacoes_data):
+                serializer = self.get_serializer(data=avaliacao_data)
+                if serializer.is_valid():
+                    avaliacao = serializer.save(avaliador=request.user)
+                    avaliacoes_criadas.append(avaliacao)
+                    registrar_auditoria(request.user, "criar_avaliacao_lote", avaliacao)
+                else:
+                    erros.append({
+                        "index": idx,
+                        "candidatura_id": avaliacao_data.get("candidatura_id"),
+                        "erros": serializer.errors
+                    })
+        
+        return Response({
+            "sucesso": len(avaliacoes_criadas),
+            "erros": len(erros),
+            "detalhes_erros": erros
+        }, status=status.HTTP_201_CREATED if avaliacoes_criadas else status.HTTP_400_BAD_REQUEST)
