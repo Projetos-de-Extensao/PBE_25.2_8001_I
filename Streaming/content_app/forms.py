@@ -13,6 +13,7 @@ class CandidaturaPublicForm(forms.ModelForm):
                 ativo=True,
             )
         self.fields["vaga"].queryset = vaga_queryset.order_by("disciplina__nome", "titulo")
+        self.fields["candidato_periodo"].required = True
         for nome, campo in self.fields.items():
             if nome == "vaga":
                 campo.widget.attrs.setdefault("class", "form-select")
@@ -25,33 +26,12 @@ class CandidaturaPublicForm(forms.ModelForm):
         model = Candidatura
         fields = [
             "vaga",
-            "candidato_nome",
-            "candidato_email",
-            "candidato_curso",
             "candidato_periodo",
-            "candidato_cr",
-            "historico_escolar",
-            "curriculo",
-            "carta_motivacao",
         ]
         labels = {
             "vaga": "Vaga",
-            "candidato_nome": "Nome do candidato",
-            "candidato_email": "E-mail do candidato",
-            "candidato_curso": "Curso do candidato",
             "candidato_periodo": "Período do candidato",
-            "candidato_cr": "CR do candidato",
-            "historico_escolar": "Histórico escolar",
-            "curriculo": "Currículo",
-            "carta_motivacao": "Carta de motivação",
         }
-        widgets = {
-            "carta_motivacao": forms.Textarea(attrs={"rows": 4}),
-        }
-
-    def clean_candidato_email(self):
-        email = self.cleaned_data.get("candidato_email", "")
-        return email.strip().lower()
 
 
 class VagaMonitoriaForm(forms.ModelForm):

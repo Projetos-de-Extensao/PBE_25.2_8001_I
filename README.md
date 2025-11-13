@@ -122,6 +122,16 @@ cd Streaming
 python manage.py runserver
 ```
 
+#### Inicie a interface React
+
+Em outro terminal, instale as dependências e suba o cliente:
+
+```ruby
+cd Streaming/frontend
+npm install
+npm run dev
+```
+
 
 ## 🌐 URLs Locais Disponíveis
 
@@ -136,6 +146,9 @@ Após iniciar o servidor, acesse:
 | http://localhost:8000/vagas/ | Portal de vagas público  |
 | http://localhost:8000/professor/ | Painel do Professor |
 |  http://127.0.0.1:8000/api/avaliacoes/ | Avaliações API |
+| http://127.0.0.1:8000/api/auth/login/ | Autenticação via JWT |
+| http://127.0.0.1:8000/api/me/profile/ | Perfil do usuário autenticado |
+| http://127.0.0.1:5173/ | Interface React (login e área do estudante) |
 
 ### 🔑 Credenciais de Teste
 

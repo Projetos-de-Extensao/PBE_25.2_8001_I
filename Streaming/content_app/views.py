@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -5,11 +7,12 @@ from django.db import transaction
 from django.db.models import Avg, Count, Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import filters, generics, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 from .forms import CandidaturaPublicForm, AvaliacaoCandidatoForm
@@ -19,6 +22,7 @@ from .models import (
     CandidaturaStatus,
     Disciplina,
     ResultadoSelecaoChoices,
+    UserProfile,
     VagaMonitoria,
     VagaMonitoriaStatus,
 )
@@ -29,6 +33,9 @@ from .permissions import (
     is_student,
 )
 from .serializers import (
+    CustomTokenObtainPairSerializer,
+    UserProfileSerializer,
+    UserRegistrationSerializer,
     AvaliacaoCandidatoSerializer,
     CandidaturaSerializer, 
     DisciplinaSerializer, 
@@ -47,8 +54,8 @@ def login_view(request):
     
     # Se for POST, processa o login
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = (request.POST.get('username') or '').strip()
+        password = request.POST.get('password') or ''
         
         # Autentica o usuário
         user = authenticate(request, username=username, password=password)
@@ -69,12 +76,61 @@ def login_view(request):
             messages.error(request, 'Usuário ou senha inválidos.')
             contexto = {
                 'error': 'Credenciais inválidas',
-                'next': request.POST.get('next') or '',
+                'next': request.POST.get('next') or request.GET.get('next') or '',
+                'username': username,
             }
             return render(request, 'login.html', contexto)
     
     # Se for GET, apenas mostra o formulário de login
-    return render(request, 'login.html', {'next': request.GET.get('next') or ''})
+    return render(request, 'login.html', {
+        'next': request.GET.get('next') or '',
+        'username': '',
+    })
+
+
+def register_page(request):
+    """Serve a lightweight React-powered registration page."""
+    return render(request, "register.html")
+
+
+@login_required
+def user_profile_page(request):
+    """Renderiza a área do usuário com SPA React simples."""
+    return render(request, "user_area.html")
+
+
+class ApiLoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+class ApiRegisterView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        token_serializer = CustomTokenObtainPairSerializer(
+            data={
+                "username": user.username,
+                "password": request.data.get("password", ""),
+            },
+            context=self.get_serializer_context(),
+        )
+        token_serializer.is_valid(raise_exception=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(token_serializer.validated_data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class CurrentUserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
+        return profile
 
 
 def logout_view(request):
@@ -344,6 +400,7 @@ def prof_comunicar_resultado(request, avaliacao_id):
     return render(request, "professor/prof_comunicarResultado.html", context)
 
 
+@login_required
 def cadastrar_candidato(request, vaga_id=None):
     vaga = None
     form_kwargs = {}
@@ -353,66 +410,78 @@ def cadastrar_candidato(request, vaga_id=None):
         )
         form_kwargs["vaga_queryset"] = VagaMonitoria.objects.filter(pk=vaga.pk)
 
+    usuario = request.user
+    perfil, _ = UserProfile.objects.get_or_create(user=usuario)
+    nome_automatico = perfil.nome_exibicao or usuario.get_full_name() or usuario.get_username()
+    email_automatico = (usuario.email or "").strip().lower()
+    curriculo_pdf = perfil.curriculo_pdf if perfil.curriculo_pdf else None
+
     if request.method == "POST":
-        form = CandidaturaPublicForm(request.POST, request.FILES, **form_kwargs)
+        form = CandidaturaPublicForm(request.POST, **form_kwargs)
         if vaga:
             form.fields["vaga"].widget = forms.HiddenInput()
             form.fields["vaga"].initial = vaga
         if form.is_valid():
+            erros_personalizados = False
+            candidatura_vaga = vaga or form.cleaned_data.get("vaga")
+            if not candidatura_vaga:
+                form.add_error("vaga", "Selecione uma vaga válida.")
+                erros_personalizados = True
+            elif not candidatura_vaga.inscricoes_abertas:
+                form.add_error("vaga", "As inscrições para esta vaga estão encerradas.")
+                erros_personalizados = True
+
+            if not email_automatico:
+                form.add_error(
+                    None,
+                    "Atualize seu e-mail em 'Meu perfil' antes de enviar a candidatura.",
+                )
+                erros_personalizados = True
+
+            if not curriculo_pdf:
+                form.add_error(
+                    None,
+                    "Envie um currículo em PDF na sua área do usuário antes de se candidatar.",
+                )
+                erros_personalizados = True
+
+            if erros_personalizados:
+                contexto = {
+                    "form": form,
+                    "vaga": vaga,
+                    "aluno_nome": nome_automatico,
+                    "aluno_email": email_automatico,
+                    "curriculo_url": curriculo_pdf.url if curriculo_pdf else "",
+                    "curriculo_nome": Path(curriculo_pdf.name).name if curriculo_pdf else "",
+                    "curriculo_disponivel": bool(curriculo_pdf),
+                }
+                return render(request, "cadastrar_candidato.html", contexto)
+
             with transaction.atomic():
-                candidatura_vaga = form.cleaned_data.get("vaga")
-                if vaga:
-                    candidatura_vaga = vaga
-                if not candidatura_vaga:
-                    form.add_error("vaga", "Selecione uma vaga válida.")
-                else:
-                    if not candidatura_vaga.inscricoes_abertas:
-                        form.add_error("vaga", "As inscrições para esta vaga estão encerradas.")
-                    candidato_cr = form.cleaned_data.get("candidato_cr")
-                    if (
-                        candidatura_vaga.cr_minimo
-                        and candidato_cr is not None
-                        and candidato_cr < candidatura_vaga.cr_minimo
-                    ):
-                        form.add_error("candidato_cr", "CR insuficiente para esta vaga.")
-
-                if form.errors:
-                    return render(request, "cadastrar_candidato.html", {"form": form, "vaga": vaga})
-
                 candidatura, criada = Candidatura.objects.get_or_create(
                     vaga=candidatura_vaga,
-                    candidato_email=form.cleaned_data["candidato_email"],
+                    candidato_email=email_automatico,
                     defaults={
-                        "candidato_nome": form.cleaned_data["candidato_nome"],
-                        "candidato_curso": form.cleaned_data.get("candidato_curso", ""),
+                        "candidato_nome": nome_automatico,
                         "candidato_periodo": form.cleaned_data.get("candidato_periodo", ""),
-                        "candidato_cr": form.cleaned_data.get("candidato_cr"),
-                        "historico_escolar": form.cleaned_data.get("historico_escolar"),
-                        "curriculo": form.cleaned_data.get("curriculo"),
-                        "carta_motivacao": form.cleaned_data.get("carta_motivacao", ""),
+                        "curriculo": curriculo_pdf,
                         "status": CandidaturaStatus.SUBMETIDA,
                     },
                 )
 
                 if not criada:
-                    campos_atualizaveis = (
-                        "candidato_nome",
-                        "candidato_curso",
-                        "candidato_periodo",
-                        "candidato_cr",
-                        "historico_escolar",
-                        "curriculo",
-                        "carta_motivacao",
-                    )
-                    for campo in campos_atualizaveis:
-                        valor = form.cleaned_data.get(campo)
-                        if campo in {"historico_escolar", "curriculo"}:
-                            if valor:
-                                setattr(candidatura, campo, valor)
-                        elif valor not in (None, ""):
-                            setattr(candidatura, campo, valor)
+                    candidatura.candidato_nome = nome_automatico
+                    candidatura.candidato_periodo = form.cleaned_data.get("candidato_periodo", "")
+                    if curriculo_pdf:
+                        candidatura.curriculo = curriculo_pdf
                     candidatura.status = CandidaturaStatus.SUBMETIDA
-                    candidatura.save()
+                    candidatura.save(update_fields=[
+                        "candidato_nome",
+                        "candidato_periodo",
+                        "curriculo",
+                        "status",
+                        "updated_at",
+                    ])
                     messages.info(request, "Dados atualizados para a candidatura existente.")
                 else:
                     messages.success(request, "Candidatura registrada com sucesso.")
@@ -425,7 +494,18 @@ def cadastrar_candidato(request, vaga_id=None):
             form.fields["vaga"].widget = forms.HiddenInput()
             form.fields["vaga"].initial = vaga
 
-    return render(request, "cadastrar_candidato.html", {"form": form, "vaga": vaga})
+    contexto = {
+        "form": form,
+        "vaga": vaga,
+        "aluno_nome": nome_automatico,
+        "aluno_email": email_automatico,
+        "curriculo_url": curriculo_pdf.url if curriculo_pdf else "",
+        "curriculo_nome": Path(curriculo_pdf.name).name if curriculo_pdf else "",
+        "curriculo_disponivel": bool(curriculo_pdf),
+        "email_disponivel": bool(email_automatico),
+    }
+
+    return render(request, "cadastrar_candidato.html", contexto)
 
 
 class DisciplinaViewSet(viewsets.ModelViewSet):

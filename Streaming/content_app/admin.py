@@ -6,6 +6,7 @@ from .models import (
     Candidatura,
     Departamento,
     Disciplina,
+    UserProfile,
     VagaMonitoria,
     VagaMonitoriaStatus,
 )
@@ -85,6 +86,14 @@ class CandidaturaAdmin(admin.ModelAdmin):
     list_filter = ("status", "vaga__disciplina__departamento", "vaga__disciplina__semestre")
     search_fields = ("candidato_nome", "candidato_email", "vaga__titulo")
     list_select_related = ("vaga", "vaga__disciplina")
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "nome_exibicao", "curriculo_pdf", "updated_at")
+    search_fields = ("user__username", "user__email", "nome_exibicao")
+    list_select_related = ("user",)
+    readonly_fields = ("created_at", "updated_at")
 
 
 @admin.register(AuditoriaRegistro)

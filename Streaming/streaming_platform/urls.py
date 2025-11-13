@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
@@ -24,6 +26,8 @@ urlpatterns = [
     path("cadastrar/", views.cadastrar_candidato, name="cadastrar_candidato"),
     path("cadastrar/<int:vaga_id>/", views.cadastrar_candidato, name="cadastrar_candidato_vaga"),
     path("area-candidato/", views.area_candidato, name="area_candidato"),
+    path("register/", views.register_page, name="register"),
+    path("perfil/", views.user_profile_page, name="user_profile"),
     path("professor/", views.prof_index, name="prof_index"),
     path("professor/vagas/", views.prof_gerenciar_vagas, name="prof_gerenciar_vagas"),
     path("professor/candidaturas/", views.prof_gerenciar_candidaturas, name="prof_gerenciar_candidaturas"),
@@ -37,7 +41,13 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
 
     path("api/", include(router.urls)),
+    path("api/auth/login/", views.ApiLoginView.as_view(), name="api_login"),
+    path("api/auth/register/", views.ApiRegisterView.as_view(), name="api_register"),
+    path("api/me/profile/", views.CurrentUserProfileView.as_view(), name="api_me_profile"),
     path("api/token/", obtain_auth_token, name="api_token_auth"),
     path("api/jwt/", TokenObtainPairView.as_view(), name="jwt_obtain_pair"),
     path("api/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

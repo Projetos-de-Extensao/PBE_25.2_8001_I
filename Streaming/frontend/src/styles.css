@@ -1,0 +1,221 @@
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2933;
+  background-color: #f5f7fa;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0ecff 0%, #f5f7fa 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.card {
+  width: min(420px, 100%);
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px #1f29330f;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 2.5rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.card-subtitle {
+  margin: 0.4rem 0 0;
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.profile-form {
+  margin-top: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-input {
+  border: 1px solid #d2dae2;
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #2563eb20;
+}
+
+.form-button {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.5rem;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-button:not(:disabled):hover {
+  box-shadow: 0 12px 24px #2563eb33;
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  border: 1px solid #d2dae2;
+  background: #f8fafc;
+  color: #1f2933;
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.secondary-button:hover {
+  background: #e2e8f0;
+}
+
+.secondary-button.full-width {
+  width: 100%;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.1rem;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  padding: 0;
+}
+
+.form-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.form-success {
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.form-info {
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.form-footer {
+  margin: 0;
+  text-align: center;
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.hint {
+  margin: -0.35rem 0 0;
+  font-size: 0.85rem;
+  color: #6c7a89;
+}
+
+.profile-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.app-footer {
+  margin-top: 2.5rem;
+  max-width: 520px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #52606d;
+}
+
+.app-footer code {
+  background-color: #e2e8f0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 520px) {
+  .card-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.6rem;
+  }
+
+  .app-footer {
+    font-size: 0.85rem;
+  }
+}

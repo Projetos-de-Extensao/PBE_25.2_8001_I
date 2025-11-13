@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% block title %}Meu Perfil{% endblock %}
+{% block hero_title %}Sua área pessoal{% endblock %}
+{% block hero_subtitle %}Atualize seu nome de exibição e anexe seu currículo em PDF{% endblock %}
+
+{% block extra_css %}
+    .profile-wrapper {
+        max-width: 620px;
+        margin: 0 auto 3rem;
+    }
+    .profile-card {
+        background-color: #ffffff;
+        border-radius: 18px;
+        padding: 2.5rem 2.75rem;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    }
+    .profile-card h2 {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+    .profile-card p.lead {
+        color: #475569;
+        margin-bottom: 2rem;
+    }
+    .profile-card .form-label {
+        font-weight: 600;
+    }
+    .profile-card .form-control {
+        border-radius: 10px;
+        padding: 0.8rem;
+    }
+    .profile-card .btn-primary {
+        border-radius: 999px;
+        font-weight: 600;
+        padding: 0.85rem 1.5rem;
+    }
+{% endblock %}
+
+{% block content %}
+<div class="container profile-wrapper">
+    <div class="profile-card">
+        <div id="user-profile-root"
+             data-profile-endpoint="{% url 'api_me_profile' %}"
+             data-csrf="{{ csrf_token }}"
+        ></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script>
+    (function () {
+        const { useEffect, useState } = React;
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+            return '';
+        }
+
+        function ProfileApp({ endpoint, csrfToken }) {
+            const [form, setForm] = useState({ nome: '', curriculo: null });
+            const [profile, setProfile] = useState(null);
+            const [status, setStatus] = useState({ loading: true, error: '', success: '' });
+
+            useEffect(() => {
+                async function loadProfile() {
+                    try {
+                        const response = await fetch(endpoint, {
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'include'
+                        });
+                        if (!response.ok) {
+                            throw new Error('Não foi possível carregar suas informações.');
+                        }
+                        const data = await response.json();
+                        setProfile(data);
+                        setForm({ nome: data?.nome || '', curriculo: null });
+                        setStatus({ loading: false, error: '', success: '' });
+                    } catch (error) {
+                        setStatus({ loading: false, error: error.message, success: '' });
+                    }
+                }
+
+                loadProfile();
+            }, [endpoint]);
+
+            const handleChange = (event) => {
+                const { name, value, files } = event.target;
+                if (name === 'curriculo' && files) {
+                    const file = files[0];
+                    setForm((prev) => ({ ...prev, curriculo: file || null }));
+                    return;
+                }
+                setForm((prev) => ({ ...prev, [name]: value }));
+            };
+
+            const handleSubmit = async (event) => {
+                event.preventDefault();
+                setStatus({ loading: true, error: '', success: '' });
+
+                try {
+                    const payload = new FormData();
+                    payload.append('nome', form.nome);
+                    if (form.curriculo instanceof File) {
+                        payload.append('curriculo_pdf', form.curriculo);
+                    } else if (form.curriculo === null) {
+                        payload.append('curriculo_pdf', '');
+                    }
+
+                    const response = await fetch(endpoint, {
+                        method: 'PATCH',
+                        body: payload,
+                        headers: {
+                            'X-CSRFToken': csrfToken || getCookie('csrftoken')
+                        },
+                        credentials: 'include'
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) {
+                        const detail = data.detail || data.error;
+                        const nonField = Array.isArray(data.non_field_errors) ? data.non_field_errors.join(' ') : '';
+                        throw new Error(detail || nonField || 'Não foi possível salvar as alterações.');
+                    }
+
+                    setProfile(data);
+                    setForm((prev) => ({ ...prev, curriculo: null }));
+                    setStatus({ loading: false, error: '', success: 'Perfil atualizado com sucesso.' });
+                } catch (error) {
+                    setStatus({ loading: false, error: error.message, success: '' });
+                }
+            };
+
+            if (status.loading && !profile) {
+                return React.createElement('p', { className: 'text-muted mb-0' }, 'Carregando suas informações...');
+            }
+
+            return React.createElement(
+                React.Fragment,
+                null,
+                React.createElement('h2', null, 'Olá, ', profile?.user?.first_name || profile?.user?.username || 'estudante', '!'),
+                React.createElement('p', { className: 'lead' }, 'Use este espaço para atualizar seu nome de exibição e anexar um currículo em PDF.'),
+                React.createElement(
+                    'form',
+                    { onSubmit: handleSubmit, className: 'd-grid gap-3' },
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'nome' }, 'Nome de exibição'),
+                        React.createElement('input', {
+                            id: 'nome',
+                            name: 'nome',
+                            type: 'text',
+                            className: 'form-control',
+                            value: form.nome,
+                            onChange: handleChange,
+                            placeholder: 'Como devemos te chamar?'
+                        })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'curriculo' }, 'Currículo (PDF)'),
+                        React.createElement('input', {
+                            id: 'curriculo',
+                            name: 'curriculo',
+                            type: 'file',
+                            accept: 'application/pdf',
+                            className: 'form-control',
+                            onChange: handleChange
+                        }),
+                        React.createElement('small', { className: 'text-muted' }, 'Tamanho máximo de 5 MB.')
+                    ),
+                    profile?.curriculo_pdf && React.createElement(
+                        'div',
+                        { className: 'alert alert-info mb-0' },
+                        'Currículo atual: ',
+                        React.createElement(
+                            'a',
+                            { href: profile.curriculo_pdf, target: '_blank', rel: 'noopener' },
+                            'abrir arquivo'
+                        )
+                    ),
+                    React.createElement(
+                        'button',
+                        { type: 'submit', className: 'btn btn-primary', disabled: status.loading },
+                        status.loading ? 'Salvando...' : 'Salvar alterações'
+                    )
+                ),
+                status.error && React.createElement('div', { className: 'alert alert-danger mt-3' }, status.error),
+                status.success && React.createElement('div', { className: 'alert alert-success mt-3' }, status.success)
+            );
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const mountNode = document.getElementById('user-profile-root');
+            if (!mountNode) {
+                return;
+            }
+            const endpoint = mountNode.dataset.profileEndpoint;
+            const csrfToken = mountNode.dataset.csrf;
+            const root = ReactDOM.createRoot(mountNode);
+            root.render(React.createElement(ProfileApp, { endpoint, csrfToken }));
+        });
+    })();
+</script>
+{% endblock %}

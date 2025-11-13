@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import (
     AvaliacaoCandidato,
@@ -8,6 +9,7 @@ from .models import (
     Departamento,
     Disciplina,
     ResultadoSelecaoChoices,
+    UserProfile,
     VagaMonitoria,
     VagaMonitoriaStatus,
 )
@@ -21,6 +23,76 @@ class UsuarioResumoSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "username", "first_name", "last_name", "email")
         read_only_fields = fields
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UsuarioResumoSerializer(read_only=True)
+    nome = serializers.CharField(source="nome_exibicao", allow_blank=True, required=False)
+    curriculo_pdf = serializers.FileField(required=False, allow_null=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ("id", "user", "nome", "curriculo_pdf", "created_at", "updated_at")
+        read_only_fields = ("id", "user", "created_at", "updated_at")
+
+    def validate_curriculo_pdf(self, value):
+        if value is None:
+            return value
+        content_type = getattr(value, "content_type", "").lower()
+        if content_type and content_type not in {"application/pdf", "application/x-pdf"}:
+            raise serializers.ValidationError("Envie um arquivo PDF válido.")
+        if not value.name.lower().endswith(".pdf"):
+            raise serializers.ValidationError("Envie um arquivo PDF válido.")
+        max_size = 5 * 1024 * 1024
+        if value.size > max_size:
+            raise serializers.ValidationError("O arquivo deve ter no máximo 5 MB.")
+        return value
+
+    def update(self, instance, validated_data):
+        nome = validated_data.pop("nome_exibicao", None)
+        curriculo = validated_data.get("curriculo_pdf", serializers.empty)
+
+        if nome is not None:
+            instance.nome_exibicao = nome
+            if instance.user.first_name != nome:
+                instance.user.first_name = nome
+                instance.user.save(update_fields=["first_name"])
+
+        if curriculo is not serializers.empty:
+            if curriculo is None:
+                instance.curriculo_pdf = None
+            else:
+                instance.curriculo_pdf = curriculo
+
+        instance.save()
+        return instance
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+    first_name = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "password", "first_name")
+
+    def validate_email(self, value):
+        return (value or "").strip().lower()
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User.objects.create_user(password=password, **validated_data)
+        return user
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data["user"] = UsuarioResumoSerializer(self.user).data
+        data["groups"] = list(self.user.groups.values_list("name", flat=True))
+        profile, _ = UserProfile.objects.get_or_create(user=self.user)
+        data["profile"] = UserProfileSerializer(profile, context=self.context).data
+        return data
 
 
 class DepartamentoSerializer(serializers.ModelSerializer):

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block title %}Criar conta{% endblock %}
+{% block hero_title %}Cadastro de Estudante{% endblock %}
+{% block hero_subtitle %}Use seus dados institucionais para acessar vagas e acompanhar suas candidaturas{% endblock %}
+
+{% block extra_css %}
+    .register-card {
+        max-width: 500px;
+        margin: 0 auto 3rem;
+        padding: 2rem 2.25rem;
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    }
+    .register-card h2 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .register-card p.lead {
+        color: #475569;
+        font-size: 0.95rem;
+    }
+    .register-card .form-label {
+        font-weight: 600;
+        color: #1f2937;
+    }
+    .register-card .form-control {
+        border-radius: 10px;
+        padding: 0.75rem 0.9rem;
+    }
+    .register-card .btn-primary {
+        border-radius: 999px;
+        font-weight: 600;
+        padding: 0.85rem 1.5rem;
+    }
+    .register-feedback {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+    }
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="register-card">
+        <div id="register-root" data-api-register="{% url 'api_register' %}" data-login-url="{% url 'login' %}"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script>
+    (function () {
+        const { useState } = React;
+
+        function RegistrationApp({ registerEndpoint, loginUrl }) {
+            const [form, setForm] = useState({
+                first_name: '',
+                username: '',
+                email: '',
+                password: ''
+            });
+            const [status, setStatus] = useState({ loading: false, error: '', success: '' });
+
+            const handleChange = (event) => {
+                const { name, value } = event.target;
+                setForm((prev) => ({ ...prev, [name]: value }));
+            };
+
+            const handleSubmit = async (event) => {
+                event.preventDefault();
+                setStatus({ loading: true, error: '', success: '' });
+
+                try {
+                    const response = await fetch(registerEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(form)
+                    });
+
+                    const payload = await response.json();
+                    if (!response.ok) {
+                        const detail = payload.detail || payload.error || payload.message;
+                        const nonField = Array.isArray(payload.non_field_errors) ? payload.non_field_errors.join(' ') : '';
+                        throw new Error(detail || nonField || 'Não foi possível concluir o cadastro.');
+                    }
+
+                    setStatus({
+                        loading: false,
+                        error: '',
+                        success: 'Cadastro realizado! Você já pode usar seus dados para entrar.'
+                    });
+                    setForm({ first_name: '', username: '', email: '', password: '' });
+                } catch (error) {
+                    setStatus({ loading: false, error: error.message, success: '' });
+                }
+            };
+
+            return React.createElement(
+                React.Fragment,
+                null,
+                React.createElement('h2', { className: 'mb-1' }, 'Crie sua conta'),
+                React.createElement(
+                    'p',
+                    { className: 'lead mb-4' },
+                    'O usuário padrão será associado ao grupo "Estudante" automaticamente.'
+                ),
+                React.createElement(
+                    'form',
+                    { onSubmit: handleSubmit, className: 'd-grid gap-3' },
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'first_name' }, 'Nome'),
+                        React.createElement('input', {
+                            id: 'first_name',
+                            name: 'first_name',
+                            type: 'text',
+                            className: 'form-control',
+                            placeholder: 'Como devemos te chamar',
+                            value: form.first_name,
+                            onChange: handleChange
+                        })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'username' }, 'Usuário'),
+                        React.createElement('input', {
+                            id: 'username',
+                            name: 'username',
+                            type: 'text',
+                            className: 'form-control',
+                            required: true,
+                            value: form.username,
+                            onChange: handleChange,
+                            autoComplete: 'username'
+                        })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'email' }, 'E-mail'),
+                        React.createElement('input', {
+                            id: 'email',
+                            name: 'email',
+                            type: 'email',
+                            className: 'form-control',
+                            required: true,
+                            value: form.email,
+                            onChange: handleChange,
+                            autoComplete: 'email'
+                        })
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement('label', { className: 'form-label', htmlFor: 'password' }, 'Senha'),
+                        React.createElement('input', {
+                            id: 'password',
+                            name: 'password',
+                            type: 'password',
+                            className: 'form-control',
+                            required: true,
+                            minLength: 8,
+                            value: form.password,
+                            onChange: handleChange,
+                            autoComplete: 'new-password'
+                        })
+                    ),
+                    React.createElement(
+                        'button',
+                        {
+                            type: 'submit',
+                            className: 'btn btn-primary',
+                            disabled: status.loading
+                        },
+                        status.loading ? 'Cadastrando...' : 'Cadastrar'
+                    )
+                ),
+                status.error && React.createElement(
+                    'div',
+                    { className: 'alert alert-danger register-feedback' },
+                    status.error
+                ),
+                status.success && React.createElement(
+                    'div',
+                    { className: 'alert alert-success register-feedback' },
+                    status.success,
+                    ' ',
+                    React.createElement(
+                        'a',
+                        { href: loginUrl, className: 'alert-link' },
+                        'Ir para o login'
+                    )
+                )
+            );
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const mountNode = document.getElementById('register-root');
+            if (!mountNode) {
+                return;
+            }
+            const registerEndpoint = mountNode.dataset.apiRegister;
+            const loginUrl = mountNode.dataset.loginUrl;
+            const root = ReactDOM.createRoot(mountNode);
+            root.render(React.createElement(RegistrationApp, { registerEndpoint, loginUrl }));
+        });
+    })();
+</script>
+{% endblock %}

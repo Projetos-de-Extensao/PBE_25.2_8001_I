@@ -173,6 +173,25 @@ class AuditoriaRegistro(models.Model):
         return f"{self.acao} - {self.modelo} ({self.criado_em:%Y-%m-%d %H:%M})"
 
 
+class UserProfile(TempoRegistro):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    nome_exibicao = models.CharField(max_length=150, blank=True)
+    curriculo_pdf = models.FileField(upload_to="curriculos/", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Perfil do Usuário"
+        verbose_name_plural = "Perfis de Usuário"
+
+    def __str__(self) -> str:
+        return self.nome_exibicao or self.user.get_username()
+
+    def clean(self):
+        super().clean()
+        arquivo = self.curriculo_pdf
+        if arquivo and not arquivo.name.lower().endswith(".pdf"):
+            raise ValidationError({"curriculo_pdf": _("Envie apenas arquivos PDF.")})
+
+
 class ResultadoSelecaoChoices(models.TextChoices):
     APROVADO = "approved", _("Aprovado")
     LISTA_ESPERA = "waitlist", _("Lista de Espera")

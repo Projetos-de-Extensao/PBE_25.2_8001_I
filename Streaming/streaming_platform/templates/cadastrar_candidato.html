@@ -9,6 +9,29 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Seus dados</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" value="{{ aluno_nome }}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" class="form-control" value="{{ aluno_email }}" disabled>
+                    </div>
+                    {% if curriculo_disponivel %}
+                    <div class="alert alert-info mb-0">
+                        Currículo no perfil: <a href="{{ curriculo_url }}" target="_blank" rel="noopener">{{ curriculo_nome }}</a>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning mb-0">
+                        Nenhum currículo encontrado. Acesse <a href="{% url 'user_profile' %}">Meu perfil</a> para anexar um PDF antes de se candidatar.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
             {% if vaga %}
             <div class="alert alert-info mb-4" role="alert">
                 <strong>Vaga selecionada:</strong> {{ vaga.titulo }} — {{ vaga.disciplina }}
@@ -21,7 +44,7 @@
             {% endfor %}
             {% endif %}
 
-            <form method="post" enctype="multipart/form-data" class="card p-4">
+            <form method="post" class="card p-4 shadow-sm">
                 {% csrf_token %}
 
                 {% if form.non_field_errors %}
@@ -30,20 +53,26 @@
                 </div>
                 {% endif %}
 
-                {% for field in form %}
                 <div class="mb-3">
-                    <label class="form-label" for="{{ field.id_for_label }}">
-                        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+                    <label class="form-label" for="{{ form.vaga.id_for_label }}">
+                        {{ form.vaga.label }}{% if form.vaga.field.required %} <span class="text-danger">*</span>{% endif %}
                     </label>
-                    {{ field }}
-                    {% if field.help_text %}
-                    <div class="form-text">{{ field.help_text }}</div>
-                    {% endif %}
-                    {% for error in field.errors %}
+                    {{ form.vaga }}
+                    {% for error in form.vaga.errors %}
                     <div class="text-danger small">{{ error }}</div>
                     {% endfor %}
                 </div>
-                {% endfor %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.candidato_periodo.id_for_label }}">
+                        {{ form.candidato_periodo.label }}{% if form.candidato_periodo.field.required %} <span class="text-danger">*</span>{% endif %}
+                    </label>
+                    {{ form.candidato_periodo }}
+                    <div class="form-text">Informe seu período atual (ex.: 4º período / Noturno).</div>
+                    {% for error in form.candidato_periodo.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
                 <div class="d-flex justify-content-between">
                     <a href="{% url 'listar_vagas' %}" class="btn btn-outline-secondary">Cancelar</a>
