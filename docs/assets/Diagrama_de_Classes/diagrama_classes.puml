@@ -1,0 +1,234 @@
+@startuml Diagrama de Classes - Sistema de Monitoria
+
+' Estilos
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+skinparam stereotypeCBackgroundColor YellowGreen
+
+' ==================== Classes Abstratas ====================
+
+abstract class TempoRegistro <<abstract>> {
+    + created_at: DateTimeField
+    + updated_at: DateTimeField
+}
+
+' ==================== Enumerações ====================
+
+enum StatusVagaMonitoria {
+    RASCUNHO
+    PUBLICADA
+    EM_AVALIACAO
+    FINALIZADA
+}
+
+enum StatusCandidatura {
+    SUBMETIDA
+    EM_ANALISE
+    APROVADA
+    LISTA_ESPERA
+    REJEITADA
+    CANCELADA
+}
+
+enum ResultadoSelecao {
+    APROVADO
+    LISTA_ESPERA
+    REPROVADO
+}
+
+' ==================== Modelo do Django ====================
+
+class Usuario {
+    + id: Integer
+    + username: CharField
+    + email: EmailField
+    + first_name: CharField
+    + last_name: CharField
+    + password: CharField
+    --
+    + get_full_name(): String
+    + get_username(): String
+}
+
+' ==================== Classes de Domínio ====================
+
+class Departamento {
+    + id: Integer
+    + nome: CharField(150)
+    + sigla: CharField(16) {unique}
+    + descricao: TextField
+    + ativo: BooleanField
+    --
+    + __str__(): String
+}
+
+class Disciplina {
+    + id: Integer
+    + nome: CharField(150)
+    + codigo: CharField(20) {unique}
+    + carga_horaria: PositiveSmallIntegerField
+    + periodo: CharField(30)
+    + semestre: CharField(20)
+    + ativo: BooleanField
+    --
+    + __str__(): String
+}
+
+class VagaMonitoria {
+    + id: Integer
+    + titulo: CharField(150)
+    + prerequisitos: TextField
+    + responsabilidades: TextField
+    + periodo_minimo: PositiveSmallIntegerField
+    + cr_minimo: DecimalField(4,2)
+    + quantidade_vagas: PositiveSmallIntegerField
+    + carga_horaria_semanal: PositiveSmallIntegerField
+    + bolsa_valor: DecimalField(9,2)
+    + inscricoes_inicio: DateField
+    + inscricoes_fim: DateField
+    + monitoria_inicio: DateField
+    + monitoria_fim: DateField
+    + status: CharField(20)
+    + publicado_em: DateTimeField
+    + permitir_edicao_submetida: BooleanField
+    + ativo: BooleanField
+    --
+    + inscricoes_abertas(): Boolean
+    + clean(): void
+    + save(): void
+    + __str__(): String
+}
+
+class Candidatura {
+    + id: Integer
+    + candidato_nome: CharField(100)
+    + candidato_email: EmailField
+    + candidato_curso: CharField(100)
+    + candidato_periodo: CharField(30)
+    + candidato_cr: DecimalField(4,2)
+    + historico_escolar: FileField
+    + curriculo: FileField
+    + carta_motivacao: TextField
+    + status: CharField(20)
+    + feedback: TextField
+    + motivo_cancelamento: TextField
+    + ultima_atualizacao_status: DateTimeField
+    --
+    + pode_editar(): Boolean
+    + __str__(): String
+}
+
+class AvaliacaoCandidato {
+    + id: Integer
+    + nota: DecimalField(5,2)
+    + criterios_avaliacao: JSONField
+    + comentarios: TextField
+    + resultado: CharField(20)
+    + mensagem_resultado: TextField
+    + resultado_comunicado: BooleanField
+    + data_comunicacao: DateTimeField
+    --
+    + save(): void
+    + __str__(): String
+}
+
+class PerfilUsuario {
+    + id: Integer
+    + nome_exibicao: CharField(150)
+    + curriculo_pdf: FileField
+    --
+    + clean(): void
+    + __str__(): String
+}
+
+class RegistroAuditoria {
+    + id: Integer
+    + acao: CharField(50)
+    + modelo: CharField(120)
+    + objeto_id: CharField(50)
+    + descricao: TextField
+    + criado_em: DateTimeField
+    --
+    + __str__(): String
+}
+
+' ==================== Relacionamentos ====================
+
+' Herança
+TempoRegistro <|-- Departamento
+TempoRegistro <|-- Disciplina
+TempoRegistro <|-- VagaMonitoria
+TempoRegistro <|-- Candidatura
+TempoRegistro <|-- AvaliacaoCandidato
+TempoRegistro <|-- PerfilUsuario
+
+' Relacionamentos entre Classes
+
+Departamento "1" -- "0..*" Disciplina : possui >
+note on link: departamento
+
+Disciplina "1" -- "0..*" VagaMonitoria : oferece >
+note on link: disciplina
+
+Usuario "1" -- "0..*" Disciplina : coordena >
+note on link: coordenador
+
+Usuario "1" -- "0..*" VagaMonitoria : cria >
+note on link: criado_por
+
+Usuario "0..1" -- "0..*" VagaMonitoria : atualiza >
+note on link: atualizado_por
+
+VagaMonitoria "1" -- "0..*" Candidatura : recebe >
+note on link: vaga
+
+Candidatura "1" -- "0..*" AvaliacaoCandidato : possui >
+note on link: candidatura
+
+Usuario "1" -- "0..*" AvaliacaoCandidato : avalia >
+note on link: avaliador
+
+Usuario "1" -- "1" PerfilUsuario : tem >
+note on link: user
+
+Usuario "0..1" -- "0..*" RegistroAuditoria : registra >
+note on link: usuario
+
+' Uso de Enums
+VagaMonitoria ..> StatusVagaMonitoria : usa
+Candidatura ..> StatusCandidatura : usa
+AvaliacaoCandidato ..> ResultadoSelecao : usa
+
+' ==================== Notas ====================
+
+note top of Usuario
+    Classe nativa do Django
+    (django.contrib.auth.models.User)
+end note
+
+note bottom of TempoRegistro
+    Classe abstrata que adiciona
+    timestamps automáticos
+end note
+
+note right of VagaMonitoria
+    Validações:
+    - Data fim após início
+    - Inscrições antes da monitoria
+    - CR entre 0 e 10
+end note
+
+note right of Candidatura
+    Restrição única:
+    (candidato_email, vaga)
+end note
+
+note bottom of AvaliacaoCandidato
+    Atualiza status da candidatura
+    automaticamente ao salvar
+end note
+
+@enduml
