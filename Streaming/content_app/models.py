@@ -334,26 +334,41 @@ class Monitor(TempoRegistro):
     @property
     def horas_trabalhadas_mes_atual(self) -> Decimal:
         """Calcula total de horas do mês atual"""
-        hoje = timezone.now().date()
-        registros = self.registros.filter(
-            data__year=hoje.year,
-            data__month=hoje.month,
-            saida__isnull=False
-        )
-        total = Decimal("0.0")
-        for reg in registros:
-            total += reg.horas_trabalhadas
-        return total
+        try:
+            hoje = timezone.now().date()
+            registros = self.registros.filter(
+                data__year=hoje.year,
+                data__month=hoje.month,
+                saida__isnull=False
+            )
+            total = Decimal("0.0")
+            for reg in registros:
+                if reg.horas_trabalhadas:
+                    total += reg.horas_trabalhadas
+            return total
+        except (AttributeError, TypeError):
+            return Decimal("0.0")
     
     @property
     def percentual_cumprido_mes(self) -> float:
         """Percentual da carga horária mensal cumprida"""
-        hoje = timezone.now().date()
-        # Calcula semanas no mês (aproximado: 4.33 semanas/mês)
-        meta_mensal = Decimal(str(self.carga_horaria_semanal * 4.33))
-        if meta_mensal == 0:
-            return 0
-        return float((self.horas_trabalhadas_mes_atual / meta_mensal) * 100)
+        try:
+            if not self.carga_horaria_semanal or self.carga_horaria_semanal == 0:
+                return 0.0
+            
+            hoje = timezone.now().date()
+            # Calcula semanas no mês (aproximado: 4.33 semanas/mês)
+            meta_mensal = Decimal(str(self.carga_horaria_semanal * 4.33))
+            if meta_mensal == 0:
+                return 0.0
+            
+            horas = self.horas_trabalhadas_mes_atual
+            if horas is None:
+                return 0.0
+            
+            return float((horas / meta_mensal) * 100)
+        except (TypeError, ValueError, AttributeError):
+            return 0.0
 
 
 class TipoRegistro(models.TextChoices):
