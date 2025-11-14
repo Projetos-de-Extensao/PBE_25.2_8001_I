@@ -5,6 +5,7 @@ from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from content_app import views
 from content_app.api import AvaliacaoCandidatoViewSet, CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
@@ -47,6 +48,11 @@ urlpatterns = [
     path("api/token/", obtain_auth_token, name="api_token_auth"),
     path("api/jwt/", TokenObtainPairView.as_view(), name="jwt_obtain_pair"),
     path("api/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
+    
+    # Documentação da API
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
 if settings.DEBUG:

@@ -13,6 +13,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.views import TokenObtainPairView
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 
 from .forms import CandidaturaPublicForm, AvaliacaoCandidatoForm
@@ -508,6 +510,38 @@ def cadastrar_candidato(request, vaga_id=None):
     return render(request, "cadastrar_candidato.html", contexto)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar disciplinas",
+        description="Retorna lista de disciplinas. Coordenadores veem apenas suas disciplinas.",
+        tags=["Disciplinas"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes da disciplina",
+        description="Retorna informações detalhadas de uma disciplina específica.",
+        tags=["Disciplinas"]
+    ),
+    create=extend_schema(
+        summary="Criar disciplina",
+        description="Cria uma nova disciplina. Apenas coordenadores podem criar disciplinas.",
+        tags=["Disciplinas"]
+    ),
+    update=extend_schema(
+        summary="Atualizar disciplina",
+        description="Atualiza informações de uma disciplina existente.",
+        tags=["Disciplinas"]
+    ),
+    partial_update=extend_schema(
+        summary="Atualizar disciplina parcialmente",
+        description="Atualiza parcialmente informações de uma disciplina.",
+        tags=["Disciplinas"]
+    ),
+    destroy=extend_schema(
+        summary="Desativar disciplina",
+        description="Desativa uma disciplina (soft delete).",
+        tags=["Disciplinas"]
+    ),
+)
 class DisciplinaViewSet(viewsets.ModelViewSet):
     serializer_class = DisciplinaSerializer
     permission_classes = [IsCoordinator]
@@ -548,6 +582,42 @@ class DisciplinaViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar vagas de monitoria",
+        description="Retorna lista de vagas. Estudantes veem apenas vagas publicadas e abertas.",
+        tags=["Vagas de Monitoria"],
+        parameters=[
+            OpenApiParameter(name='status', description='Filtrar por status da vaga', type=str),
+            OpenApiParameter(name='disciplina__codigo', description='Filtrar por código da disciplina', type=str),
+        ]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes da vaga",
+        description="Retorna informações detalhadas de uma vaga de monitoria.",
+        tags=["Vagas de Monitoria"]
+    ),
+    create=extend_schema(
+        summary="Criar vaga de monitoria",
+        description="Cria uma nova vaga de monitoria. Apenas coordenadores.",
+        tags=["Vagas de Monitoria"]
+    ),
+    update=extend_schema(
+        summary="Atualizar vaga",
+        description="Atualiza informações de uma vaga de monitoria.",
+        tags=["Vagas de Monitoria"]
+    ),
+    partial_update=extend_schema(
+        summary="Atualizar vaga parcialmente",
+        description="Atualiza parcialmente informações de uma vaga.",
+        tags=["Vagas de Monitoria"]
+    ),
+    destroy=extend_schema(
+        summary="Arquivar vaga",
+        description="Arquiva uma vaga de monitoria (soft delete).",
+        tags=["Vagas de Monitoria"]
+    ),
+)
 class VagaMonitoriaViewSet(viewsets.ModelViewSet):
     serializer_class = VagaMonitoriaSerializer
     permission_classes = [IsCoordinator]
@@ -606,6 +676,12 @@ class VagaMonitoriaViewSet(viewsets.ModelViewSet):
         registrar_auditoria(request.user, "arquivar_vaga", vaga)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        summary="Dashboard de vagas",
+        description="Retorna estatísticas e métricas sobre vagas de monitoria.",
+        tags=["Vagas de Monitoria"],
+        responses={200: OpenApiTypes.OBJECT}
+    )
     @action(detail=False, methods=["get"], permission_classes=[IsCoordinator])
     def dashboard(self, request):
         queryset = self.filter_queryset(self.get_queryset())
@@ -638,6 +714,11 @@ class VagaMonitoriaViewSet(viewsets.ModelViewSet):
         }
         return Response(dados)
 
+    @extend_schema(
+        summary="Listar candidaturas de uma vaga",
+        description="Retorna todas as candidaturas de uma vaga específica.",
+        tags=["Vagas de Monitoria"]
+    )
     @action(detail=True, methods=["get"], permission_classes=[IsCoordinator])
     def candidaturas(self, request, pk=None):
         vaga = self.get_object()
@@ -648,6 +729,11 @@ class VagaMonitoriaViewSet(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
+    @extend_schema(
+        summary="Alterar status da vaga",
+        description="Altera o status de uma vaga de monitoria.",
+        tags=["Vagas de Monitoria"]
+    )
     @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
     def alterar_status(self, request, pk=None):
         vaga = self.get_object()
@@ -660,6 +746,11 @@ class VagaMonitoriaViewSet(viewsets.ModelViewSet):
         registrar_auditoria(request.user, f"alterar_status_{novo_status}", vaga)
         return Response(VagaMonitoriaSerializer(vaga, context=self.get_serializer_context()).data)
 
+    @extend_schema(
+        summary="Duplicar vaga",
+        description="Cria uma cópia de uma vaga existente com status de rascunho.",
+        tags=["Vagas de Monitoria"]
+    )
     @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
     def duplicar(self, request, pk=None):
         vaga = self.get_object()
@@ -688,6 +779,33 @@ class VagaMonitoriaViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar candidaturas",
+        description="Retorna lista de candidaturas. Estudantes veem apenas suas próprias candidaturas.",
+        tags=["Candidaturas"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes da candidatura",
+        description="Retorna informações detalhadas de uma candidatura específica.",
+        tags=["Candidaturas"]
+    ),
+    create=extend_schema(
+        summary="Criar candidatura",
+        description="Submete uma nova candidatura para uma vaga de monitoria.",
+        tags=["Candidaturas"]
+    ),
+    update=extend_schema(
+        summary="Atualizar candidatura",
+        description="Atualiza informações de uma candidatura (se permitido).",
+        tags=["Candidaturas"]
+    ),
+    partial_update=extend_schema(
+        summary="Atualizar candidatura parcialmente",
+        description="Atualiza parcialmente informações de uma candidatura.",
+        tags=["Candidaturas"]
+    ),
+)
 class CandidaturaViewSet(viewsets.ModelViewSet):
     serializer_class = CandidaturaSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -733,6 +851,11 @@ class CandidaturaViewSet(viewsets.ModelViewSet):
         candidatura = serializer.save()
         registrar_auditoria(self.request.user, "atualizar_candidatura", candidatura)
 
+    @extend_schema(
+        summary="Atualizar status da candidatura",
+        description="Altera o status de uma candidatura e adiciona feedback (apenas coordenadores).",
+        tags=["Candidaturas"]
+    )
     @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
     def atualizar_status(self, request, pk=None):
         candidatura = self.get_object()
@@ -746,6 +869,33 @@ class CandidaturaViewSet(viewsets.ModelViewSet):
         return Response(CandidaturaSerializer(candidatura, context=self.get_serializer_context()).data)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar avaliações de candidatos",
+        description="Retorna lista de avaliações. Coordenadores veem avaliações de suas disciplinas.",
+        tags=["Avaliações"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes da avaliação",
+        description="Retorna informações detalhadas de uma avaliação específica.",
+        tags=["Avaliações"]
+    ),
+    create=extend_schema(
+        summary="Criar avaliação",
+        description="Cria uma nova avaliação para um candidato. Apenas coordenadores.",
+        tags=["Avaliações"]
+    ),
+    update=extend_schema(
+        summary="Atualizar avaliação",
+        description="Atualiza informações de uma avaliação existente.",
+        tags=["Avaliações"]
+    ),
+    partial_update=extend_schema(
+        summary="Atualizar avaliação parcialmente",
+        description="Atualiza parcialmente informações de uma avaliação.",
+        tags=["Avaliações"]
+    ),
+)
 class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
     """
     ViewSet para avaliações de candidatos
@@ -787,6 +937,11 @@ class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
         avaliacao = serializer.save()
         registrar_auditoria(self.request.user, "atualizar_avaliacao", avaliacao)
 
+    @extend_schema(
+        summary="Comunicar resultado ao candidato",
+        description="Marca o resultado da avaliação como comunicado ao candidato.",
+        tags=["Avaliações"]
+    )
     @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
     def comunicar_resultado(self, request, pk=None):
         """
@@ -817,6 +972,11 @@ class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
             "data_comunicacao": avaliacao.data_comunicacao
         })
 
+    @extend_schema(
+        summary="Candidaturas pendentes de avaliação",
+        description="Lista candidaturas que ainda não foram avaliadas pelo coordenador atual.",
+        tags=["Avaliações"]
+    )
     @action(detail=False, methods=["get"], permission_classes=[IsCoordinator])
     def pendentes(self, request):
         """
@@ -849,6 +1009,11 @@ class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
             "candidaturas": serializer.data
         })
 
+    @extend_schema(
+        summary="Avaliar múltiplos candidatos",
+        description="Permite criar avaliações para múltiplos candidatos em uma única requisição.",
+        tags=["Avaliações"]
+    )
     @action(detail=False, methods=["post"], permission_classes=[IsCoordinator])
     def avaliar_lote(self, request):
         """

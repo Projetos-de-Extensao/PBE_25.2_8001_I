@@ -1,0 +1,2241 @@
+openapi: 3.0.3
+info:
+  title: API do Sistema de Monitoria
+  version: 1.0.0
+  description: API REST para gerenciamento de vagas de monitoria, candidaturas e avaliações
+paths:
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+          description: ''
+  /api/avaliacoes/:
+    get:
+      operationId: avaliacoes_list
+      description: Retorna lista de avaliações. Coordenadores veem avaliações de suas
+        disciplinas.
+      summary: Listar avaliações de candidatos
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Avaliações
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAvaliacaoCandidatoList'
+          description: ''
+    post:
+      operationId: avaliacoes_create
+      description: Cria uma nova avaliação para um candidato. Apenas coordenadores.
+      summary: Criar avaliação
+      tags:
+      - Avaliações
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+  /api/avaliacoes/{id}/:
+    get:
+      operationId: avaliacoes_retrieve
+      description: Retorna informações detalhadas de uma avaliação específica.
+      summary: Detalhes da avaliação
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Avaliação de Candidato.
+        required: true
+      tags:
+      - Avaliações
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+    put:
+      operationId: avaliacoes_update
+      description: Atualiza informações de uma avaliação existente.
+      summary: Atualizar avaliação
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Avaliação de Candidato.
+        required: true
+      tags:
+      - Avaliações
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+    patch:
+      operationId: avaliacoes_partial_update
+      description: Atualiza parcialmente informações de uma avaliação.
+      summary: Atualizar avaliação parcialmente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Avaliação de Candidato.
+        required: true
+      tags:
+      - Avaliações
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAvaliacaoCandidatoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAvaliacaoCandidatoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAvaliacaoCandidatoRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+    delete:
+      operationId: avaliacoes_destroy
+      description: |-
+        ViewSet para avaliações de candidatos
+        Permite professores criar, visualizar e gerenciar avaliações
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Avaliação de Candidato.
+        required: true
+      tags:
+      - avaliacoes
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/avaliacoes/{id}/comunicar_resultado/:
+    post:
+      operationId: avaliacoes_comunicar_resultado_create
+      description: Marca o resultado da avaliação como comunicado ao candidato.
+      summary: Comunicar resultado ao candidato
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Avaliação de Candidato.
+        required: true
+      tags:
+      - Avaliações
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+  /api/avaliacoes/avaliar_lote/:
+    post:
+      operationId: avaliacoes_avaliar_lote_create
+      description: Permite criar avaliações para múltiplos candidatos em uma única
+        requisição.
+      summary: Avaliar múltiplos candidatos
+      tags:
+      - Avaliações
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvaliacaoCandidatoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+  /api/avaliacoes/pendentes/:
+    get:
+      operationId: avaliacoes_pendentes_retrieve
+      description: Lista candidaturas que ainda não foram avaliadas pelo coordenador
+        atual.
+      summary: Candidaturas pendentes de avaliação
+      tags:
+      - Avaliações
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvaliacaoCandidato'
+          description: ''
+  /api/candidaturas/:
+    get:
+      operationId: candidaturas_list
+      description: Retorna lista de candidaturas. Estudantes veem apenas suas próprias
+        candidaturas.
+      summary: Listar candidaturas
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Candidaturas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCandidaturaList'
+          description: ''
+    post:
+      operationId: candidaturas_create
+      description: Submete uma nova candidatura para uma vaga de monitoria.
+      summary: Criar candidatura
+      tags:
+      - Candidaturas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidatura'
+          description: ''
+  /api/candidaturas/{id}/:
+    get:
+      operationId: candidaturas_retrieve
+      description: Retorna informações detalhadas de uma candidatura específica.
+      summary: Detalhes da candidatura
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidatura.
+        required: true
+      tags:
+      - Candidaturas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidatura'
+          description: ''
+    put:
+      operationId: candidaturas_update
+      description: Atualiza informações de uma candidatura (se permitido).
+      summary: Atualizar candidatura
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidatura.
+        required: true
+      tags:
+      - Candidaturas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidatura'
+          description: ''
+    patch:
+      operationId: candidaturas_partial_update
+      description: Atualiza parcialmente informações de uma candidatura.
+      summary: Atualizar candidatura parcialmente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidatura.
+        required: true
+      tags:
+      - Candidaturas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidaturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidaturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidaturaRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidatura'
+          description: ''
+    delete:
+      operationId: candidaturas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidatura.
+        required: true
+      tags:
+      - candidaturas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/candidaturas/{id}/atualizar_status/:
+    post:
+      operationId: candidaturas_atualizar_status_create
+      description: Altera o status de uma candidatura e adiciona feedback (apenas
+        coordenadores).
+      summary: Atualizar status da candidatura
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidatura.
+        required: true
+      tags:
+      - Candidaturas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CandidaturaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidatura'
+          description: ''
+  /api/disciplinas/:
+    get:
+      operationId: disciplinas_list
+      description: Retorna lista de disciplinas. Coordenadores veem apenas suas disciplinas.
+      summary: Listar disciplinas
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Disciplinas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDisciplinaList'
+          description: ''
+    post:
+      operationId: disciplinas_create
+      description: Cria uma nova disciplina. Apenas coordenadores podem criar disciplinas.
+      summary: Criar disciplina
+      tags:
+      - Disciplinas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disciplina'
+          description: ''
+  /api/disciplinas/{id}/:
+    get:
+      operationId: disciplinas_retrieve
+      description: Retorna informações detalhadas de uma disciplina específica.
+      summary: Detalhes da disciplina
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disciplina.
+        required: true
+      tags:
+      - Disciplinas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disciplina'
+          description: ''
+    put:
+      operationId: disciplinas_update
+      description: Atualiza informações de uma disciplina existente.
+      summary: Atualizar disciplina
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disciplina.
+        required: true
+      tags:
+      - Disciplinas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DisciplinaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disciplina'
+          description: ''
+    patch:
+      operationId: disciplinas_partial_update
+      description: Atualiza parcialmente informações de uma disciplina.
+      summary: Atualizar disciplina parcialmente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disciplina.
+        required: true
+      tags:
+      - Disciplinas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDisciplinaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDisciplinaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDisciplinaRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disciplina'
+          description: ''
+    delete:
+      operationId: disciplinas_destroy
+      description: Desativa uma disciplina (soft delete).
+      summary: Desativar disciplina
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this disciplina.
+        required: true
+      tags:
+      - Disciplinas
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/jwt/:
+    post:
+      operationId: jwt_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - jwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/jwt/refresh/:
+    post:
+      operationId: jwt_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - jwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/me/profile/:
+    get:
+      operationId: me_profile_retrieve
+      tags:
+      - me
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: me_profile_update
+      tags:
+      - me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: me_profile_partial_update
+      tags:
+      - me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/token/:
+    post:
+      operationId: token_create
+      tags:
+      - token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/vagas/:
+    get:
+      operationId: vagas_list
+      description: Retorna lista de vagas. Estudantes veem apenas vagas publicadas
+        e abertas.
+      summary: Listar vagas de monitoria
+      parameters:
+      - in: query
+        name: disciplina__codigo
+        schema:
+          type: string
+        description: Filtrar por código da disciplina
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Filtrar por status da vaga
+      tags:
+      - Vagas de Monitoria
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVagaMonitoriaList'
+          description: ''
+    post:
+      operationId: vagas_create
+      description: Cria uma nova vaga de monitoria. Apenas coordenadores.
+      summary: Criar vaga de monitoria
+      tags:
+      - Vagas de Monitoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+  /api/vagas/{id}/:
+    get:
+      operationId: vagas_retrieve
+      description: Retorna informações detalhadas de uma vaga de monitoria.
+      summary: Detalhes da vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+    put:
+      operationId: vagas_update
+      description: Atualiza informações de uma vaga de monitoria.
+      summary: Atualizar vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+    patch:
+      operationId: vagas_partial_update
+      description: Atualiza parcialmente informações de uma vaga.
+      summary: Atualizar vaga parcialmente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVagaMonitoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVagaMonitoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVagaMonitoriaRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+    delete:
+      operationId: vagas_destroy
+      description: Arquiva uma vaga de monitoria (soft delete).
+      summary: Arquivar vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/vagas/{id}/alterar_status/:
+    post:
+      operationId: vagas_alterar_status_create
+      description: Altera o status de uma vaga de monitoria.
+      summary: Alterar status da vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+  /api/vagas/{id}/candidaturas/:
+    get:
+      operationId: vagas_candidaturas_retrieve
+      description: Retorna todas as candidaturas de uma vaga específica.
+      summary: Listar candidaturas de uma vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+  /api/vagas/{id}/duplicar/:
+    post:
+      operationId: vagas_duplicar_create
+      description: Cria uma cópia de uma vaga existente com status de rascunho.
+      summary: Duplicar vaga
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vaga de Monitoria.
+        required: true
+      tags:
+      - Vagas de Monitoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VagaMonitoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagaMonitoria'
+          description: ''
+  /api/vagas/dashboard/:
+    get:
+      operationId: vagas_dashboard_retrieve
+      description: Retorna estatísticas e métricas sobre vagas de monitoria.
+      summary: Dashboard de vagas
+      tags:
+      - Vagas de Monitoria
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+          readOnly: true
+      required:
+      - token
+    AuthTokenRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    AvaliacaoCandidato:
+      type: object
+      description: Serializer para avaliações de candidatos
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        candidatura:
+          allOf:
+          - $ref: '#/components/schemas/Candidatura'
+          readOnly: true
+        avaliador:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        nota:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+          description: Nota da avaliação (0 a 10)
+        criterios_avaliacao:
+          description: 'Critérios específicos avaliados (ex: conhecimento técnico,
+            motivação, etc)'
+        comentarios:
+          type: string
+          description: Comentários e observações sobre o candidato
+        resultado:
+          nullable: true
+          description: |-
+            Resultado final da seleção
+
+            * `approved` - Aprovado
+            * `waitlist` - Lista de Espera
+            * `rejected` - Reprovado
+          oneOf:
+          - $ref: '#/components/schemas/ResultadoEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        resultado_display:
+          type: string
+          readOnly: true
+        mensagem_resultado:
+          type: string
+          description: Mensagem padronizada a ser enviada ao candidato
+        resultado_comunicado:
+          type: boolean
+          description: Indica se o resultado já foi comunicado ao candidato
+        data_comunicacao:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Data em que o resultado foi comunicado
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - avaliador
+      - candidatura
+      - created_at
+      - data_comunicacao
+      - id
+      - resultado_display
+      - updated_at
+    AvaliacaoCandidatoRequest:
+      type: object
+      description: Serializer para avaliações de candidatos
+      properties:
+        candidatura_id:
+          type: integer
+          writeOnly: true
+        nota:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+          description: Nota da avaliação (0 a 10)
+        criterios_avaliacao:
+          description: 'Critérios específicos avaliados (ex: conhecimento técnico,
+            motivação, etc)'
+        comentarios:
+          type: string
+          description: Comentários e observações sobre o candidato
+        resultado:
+          nullable: true
+          description: |-
+            Resultado final da seleção
+
+            * `approved` - Aprovado
+            * `waitlist` - Lista de Espera
+            * `rejected` - Reprovado
+          oneOf:
+          - $ref: '#/components/schemas/ResultadoEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        mensagem_resultado:
+          type: string
+          description: Mensagem padronizada a ser enviada ao candidato
+        resultado_comunicado:
+          type: boolean
+          description: Indica se o resultado já foi comunicado ao candidato
+      required:
+      - candidatura_id
+    BlankEnum:
+      enum:
+      - ''
+    Candidatura:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        candidato_nome:
+          type: string
+          maxLength: 100
+        candidato_email:
+          type: string
+          format: email
+          maxLength: 254
+        candidato_curso:
+          type: string
+          maxLength: 100
+        candidato_periodo:
+          type: string
+          maxLength: 30
+        candidato_cr:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        historico_escolar:
+          type: string
+          format: uri
+        curriculo:
+          type: string
+          format: uri
+        carta_motivacao:
+          type: string
+        vaga:
+          allOf:
+          - $ref: '#/components/schemas/VagaMonitoria'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CandidaturaStatusEnum'
+        status_display:
+          type: string
+          readOnly: true
+        feedback:
+          type: string
+        motivo_cancelamento:
+          type: string
+        avaliacoes:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        ultima_atualizacao_status:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - avaliacoes
+      - candidato_email
+      - candidato_nome
+      - created_at
+      - id
+      - status_display
+      - ultima_atualizacao_status
+      - updated_at
+      - vaga
+    CandidaturaRequest:
+      type: object
+      properties:
+        candidato_nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        candidato_email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        candidato_curso:
+          type: string
+          maxLength: 100
+        candidato_periodo:
+          type: string
+          maxLength: 30
+        candidato_cr:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        historico_escolar:
+          type: string
+          format: binary
+        curriculo:
+          type: string
+          format: binary
+        carta_motivacao:
+          type: string
+        vaga_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/CandidaturaStatusEnum'
+        feedback:
+          type: string
+        motivo_cancelamento:
+          type: string
+      required:
+      - candidato_email
+      - candidato_nome
+      - vaga_id
+    CandidaturaStatusEnum:
+      enum:
+      - submitted
+      - in_review
+      - approved
+      - waitlist
+      - rejected
+      - cancelled
+      type: string
+      description: |-
+        * `submitted` - Submetida
+        * `in_review` - Em Análise
+        * `approved` - Aprovada
+        * `waitlist` - Lista de Espera
+        * `rejected` - Rejeitada
+        * `cancelled` - Cancelada
+    CustomTokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    Departamento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 150
+        sigla:
+          type: string
+          maxLength: 16
+        descricao:
+          type: string
+        ativo:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - nome
+      - sigla
+      - updated_at
+    DepartamentoRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 150
+        sigla:
+          type: string
+          minLength: 1
+          maxLength: 16
+        descricao:
+          type: string
+        ativo:
+          type: boolean
+      required:
+      - nome
+      - sigla
+    Disciplina:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 150
+        codigo:
+          type: string
+          maxLength: 20
+        departamento:
+          allOf:
+          - $ref: '#/components/schemas/Departamento'
+          readOnly: true
+        carga_horaria:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        periodo:
+          type: string
+          maxLength: 30
+        semestre:
+          type: string
+          maxLength: 20
+        coordenador:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        ativo:
+          type: boolean
+        vagas_ativas:
+          type: integer
+          readOnly: true
+        vagas_preview:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - carga_horaria
+      - codigo
+      - coordenador
+      - created_at
+      - departamento
+      - id
+      - nome
+      - periodo
+      - semestre
+      - updated_at
+      - vagas_ativas
+      - vagas_preview
+    DisciplinaRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 150
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 20
+        departamento_id:
+          type: integer
+          writeOnly: true
+        carga_horaria:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        periodo:
+          type: string
+          minLength: 1
+          maxLength: 30
+        semestre:
+          type: string
+          minLength: 1
+          maxLength: 20
+        coordenador_id:
+          type: integer
+          writeOnly: true
+        ativo:
+          type: boolean
+      required:
+      - carga_horaria
+      - codigo
+      - coordenador_id
+      - departamento_id
+      - nome
+      - periodo
+      - semestre
+    NullEnum:
+      enum:
+      - null
+    PaginatedAvaliacaoCandidatoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvaliacaoCandidato'
+    PaginatedCandidaturaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidatura'
+    PaginatedDisciplinaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disciplina'
+    PaginatedVagaMonitoriaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VagaMonitoria'
+    PatchedAvaliacaoCandidatoRequest:
+      type: object
+      description: Serializer para avaliações de candidatos
+      properties:
+        candidatura_id:
+          type: integer
+          writeOnly: true
+        nota:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+          description: Nota da avaliação (0 a 10)
+        criterios_avaliacao:
+          description: 'Critérios específicos avaliados (ex: conhecimento técnico,
+            motivação, etc)'
+        comentarios:
+          type: string
+          description: Comentários e observações sobre o candidato
+        resultado:
+          nullable: true
+          description: |-
+            Resultado final da seleção
+
+            * `approved` - Aprovado
+            * `waitlist` - Lista de Espera
+            * `rejected` - Reprovado
+          oneOf:
+          - $ref: '#/components/schemas/ResultadoEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        mensagem_resultado:
+          type: string
+          description: Mensagem padronizada a ser enviada ao candidato
+        resultado_comunicado:
+          type: boolean
+          description: Indica se o resultado já foi comunicado ao candidato
+    PatchedCandidaturaRequest:
+      type: object
+      properties:
+        candidato_nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        candidato_email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        candidato_curso:
+          type: string
+          maxLength: 100
+        candidato_periodo:
+          type: string
+          maxLength: 30
+        candidato_cr:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        historico_escolar:
+          type: string
+          format: binary
+        curriculo:
+          type: string
+          format: binary
+        carta_motivacao:
+          type: string
+        vaga_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/CandidaturaStatusEnum'
+        feedback:
+          type: string
+        motivo_cancelamento:
+          type: string
+    PatchedDisciplinaRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 150
+        codigo:
+          type: string
+          minLength: 1
+          maxLength: 20
+        departamento_id:
+          type: integer
+          writeOnly: true
+        carga_horaria:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        periodo:
+          type: string
+          minLength: 1
+          maxLength: 30
+        semestre:
+          type: string
+          minLength: 1
+          maxLength: 20
+        coordenador_id:
+          type: integer
+          writeOnly: true
+        ativo:
+          type: boolean
+    PatchedUserProfileRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+        curriculo_pdf:
+          type: string
+          format: binary
+          nullable: true
+    PatchedVagaMonitoriaRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        disciplina_id:
+          type: integer
+          writeOnly: true
+        prerequisitos:
+          type: string
+        responsabilidades:
+          type: string
+        periodo_minimo:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        cr_minimo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        quantidade_vagas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        bolsa_valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,7}(?:\.\d{0,2})?$
+          nullable: true
+        inscricoes_inicio:
+          type: string
+          format: date
+        inscricoes_fim:
+          type: string
+          format: date
+        monitoria_inicio:
+          type: string
+          format: date
+        monitoria_fim:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/VagaMonitoriaStatusEnum'
+        permitir_edicao_submetida:
+          type: boolean
+        ativo:
+          type: boolean
+    ResultadoEnum:
+      enum:
+      - approved
+      - waitlist
+      - rejected
+      type: string
+      description: |-
+        * `approved` - Aprovado
+        * `waitlist` - Lista de Espera
+        * `rejected` - Reprovado
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        nome:
+          type: string
+        curriculo_pdf:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - updated_at
+      - user
+    UserProfileRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+        curriculo_pdf:
+          type: string
+          format: binary
+          nullable: true
+    UserRegistration:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+      required:
+      - id
+      - username
+    UserRegistrationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        first_name:
+          type: string
+      required:
+      - password
+      - username
+    UsuarioResumo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        first_name:
+          type: string
+          readOnly: true
+        last_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - username
+    VagaMonitoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 150
+        disciplina:
+          allOf:
+          - $ref: '#/components/schemas/Disciplina'
+          readOnly: true
+        prerequisitos:
+          type: string
+        responsabilidades:
+          type: string
+        periodo_minimo:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        cr_minimo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        quantidade_vagas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        bolsa_valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,7}(?:\.\d{0,2})?$
+          nullable: true
+        inscricoes_inicio:
+          type: string
+          format: date
+        inscricoes_fim:
+          type: string
+          format: date
+        monitoria_inicio:
+          type: string
+          format: date
+        monitoria_fim:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/VagaMonitoriaStatusEnum'
+        status_display:
+          type: string
+          readOnly: true
+        publicado_em:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        criado_por:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        atualizado_por:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        permitir_edicao_submetida:
+          type: boolean
+        ativo:
+          type: boolean
+        inscricoes_abertas:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - atualizado_por
+      - created_at
+      - criado_por
+      - disciplina
+      - id
+      - inscricoes_abertas
+      - publicado_em
+      - status_display
+      - titulo
+      - updated_at
+    VagaMonitoriaRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+          maxLength: 150
+        disciplina_id:
+          type: integer
+          writeOnly: true
+        prerequisitos:
+          type: string
+        responsabilidades:
+          type: string
+        periodo_minimo:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        cr_minimo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,2})?$
+          nullable: true
+        quantidade_vagas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        bolsa_valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,7}(?:\.\d{0,2})?$
+          nullable: true
+        inscricoes_inicio:
+          type: string
+          format: date
+        inscricoes_fim:
+          type: string
+          format: date
+        monitoria_inicio:
+          type: string
+          format: date
+        monitoria_fim:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/VagaMonitoriaStatusEnum'
+        permitir_edicao_submetida:
+          type: boolean
+        ativo:
+          type: boolean
+      required:
+      - disciplina_id
+      - titulo
+    VagaMonitoriaStatusEnum:
+      enum:
+      - draft
+      - published
+      - under_review
+      - closed
+      type: string
+      description: |-
+        * `draft` - Rascunho
+        * `published` - Publicada
+        * `under_review` - Em Avaliação
+        * `closed` - Finalizada
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
