@@ -6,6 +6,9 @@ from .models import (
     Candidatura,
     Departamento,
     Disciplina,
+    Monitor,
+    RegistroFrequencia,
+    RelatorioMensal,
     UserProfile,
     VagaMonitoria,
     VagaMonitoriaStatus,
@@ -150,3 +153,153 @@ class AvaliacaoCandidatoAdmin(admin.ModelAdmin):
             "classes": ("collapse",)
         }),
     )
+
+
+# ==================== Admin de Controle de Frequência ====================
+
+@admin.register(Monitor)
+class MonitorAdmin(admin.ModelAdmin):
+    list_display = (
+        "nome",
+        "vaga",
+        "status",
+        "data_inicio",
+        "data_fim",
+        "carga_horaria_semanal",
+        "horas_mes_atual",
+        "percentual_cumprido",
+    )
+    list_filter = ("status", "vaga__disciplina__departamento", "data_inicio")
+    search_fields = ("nome", "email", "vaga__titulo", "vaga__disciplina__nome")
+    list_select_related = ("vaga", "vaga__disciplina", "candidatura", "usuario")
+    readonly_fields = ("created_at", "updated_at", "horas_mes_atual", "percentual_cumprido")
+    
+    fieldsets = (
+        ("Informações Básicas", {
+            "fields": ("candidatura", "vaga", "usuario", "nome", "email")
+        }),
+        ("Período e Carga Horária", {
+            "fields": ("data_inicio", "data_fim", "carga_horaria_semanal", "status")
+        }),
+        ("Estatísticas", {
+            "fields": ("horas_mes_atual", "percentual_cumprido"),
+            "classes": ("collapse",)
+        }),
+        ("Observações", {
+            "fields": ("observacoes",)
+        }),
+        ("Datas", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",)
+        }),
+    )
+    
+    def horas_mes_atual(self, obj):
+        return f"{obj.horas_trabalhadas_mes_atual:.2f}h"
+    horas_mes_atual.short_description = "Horas Mês Atual"
+    
+    def percentual_cumprido(self, obj):
+        return f"{obj.percentual_cumprido_mes:.1f}%"
+    percentual_cumprido.short_description = "% Cumprido"
+
+
+@admin.register(RegistroFrequencia)
+class RegistroFrequenciaAdmin(admin.ModelAdmin):
+    list_display = (
+        "monitor",
+        "data",
+        "entrada",
+        "saida",
+        "horas",
+        "tipo",
+        "validado",
+        "validado_por",
+    )
+    list_filter = ("tipo", "data", "validado_por", "monitor__vaga__disciplina")
+    search_fields = ("monitor__nome", "atividades", "local")
+    list_select_related = ("monitor", "monitor__vaga", "validado_por")
+    readonly_fields = ("created_at", "updated_at", "horas", "validado_em")
+    date_hierarchy = "data"
+    
+    fieldsets = (
+        ("Informações Básicas", {
+            "fields": ("monitor", "data", "entrada", "saida", "tipo")
+        }),
+        ("Detalhes", {
+            "fields": ("atividades", "local", "observacoes")
+        }),
+        ("Validação", {
+            "fields": ("validado_por", "validado_em")
+        }),
+        ("Datas", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",)
+        }),
+    )
+    
+    def horas(self, obj):
+        return f"{obj.horas_trabalhadas:.2f}h"
+    horas.short_description = "Horas Trabalhadas"
+    
+    def validado(self, obj):
+        return "✓" if obj.validado_por else "✗"
+    validado.short_description = "Validado"
+    validado.boolean = True
+
+
+@admin.register(RelatorioMensal)
+class RelatorioMensalAdmin(admin.ModelAdmin):
+    list_display = (
+        "monitor",
+        "mes_ano",
+        "total_horas",
+        "dias_trabalhados",
+        "percentual_cumprido",
+        "aprovado",
+    )
+    list_filter = ("ano", "mes", "aprovado_por", "monitor__vaga__disciplina")
+    search_fields = ("monitor__nome", "resumo_atividades")
+    list_select_related = ("monitor", "monitor__vaga", "aprovado_por")
+    readonly_fields = ("created_at", "updated_at", "aprovado_em")
+    
+    fieldsets = (
+        ("Informações Básicas", {
+            "fields": ("monitor", "mes", "ano")
+        }),
+        ("Totalizadores", {
+            "fields": (
+                "total_horas",
+                "dias_trabalhados",
+                "carga_horaria_prevista",
+                "percentual_cumprido"
+            )
+        }),
+        ("Resumo", {
+            "fields": ("resumo_atividades", "observacoes_professor")
+        }),
+        ("Aprovação", {
+            "fields": ("aprovado_por", "aprovado_em")
+        }),
+        ("Datas", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",)
+        }),
+    )
+    
+    actions = ["recalcular_totais"]
+    
+    def mes_ano(self, obj):
+        return f"{obj.mes:02d}/{obj.ano}"
+    mes_ano.short_description = "Mês/Ano"
+    
+    def aprovado(self, obj):
+        return "✓" if obj.aprovado_por else "✗"
+    aprovado.short_description = "Aprovado"
+    aprovado.boolean = True
+    
+    @admin.action(description="Recalcular totais dos relatórios selecionados")
+    def recalcular_totais(self, request, queryset):
+        for relatorio in queryset:
+            relatorio.calcular_totais()
+            relatorio.save()
+        self.message_user(request, f"{queryset.count()} relatório(s) recalculado(s) com sucesso.")

@@ -9,6 +9,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from content_app import views
 from content_app.api import AvaliacaoCandidatoViewSet, CandidaturaViewSet, DisciplinaViewSet, VagaMonitoriaViewSet
+from content_app.views import MonitorViewSet, RegistroFrequenciaViewSet, RelatorioMensalViewSet
 
 
 router = DefaultRouter()
@@ -16,6 +17,9 @@ router.register(r"disciplinas", DisciplinaViewSet, basename="disciplina")
 router.register(r"vagas", VagaMonitoriaViewSet, basename="vaga")
 router.register(r"candidaturas", CandidaturaViewSet, basename="candidatura")
 router.register(r"avaliacoes", AvaliacaoCandidatoViewSet, basename="avaliacao")
+router.register(r"monitores", MonitorViewSet, basename="monitor")
+router.register(r"registros-frequencia", RegistroFrequenciaViewSet, basename="registro-frequencia")
+router.register(r"relatorios-mensais", RelatorioMensalViewSet, basename="relatorio-mensal")
 
 
 urlpatterns = [

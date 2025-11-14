@@ -850,6 +850,676 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserProfile'
           description: ''
+  /api/monitores/:
+    get:
+      operationId: monitores_list
+      description: Retorna lista de monitores ativos. Coordenadores veem monitores
+        de suas disciplinas.
+      summary: Listar monitores
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Frequência - Monitores
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMonitorList'
+          description: ''
+    post:
+      operationId: monitores_create
+      description: Registra um novo monitor (normalmente criado automaticamente ao
+        aprovar candidatura).
+      summary: Criar monitor
+      tags:
+      - Frequência - Monitores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+          description: ''
+  /api/monitores/{id}/:
+    get:
+      operationId: monitores_retrieve
+      description: Retorna informações detalhadas de um monitor.
+      summary: Detalhes do monitor
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Monitor.
+        required: true
+      tags:
+      - Frequência - Monitores
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+          description: ''
+    put:
+      operationId: monitores_update
+      description: Atualiza informações de um monitor.
+      summary: Atualizar monitor
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Monitor.
+        required: true
+      tags:
+      - Frequência - Monitores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MonitorRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+          description: ''
+    patch:
+      operationId: monitores_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Monitor.
+        required: true
+      tags:
+      - monitores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMonitorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMonitorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMonitorRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+          description: ''
+    delete:
+      operationId: monitores_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Monitor.
+        required: true
+      tags:
+      - monitores
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/monitores/{id}/dashboard/:
+    get:
+      operationId: monitores_dashboard_retrieve
+      description: Retorna estatísticas e resumo de horas do monitor.
+      summary: Dashboard do monitor
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Monitor.
+        required: true
+      tags:
+      - Frequência - Monitores
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+          description: ''
+  /api/registros-frequencia/:
+    get:
+      operationId: registros_frequencia_list
+      description: Retorna lista de registros de entrada/saída dos monitores.
+      summary: Listar registros de frequência
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Frequência - Registros
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRegistroFrequenciaList'
+          description: ''
+    post:
+      operationId: registros_frequencia_create
+      description: Registra entrada/saída de um monitor.
+      summary: Criar registro de frequência
+      tags:
+      - Frequência - Registros
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroFrequencia'
+          description: ''
+  /api/registros-frequencia/{id}/:
+    get:
+      operationId: registros_frequencia_retrieve
+      description: Retorna informações detalhadas de um registro de frequência.
+      summary: Detalhes do registro
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Registro de Frequência.
+        required: true
+      tags:
+      - Frequência - Registros
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroFrequencia'
+          description: ''
+    put:
+      operationId: registros_frequencia_update
+      description: Atualiza um registro de frequência.
+      summary: Atualizar registro
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Registro de Frequência.
+        required: true
+      tags:
+      - Frequência - Registros
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroFrequencia'
+          description: ''
+    patch:
+      operationId: registros_frequencia_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Registro de Frequência.
+        required: true
+      tags:
+      - registros-frequencia
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistroFrequenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistroFrequenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistroFrequenciaRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroFrequencia'
+          description: ''
+    delete:
+      operationId: registros_frequencia_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Registro de Frequência.
+        required: true
+      tags:
+      - registros-frequencia
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/registros-frequencia/{id}/validar/:
+    post:
+      operationId: registros_frequencia_validar_create
+      description: Professor valida o registro de frequência de um monitor.
+      summary: Validar registro de frequência
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Registro de Frequência.
+        required: true
+      tags:
+      - Frequência - Registros
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegistroFrequenciaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroFrequencia'
+          description: ''
+  /api/relatorios-mensais/:
+    get:
+      operationId: relatorios_mensais_list
+      description: Retorna lista de relatórios mensais consolidados.
+      summary: Listar relatórios mensais
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Frequência - Relatórios
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRelatorioMensalList'
+          description: ''
+    post:
+      operationId: relatorios_mensais_create
+      description: Gera um novo relatório mensal consolidado.
+      summary: Criar relatório mensal
+      tags:
+      - Frequência - Relatórios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
+  /api/relatorios-mensais/{id}/:
+    get:
+      operationId: relatorios_mensais_retrieve
+      description: Retorna informações detalhadas de um relatório mensal.
+      summary: Detalhes do relatório
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - Frequência - Relatórios
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
+    put:
+      operationId: relatorios_mensais_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - relatorios-mensais
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
+    patch:
+      operationId: relatorios_mensais_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - relatorios-mensais
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioMensalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioMensalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRelatorioMensalRequest'
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
+    delete:
+      operationId: relatorios_mensais_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - relatorios-mensais
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/relatorios-mensais/{id}/aprovar/:
+    post:
+      operationId: relatorios_mensais_aprovar_create
+      description: Professor aprova o relatório mensal do monitor.
+      summary: Aprovar relatório mensal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - Frequência - Relatórios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
+  /api/relatorios-mensais/{id}/recalcular/:
+    post:
+      operationId: relatorios_mensais_recalcular_create
+      description: Recalcula horas e percentuais baseado nos registros de frequência.
+      summary: Recalcular totais do relatório
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Relatório Mensal.
+        required: true
+      tags:
+      - Frequência - Relatórios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelatorioMensalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelatorioMensal'
+          description: ''
   /api/token/:
     post:
       operationId: token_create
@@ -1617,6 +2287,149 @@ components:
       - nome
       - periodo
       - semestre
+    Monitor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        candidatura:
+          type: integer
+        vaga:
+          type: integer
+        vaga_titulo:
+          type: string
+          readOnly: true
+        disciplina_nome:
+          type: string
+          readOnly: true
+        disciplina_codigo:
+          type: string
+          readOnly: true
+        usuario:
+          type: integer
+          nullable: true
+          description: Usuário do sistema (se tiver cadastro)
+        candidato_nome:
+          type: string
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        data_inicio:
+          type: string
+          format: date
+        data_fim:
+          type: string
+          format: date
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+          description: Horas semanais previstas
+        status:
+          $ref: '#/components/schemas/MonitorStatusEnum'
+        status_display:
+          type: string
+          readOnly: true
+        observacoes:
+          type: string
+        horas_mes_atual:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          readOnly: true
+        percentual_cumprido:
+          type: number
+          format: double
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - candidato_nome
+      - candidatura
+      - carga_horaria_semanal
+      - created_at
+      - data_fim
+      - data_inicio
+      - disciplina_codigo
+      - disciplina_nome
+      - email
+      - horas_mes_atual
+      - id
+      - nome
+      - percentual_cumprido
+      - status_display
+      - updated_at
+      - vaga
+      - vaga_titulo
+    MonitorRequest:
+      type: object
+      properties:
+        candidatura:
+          type: integer
+        vaga:
+          type: integer
+        usuario:
+          type: integer
+          nullable: true
+          description: Usuário do sistema (se tiver cadastro)
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        data_inicio:
+          type: string
+          format: date
+        data_fim:
+          type: string
+          format: date
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+          description: Horas semanais previstas
+        status:
+          $ref: '#/components/schemas/MonitorStatusEnum'
+        observacoes:
+          type: string
+      required:
+      - candidatura
+      - carga_horaria_semanal
+      - data_fim
+      - data_inicio
+      - email
+      - nome
+      - vaga
+    MonitorStatusEnum:
+      enum:
+      - ativo
+      - afastado
+      - desligado
+      - concluido
+      type: string
+      description: |-
+        * `ativo` - Ativo
+        * `afastado` - Afastado
+        * `desligado` - Desligado
+        * `concluido` - Concluído
     NullEnum:
       enum:
       - null
@@ -1689,6 +2502,75 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Disciplina'
+    PaginatedMonitorList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Monitor'
+    PaginatedRegistroFrequenciaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistroFrequencia'
+    PaginatedRelatorioMensalList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatorioMensal'
     PaginatedVagaMonitoriaList:
       type: object
       required:
@@ -1821,6 +2703,98 @@ components:
           writeOnly: true
         ativo:
           type: boolean
+    PatchedMonitorRequest:
+      type: object
+      properties:
+        candidatura:
+          type: integer
+        vaga:
+          type: integer
+        usuario:
+          type: integer
+          nullable: true
+          description: Usuário do sistema (se tiver cadastro)
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        data_inicio:
+          type: string
+          format: date
+        data_fim:
+          type: string
+          format: date
+        carga_horaria_semanal:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+          description: Horas semanais previstas
+        status:
+          $ref: '#/components/schemas/MonitorStatusEnum'
+        observacoes:
+          type: string
+    PatchedRegistroFrequenciaRequest:
+      type: object
+      properties:
+        monitor:
+          type: integer
+        data:
+          type: string
+          format: date
+        entrada:
+          type: string
+          format: time
+        saida:
+          type: string
+          format: time
+          nullable: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        atividades:
+          type: string
+          description: Descrição das atividades realizadas
+        local:
+          type: string
+          description: Local onde a monitoria foi realizada
+          maxLength: 100
+        validado_por:
+          type: integer
+          nullable: true
+          description: Professor que validou o registro
+        observacoes:
+          type: string
+    PatchedRelatorioMensalRequest:
+      type: object
+      properties:
+        monitor:
+          type: integer
+        mes:
+          type: integer
+          maximum: 12
+          minimum: 1
+        ano:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        carga_horaria_prevista:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          description: Carga horária mensal esperada
+        resumo_atividades:
+          type: string
+        observacoes_professor:
+          type: string
+        aprovado_por:
+          type: integer
+          nullable: true
     PatchedUserProfileRequest:
       type: object
       properties:
@@ -1888,6 +2862,227 @@ components:
           type: boolean
         ativo:
           type: boolean
+    RegistroFrequencia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        monitor:
+          type: integer
+        monitor_nome:
+          type: string
+          readOnly: true
+        data:
+          type: string
+          format: date
+        entrada:
+          type: string
+          format: time
+        saida:
+          type: string
+          format: time
+          nullable: true
+        horas:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          readOnly: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        tipo_display:
+          type: string
+          readOnly: true
+        atividades:
+          type: string
+          description: Descrição das atividades realizadas
+        local:
+          type: string
+          description: Local onde a monitoria foi realizada
+          maxLength: 100
+        validado_por:
+          type: integer
+          nullable: true
+          description: Professor que validou o registro
+        validado_por_nome:
+          type: string
+          readOnly: true
+          nullable: true
+        validado_em:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        observacoes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - entrada
+      - horas
+      - id
+      - monitor
+      - monitor_nome
+      - tipo_display
+      - updated_at
+      - validado_em
+      - validado_por_nome
+    RegistroFrequenciaRequest:
+      type: object
+      properties:
+        monitor:
+          type: integer
+        data:
+          type: string
+          format: date
+        entrada:
+          type: string
+          format: time
+        saida:
+          type: string
+          format: time
+          nullable: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        atividades:
+          type: string
+          description: Descrição das atividades realizadas
+        local:
+          type: string
+          description: Local onde a monitoria foi realizada
+          maxLength: 100
+        validado_por:
+          type: integer
+          nullable: true
+          description: Professor que validou o registro
+        observacoes:
+          type: string
+      required:
+      - entrada
+      - monitor
+    RelatorioMensal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        monitor:
+          type: integer
+        monitor_nome:
+          type: string
+          readOnly: true
+        disciplina_nome:
+          type: string
+          readOnly: true
+        mes:
+          type: integer
+          maximum: 12
+          minimum: 1
+        mes_nome:
+          type: string
+          readOnly: true
+        ano:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        total_horas:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          readOnly: true
+        dias_trabalhados:
+          type: integer
+          readOnly: true
+        carga_horaria_prevista:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          description: Carga horária mensal esperada
+        percentual_cumprido:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          readOnly: true
+          description: Percentual da carga horária cumprida
+        resumo_atividades:
+          type: string
+        observacoes_professor:
+          type: string
+        aprovado_por:
+          type: integer
+          nullable: true
+        aprovado_por_nome:
+          type: string
+          readOnly: true
+          nullable: true
+        aprovado_em:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - ano
+      - aprovado_em
+      - aprovado_por_nome
+      - carga_horaria_prevista
+      - created_at
+      - dias_trabalhados
+      - disciplina_nome
+      - id
+      - mes
+      - mes_nome
+      - monitor
+      - monitor_nome
+      - percentual_cumprido
+      - total_horas
+      - updated_at
+    RelatorioMensalRequest:
+      type: object
+      properties:
+        monitor:
+          type: integer
+        mes:
+          type: integer
+          maximum: 12
+          minimum: 1
+        ano:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        carga_horaria_prevista:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          description: Carga horária mensal esperada
+        resumo_atividades:
+          type: string
+        observacoes_professor:
+          type: string
+        aprovado_por:
+          type: integer
+          nullable: true
+      required:
+      - ano
+      - carga_horaria_prevista
+      - mes
+      - monitor
     ResultadoEnum:
       enum:
       - approved
@@ -1898,6 +3093,16 @@ components:
         * `approved` - Aprovado
         * `waitlist` - Lista de Espera
         * `rejected` - Reprovado
+    TipoEnum:
+      enum:
+      - normal
+      - reposicao
+      - extra
+      type: string
+      description: |-
+        * `normal` - Normal
+        * `reposicao` - Reposição
+        * `extra` - Extra
     TokenObtainPair:
       type: object
       properties:

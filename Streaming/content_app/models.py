@@ -275,3 +275,235 @@ class AvaliacaoCandidato(TempoRegistro):
             self.data_comunicacao = timezone.now()
         
         super().save(*args, **kwargs)
+
+
+class StatusMonitor(models.TextChoices):
+    ATIVO = "ativo", _("Ativo")
+    AFASTADO = "afastado", _("Afastado")
+    DESLIGADO = "desligado", _("Desligado")
+    CONCLUIDO = "concluido", _("Concluído")
+
+
+class Monitor(TempoRegistro):
+    """
+    Modelo para monitores aprovados
+    Criado automaticamente quando uma candidatura é aprovada
+    """
+    candidatura = models.OneToOneField(
+        Candidatura,
+        on_delete=models.CASCADE,
+        related_name="monitor"
+    )
+    vaga = models.ForeignKey(
+        VagaMonitoria,
+        on_delete=models.PROTECT,
+        related_name="monitores"
+    )
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="monitorias",
+        null=True,
+        blank=True,
+        help_text="Usuário do sistema (se tiver cadastro)"
+    )
+    nome = models.CharField(max_length=150)
+    email = models.EmailField()
+    data_inicio = models.DateField()
+    data_fim = models.DateField()
+    carga_horaria_semanal = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1)],
+        help_text="Horas semanais previstas"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=StatusMonitor.choices,
+        default=StatusMonitor.ATIVO
+    )
+    observacoes = models.TextField(blank=True)
+    
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Monitor"
+        verbose_name_plural = "Monitores"
+        unique_together = ("vaga", "candidatura")
+    
+    def __str__(self) -> str:
+        return f"{self.nome} - {self.vaga.disciplina.codigo}"
+    
+    @property
+    def horas_trabalhadas_mes_atual(self) -> Decimal:
+        """Calcula total de horas do mês atual"""
+        hoje = timezone.now().date()
+        registros = self.registros.filter(
+            data__year=hoje.year,
+            data__month=hoje.month,
+            saida__isnull=False
+        )
+        total = Decimal("0.0")
+        for reg in registros:
+            total += reg.horas_trabalhadas
+        return total
+    
+    @property
+    def percentual_cumprido_mes(self) -> float:
+        """Percentual da carga horária mensal cumprida"""
+        hoje = timezone.now().date()
+        # Calcula semanas no mês (aproximado: 4.33 semanas/mês)
+        meta_mensal = Decimal(str(self.carga_horaria_semanal * 4.33))
+        if meta_mensal == 0:
+            return 0
+        return float((self.horas_trabalhadas_mes_atual / meta_mensal) * 100)
+
+
+class TipoRegistro(models.TextChoices):
+    NORMAL = "normal", _("Normal")
+    REPOSICAO = "reposicao", _("Reposição")
+    EXTRA = "extra", _("Extra")
+
+
+class RegistroFrequencia(TempoRegistro):
+    """
+    Modelo para registro de entrada/saída e horas trabalhadas
+    """
+    monitor = models.ForeignKey(
+        Monitor,
+        on_delete=models.CASCADE,
+        related_name="registros"
+    )
+    data = models.DateField(default=timezone.now)
+    entrada = models.TimeField()
+    saida = models.TimeField(null=True, blank=True)
+    tipo = models.CharField(
+        max_length=20,
+        choices=TipoRegistro.choices,
+        default=TipoRegistro.NORMAL
+    )
+    atividades = models.TextField(
+        blank=True,
+        help_text="Descrição das atividades realizadas"
+    )
+    local = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Local onde a monitoria foi realizada"
+    )
+    validado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="registros_validados",
+        help_text="Professor que validou o registro"
+    )
+    validado_em = models.DateTimeField(null=True, blank=True)
+    observacoes = models.TextField(blank=True)
+    
+    class Meta:
+        ordering = ["-data", "-entrada"]
+        verbose_name = "Registro de Frequência"
+        verbose_name_plural = "Registros de Frequência"
+    
+    def __str__(self) -> str:
+        return f"{self.monitor.nome} - {self.data}"
+    
+    @property
+    def horas_trabalhadas(self) -> Decimal:
+        """Calcula horas trabalhadas em decimal"""
+        if not self.saida:
+            return Decimal("0.0")
+        
+        from datetime import datetime, timedelta
+        entrada_dt = datetime.combine(self.data, self.entrada)
+        saida_dt = datetime.combine(self.data, self.saida)
+        
+        # Se saída for antes da entrada, considera que passou da meia-noite
+        if saida_dt < entrada_dt:
+            saida_dt += timedelta(days=1)
+        
+        diferenca = saida_dt - entrada_dt
+        horas = Decimal(str(diferenca.total_seconds() / 3600))
+        return round(horas, 2)
+    
+    def clean(self):
+        super().clean()
+        if self.saida and self.saida < self.entrada:
+            # Valida apenas se não passou da meia-noite (mais de 12h)
+            from datetime import datetime, timedelta
+            entrada_dt = datetime.combine(self.data, self.entrada)
+            saida_dt = datetime.combine(self.data, self.saida) + timedelta(days=1)
+            if (saida_dt - entrada_dt).total_seconds() / 3600 > 24:
+                raise ValidationError({"saida": _("Horário de saída inválido.")})
+
+
+class RelatorioMensal(TempoRegistro):
+    """
+    Modelo para relatórios mensais consolidados
+    Gerado automaticamente ou pelo professor
+    """
+    monitor = models.ForeignKey(
+        Monitor,
+        on_delete=models.CASCADE,
+        related_name="relatorios"
+    )
+    mes = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)]
+    )
+    ano = models.PositiveIntegerField()
+    total_horas = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=Decimal("0.0")
+    )
+    dias_trabalhados = models.PositiveSmallIntegerField(default=0)
+    carga_horaria_prevista = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        help_text="Carga horária mensal esperada"
+    )
+    percentual_cumprido = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=Decimal("0.0"),
+        help_text="Percentual da carga horária cumprida"
+    )
+    resumo_atividades = models.TextField(blank=True)
+    observacoes_professor = models.TextField(blank=True)
+    aprovado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="relatorios_aprovados"
+    )
+    aprovado_em = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ["-ano", "-mes"]
+        verbose_name = "Relatório Mensal"
+        verbose_name_plural = "Relatórios Mensais"
+        unique_together = ("monitor", "mes", "ano")
+    
+    def __str__(self) -> str:
+        return f"{self.monitor.nome} - {self.mes:02d}/{self.ano}"
+    
+    def calcular_totais(self):
+        """Recalcula os totais baseado nos registros de frequência"""
+        registros = self.monitor.registros.filter(
+            data__year=self.ano,
+            data__month=self.mes,
+            saida__isnull=False
+        )
+        
+        self.total_horas = sum(
+            (reg.horas_trabalhadas for reg in registros),
+            Decimal("0.0")
+        )
+        self.dias_trabalhados = registros.values('data').distinct().count()
+        
+        if self.carga_horaria_prevista > 0:
+            self.percentual_cumprido = (
+                self.total_horas / self.carga_horaria_prevista * 100
+            )
+        else:
+            self.percentual_cumprido = Decimal("0.0")

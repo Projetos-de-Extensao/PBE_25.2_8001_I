@@ -23,6 +23,9 @@ from .models import (
     Candidatura,
     CandidaturaStatus,
     Disciplina,
+    Monitor,
+    RegistroFrequencia,
+    RelatorioMensal,
     ResultadoSelecaoChoices,
     UserProfile,
     VagaMonitoria,
@@ -40,7 +43,10 @@ from .serializers import (
     UserRegistrationSerializer,
     AvaliacaoCandidatoSerializer,
     CandidaturaSerializer, 
-    DisciplinaSerializer, 
+    DisciplinaSerializer,
+    MonitorSerializer,
+    RegistroFrequenciaSerializer,
+    RelatorioMensalSerializer,
     VagaMonitoriaSerializer
 )
 from .utils import registrar_auditoria
@@ -1120,3 +1126,266 @@ class AvaliacaoCandidatoViewSet(viewsets.ModelViewSet):
             "erros": len(erros),
             "detalhes_erros": erros
         }, status=status.HTTP_201_CREATED if avaliacoes_criadas else status.HTTP_400_BAD_REQUEST)
+
+
+# ==================== ViewSets de Controle de Frequência ====================
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar monitores",
+        description="Retorna lista de monitores ativos. Coordenadores veem monitores de suas disciplinas.",
+        tags=["Frequência - Monitores"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes do monitor",
+        description="Retorna informações detalhadas de um monitor.",
+        tags=["Frequência - Monitores"]
+    ),
+    create=extend_schema(
+        summary="Criar monitor",
+        description="Registra um novo monitor (normalmente criado automaticamente ao aprovar candidatura).",
+        tags=["Frequência - Monitores"]
+    ),
+    update=extend_schema(
+        summary="Atualizar monitor",
+        description="Atualiza informações de um monitor.",
+        tags=["Frequência - Monitores"]
+    ),
+)
+class MonitorViewSet(viewsets.ModelViewSet):
+    serializer_class = MonitorSerializer
+    permission_classes = [IsCoordinator]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ("nome", "email", "vaga__disciplina__nome")
+    ordering_fields = ("data_inicio", "nome", "status")
+    filterset_fields = {
+        "status": ["exact"],
+        "vaga__disciplina_id": ["exact"],
+        "vaga_id": ["exact"],
+    }
+    
+    def get_queryset(self):
+        queryset = Monitor.objects.select_related(
+            "vaga",
+            "vaga__disciplina",
+            "candidatura",
+            "usuario"
+        )
+        user = self.request.user
+        if is_admin(user):
+            return queryset
+        if is_coordinator(user):
+            return queryset.filter(vaga__disciplina__coordenador=user)
+        if is_student(user) and user.email:
+            return queryset.filter(email__iexact=user.email.strip())
+        return queryset.none()
+    
+    def perform_create(self, serializer):
+        monitor = serializer.save()
+        registrar_auditoria(self.request.user, "criar_monitor", monitor)
+    
+    @extend_schema(
+        summary="Dashboard do monitor",
+        description="Retorna estatísticas e resumo de horas do monitor.",
+        tags=["Frequência - Monitores"]
+    )
+    @action(detail=True, methods=["get"])
+    def dashboard(self, request, pk=None):
+        monitor = self.get_object()
+        hoje = timezone.now().date()
+        
+        # Estatísticas do mês atual
+        registros_mes = monitor.registros.filter(
+            data__year=hoje.year,
+            data__month=hoje.month
+        )
+        
+        dados = {
+            "monitor": MonitorSerializer(monitor, context=self.get_serializer_context()).data,
+            "mes_atual": {
+                "total_horas": float(monitor.horas_trabalhadas_mes_atual),
+                "percentual_cumprido": monitor.percentual_cumprido_mes,
+                "dias_trabalhados": registros_mes.values('data').distinct().count(),
+                "registros_pendentes": registros_mes.filter(validado_por__isnull=True).count(),
+            }
+        }
+        return Response(dados)
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar registros de frequência",
+        description="Retorna lista de registros de entrada/saída dos monitores.",
+        tags=["Frequência - Registros"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes do registro",
+        description="Retorna informações detalhadas de um registro de frequência.",
+        tags=["Frequência - Registros"]
+    ),
+    create=extend_schema(
+        summary="Criar registro de frequência",
+        description="Registra entrada/saída de um monitor.",
+        tags=["Frequência - Registros"]
+    ),
+    update=extend_schema(
+        summary="Atualizar registro",
+        description="Atualiza um registro de frequência.",
+        tags=["Frequência - Registros"]
+    ),
+)
+class RegistroFrequenciaViewSet(viewsets.ModelViewSet):
+    serializer_class = RegistroFrequenciaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ("monitor__nome", "atividades", "local")
+    ordering_fields = ("data", "entrada", "created_at")
+    filterset_fields = {
+        "monitor_id": ["exact"],
+        "data": ["gte", "lte", "exact"],
+        "tipo": ["exact"],
+        "validado_por": ["isnull", "exact"],
+    }
+    
+    def get_queryset(self):
+        queryset = RegistroFrequencia.objects.select_related(
+            "monitor",
+            "monitor__vaga",
+            "monitor__vaga__disciplina",
+            "validado_por"
+        )
+        user = self.request.user
+        if is_admin(user):
+            return queryset
+        if is_coordinator(user):
+            return queryset.filter(monitor__vaga__disciplina__coordenador=user)
+        if is_student(user) and user.email:
+            return queryset.filter(monitor__email__iexact=user.email.strip())
+        return queryset.none()
+    
+    def perform_create(self, serializer):
+        registro = serializer.save()
+        registrar_auditoria(self.request.user, "criar_registro_frequencia", registro)
+    
+    @extend_schema(
+        summary="Validar registro de frequência",
+        description="Professor valida o registro de frequência de um monitor.",
+        tags=["Frequência - Registros"]
+    )
+    @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
+    def validar(self, request, pk=None):
+        registro = self.get_object()
+        
+        if registro.validado_por:
+            return Response(
+                {"detail": "Este registro já foi validado."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        registro.validado_por = request.user
+        registro.validado_em = timezone.now()
+        registro.save(update_fields=["validado_por", "validado_em", "updated_at"])
+        
+        registrar_auditoria(request.user, "validar_frequencia", registro)
+        
+        return Response({
+            "detail": "Registro validado com sucesso.",
+            "validado_em": registro.validado_em
+        })
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Listar relatórios mensais",
+        description="Retorna lista de relatórios mensais consolidados.",
+        tags=["Frequência - Relatórios"]
+    ),
+    retrieve=extend_schema(
+        summary="Detalhes do relatório",
+        description="Retorna informações detalhadas de um relatório mensal.",
+        tags=["Frequência - Relatórios"]
+    ),
+    create=extend_schema(
+        summary="Criar relatório mensal",
+        description="Gera um novo relatório mensal consolidado.",
+        tags=["Frequência - Relatórios"]
+    ),
+)
+class RelatorioMensalViewSet(viewsets.ModelViewSet):
+    serializer_class = RelatorioMensalSerializer
+    permission_classes = [IsCoordinator]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ("monitor__nome",)
+    ordering_fields = ("ano", "mes", "total_horas")
+    filterset_fields = {
+        "monitor_id": ["exact"],
+        "mes": ["exact"],
+        "ano": ["exact"],
+        "aprovado_por": ["isnull", "exact"],
+    }
+    
+    def get_queryset(self):
+        queryset = RelatorioMensal.objects.select_related(
+            "monitor",
+            "monitor__vaga",
+            "monitor__vaga__disciplina",
+            "aprovado_por"
+        )
+        user = self.request.user
+        if is_admin(user):
+            return queryset
+        if is_coordinator(user):
+            return queryset.filter(monitor__vaga__disciplina__coordenador=user)
+        return queryset.none()
+    
+    def perform_create(self, serializer):
+        relatorio = serializer.save()
+        relatorio.calcular_totais()
+        relatorio.save()
+        registrar_auditoria(self.request.user, "criar_relatorio_mensal", relatorio)
+    
+    @extend_schema(
+        summary="Recalcular totais do relatório",
+        description="Recalcula horas e percentuais baseado nos registros de frequência.",
+        tags=["Frequência - Relatórios"]
+    )
+    @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
+    def recalcular(self, request, pk=None):
+        relatorio = self.get_object()
+        relatorio.calcular_totais()
+        relatorio.save()
+        
+        return Response(RelatorioMensalSerializer(
+            relatorio,
+            context=self.get_serializer_context()
+        ).data)
+    
+    @extend_schema(
+        summary="Aprovar relatório mensal",
+        description="Professor aprova o relatório mensal do monitor.",
+        tags=["Frequência - Relatórios"]
+    )
+    @action(detail=True, methods=["post"], permission_classes=[IsCoordinator])
+    def aprovar(self, request, pk=None):
+        relatorio = self.get_object()
+        
+        if relatorio.aprovado_por:
+            return Response(
+                {"detail": "Este relatório já foi aprovado."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        relatorio.observacoes_professor = request.data.get(
+            "observacoes_professor",
+            relatorio.observacoes_professor
+        )
+        relatorio.aprovado_por = request.user
+        relatorio.aprovado_em = timezone.now()
+        relatorio.save()
+        
+        registrar_auditoria(request.user, "aprovar_relatorio_mensal", relatorio)
+        
+        return Response({
+            "detail": "Relatório aprovado com sucesso.",
+            "aprovado_em": relatorio.aprovado_em
+        })

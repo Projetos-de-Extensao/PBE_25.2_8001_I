@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -8,6 +9,9 @@ from .models import (
     CandidaturaStatus,
     Departamento,
     Disciplina,
+    Monitor,
+    RegistroFrequencia,
+    RelatorioMensal,
     ResultadoSelecaoChoices,
     UserProfile,
     VagaMonitoria,
@@ -16,7 +20,6 @@ from .models import (
 
 
 User = get_user_model()
-
 
 class UsuarioResumoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -383,3 +386,159 @@ class AvaliacaoCandidatoResumoSerializer(serializers.ModelSerializer):
             "created_at",
         )
         read_only_fields = fields
+
+
+# ==================== Serializers de Controle de Frequência ====================
+
+class MonitorSerializer(serializers.ModelSerializer):
+    candidato_nome = serializers.CharField(source="nome", read_only=True)
+    vaga_titulo = serializers.CharField(source="vaga.titulo", read_only=True)
+    disciplina_nome = serializers.CharField(source="vaga.disciplina.nome", read_only=True)
+    disciplina_codigo = serializers.CharField(source="vaga.disciplina.codigo", read_only=True)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+    horas_mes_atual = serializers.DecimalField(
+        source="horas_trabalhadas_mes_atual",
+        max_digits=6,
+        decimal_places=2,
+        read_only=True
+    )
+    percentual_cumprido = serializers.FloatField(
+        source="percentual_cumprido_mes",
+        read_only=True
+    )
+    
+    class Meta:
+        model = Monitor
+        fields = (
+            "id",
+            "candidatura",
+            "vaga",
+            "vaga_titulo",
+            "disciplina_nome",
+            "disciplina_codigo",
+            "usuario",
+            "candidato_nome",
+            "nome",
+            "email",
+            "data_inicio",
+            "data_fim",
+            "carga_horaria_semanal",
+            "status",
+            "status_display",
+            "observacoes",
+            "horas_mes_atual",
+            "percentual_cumprido",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "created_at", "updated_at")
+
+
+class RegistroFrequenciaSerializer(serializers.ModelSerializer):
+    monitor_nome = serializers.CharField(source="monitor.nome", read_only=True)
+    horas = serializers.DecimalField(
+        source="horas_trabalhadas",
+        max_digits=5,
+        decimal_places=2,
+        read_only=True
+    )
+    validado_por_nome = serializers.CharField(
+        source="validado_por.get_full_name",
+        read_only=True,
+        allow_null=True
+    )
+    tipo_display = serializers.CharField(source="get_tipo_display", read_only=True)
+    
+    class Meta:
+        model = RegistroFrequencia
+        fields = (
+            "id",
+            "monitor",
+            "monitor_nome",
+            "data",
+            "entrada",
+            "saida",
+            "horas",
+            "tipo",
+            "tipo_display",
+            "atividades",
+            "local",
+            "validado_por",
+            "validado_por_nome",
+            "validado_em",
+            "observacoes",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "horas", "validado_em", "created_at", "updated_at")
+    
+    def validate(self, data):
+        saida = data.get('saida')
+        entrada = data.get('entrada')
+        
+        if saida and entrada and saida < entrada:
+            # Verifica se não está passando da meia-noite (aceita até 12h de diferença)
+            from datetime import datetime, timedelta
+            data_ref = data.get('data', timezone.now().date())
+            entrada_dt = datetime.combine(data_ref, entrada)
+            saida_dt = datetime.combine(data_ref, saida) + timedelta(days=1)
+            
+            if (saida_dt - entrada_dt).total_seconds() / 3600 > 24:
+                raise serializers.ValidationError({
+                    "saida": "Horário de saída inválido."
+                })
+        
+        return data
+
+
+class RelatorioMensalSerializer(serializers.ModelSerializer):
+    monitor_nome = serializers.CharField(source="monitor.nome", read_only=True)
+    disciplina_nome = serializers.CharField(
+        source="monitor.vaga.disciplina.nome",
+        read_only=True
+    )
+    aprovado_por_nome = serializers.CharField(
+        source="aprovado_por.get_full_name",
+        read_only=True,
+        allow_null=True
+    )
+    mes_nome = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = RelatorioMensal
+        fields = (
+            "id",
+            "monitor",
+            "monitor_nome",
+            "disciplina_nome",
+            "mes",
+            "mes_nome",
+            "ano",
+            "total_horas",
+            "dias_trabalhados",
+            "carga_horaria_prevista",
+            "percentual_cumprido",
+            "resumo_atividades",
+            "observacoes_professor",
+            "aprovado_por",
+            "aprovado_por_nome",
+            "aprovado_em",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "id",
+            "total_horas",
+            "dias_trabalhados",
+            "percentual_cumprido",
+            "aprovado_em",
+            "created_at",
+            "updated_at",
+        )
+    
+    def get_mes_nome(self, obj):
+        meses = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        ]
+        return meses[obj.mes - 1] if 1 <= obj.mes <= 12 else str(obj.mes)
