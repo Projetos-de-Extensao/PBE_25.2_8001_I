@@ -55,7 +55,7 @@ Desenvolver uma plataforma digital exclusiva para a Monitoria da faculdade, visa
 - [x] 🌐 **Portal de Vagas** 
 - [x] 📝 **Cadastro de Candidatos** 
 - [x] 📩 **Seleção e Comunicação** 
-- [x]📊 **Geração de Relatórios Básicos** 
+- [x] 📊 **Geração de Relatórios Básicos** 
 - [x] ⏱️ **Registro de Frequência e Horas** 
 - [x] 📈 **Dashboard de Gestão**
 
