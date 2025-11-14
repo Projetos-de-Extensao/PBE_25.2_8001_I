@@ -238,19 +238,90 @@ def prof_gerenciar_candidaturas(request):
 
 @login_required
 def prof_relatorios(request):
-    """View para exibir relatórios"""
+    """View para exibir relatórios com estatísticas dinâmicas"""
+    from django.db.models import Count, Q
+    from django.db.models.functions import TruncMonth
+    import json
+    
+    # Filtrar apenas vagas e candidaturas do professor logado
+    vagas_professor = VagaMonitoria.objects.filter(disciplina__coordenador=request.user)
+    candidaturas_professor = Candidatura.objects.filter(vaga__disciplina__coordenador=request.user)
+    
     # Estatísticas básicas
-    total_vagas = VagaMonitoria.objects.filter(disciplina__coordenador=request.user).count()
-    total_candidaturas = Candidatura.objects.filter(vaga__disciplina__coordenador=request.user).count()
-    candidaturas_aprovadas = Candidatura.objects.filter(
-        vaga__disciplina__coordenador=request.user,
-        status=CandidaturaStatus.APROVADA
-    ).count()
+    total_vagas = vagas_professor.count()
+    total_candidaturas = candidaturas_professor.count()
+    candidaturas_aprovadas = candidaturas_professor.filter(status=CandidaturaStatus.APROVADA).count()
+    
+    # Calcular média de candidatos por vaga
+    media_candidatos = round(total_candidaturas / total_vagas, 1) if total_vagas > 0 else 0
+    
+    # Calcular taxa de aprovação
+    taxa_aprovacao = round((candidaturas_aprovadas / total_candidaturas * 100), 1) if total_candidaturas > 0 else 0
+    
+    # Candidaturas por mês (últimos 4 meses)
+    candidaturas_por_mes = candidaturas_professor.annotate(
+        mes=TruncMonth('created_at')
+    ).values('mes').annotate(
+        total=Count('id')
+    ).order_by('mes')[:4]
+    
+    meses_labels = [c['mes'].strftime('%b') for c in candidaturas_por_mes]
+    meses_dados = [c['total'] for c in candidaturas_por_mes]
+    
+    # Status das candidaturas
+    status_counts = candidaturas_professor.values('status').annotate(
+        total=Count('id')
+    )
+    
+    status_labels = []
+    status_dados = []
+    for s in status_counts:
+        status_display = dict(CandidaturaStatus.choices).get(s['status'], s['status'])
+        status_labels.append(status_display)
+        status_dados.append(s['total'])
+    
+    # Vagas por disciplina (top 5)
+    vagas_por_disciplina = vagas_professor.values(
+        'disciplina__nome'
+    ).annotate(
+        total=Count('id')
+    ).order_by('-total')[:5]
+    
+    disciplinas_labels = [v['disciplina__nome'] for v in vagas_por_disciplina]
+    disciplinas_dados = [v['total'] for v in vagas_por_disciplina]
+    
+    # Distribuição de CR dos candidatos
+    cr_ranges = [
+        {'label': '7.0-8.0', 'min': 7.0, 'max': 8.0},
+        {'label': '8.0-9.0', 'min': 8.0, 'max': 9.0},
+        {'label': '9.0-10.0', 'min': 9.0, 'max': 10.0},
+    ]
+    
+    cr_labels = []
+    cr_dados = []
+    for r in cr_ranges:
+        count = candidaturas_professor.filter(
+            candidato_cr__gte=r['min'],
+            candidato_cr__lt=r['max']
+        ).count()
+        cr_labels.append(r['label'])
+        cr_dados.append(count)
     
     context = {
         'total_vagas': total_vagas,
         'total_candidaturas': total_candidaturas,
         'candidaturas_aprovadas': candidaturas_aprovadas,
+        'media_candidatos': media_candidatos,
+        'taxa_aprovacao': taxa_aprovacao,
+        # Dados para gráficos (convertidos para JSON)
+        'meses_labels': json.dumps(meses_labels),
+        'meses_dados': json.dumps(meses_dados),
+        'status_labels': json.dumps(status_labels),
+        'status_dados': json.dumps(status_dados),
+        'disciplinas_labels': json.dumps(disciplinas_labels),
+        'disciplinas_dados': json.dumps(disciplinas_dados),
+        'cr_labels': json.dumps(cr_labels),
+        'cr_dados': json.dumps(cr_dados),
     }
     return render(request, "professor/prof_relatorio.html", context)
 

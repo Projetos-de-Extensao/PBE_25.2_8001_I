@@ -30,7 +30,7 @@
 		display: flex;
 		gap: 0.5rem;
 		padding: 0.5rem;
-
+		justify-content: center;
 		backdrop-filter: blur(20px);
 		
 	}
@@ -272,36 +272,24 @@
 			<div class="card stats-card text-center p-4">
 				<div class="stats-number">{{ total_vagas|default:"0" }}</div>
 				<h6 class="text-muted mb-0">Total de Vagas</h6>
-				<small class="text-success">
-					<i class="bi bi-arrow-up"></i> +12% este mês
-				</small>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card stats-card text-center p-4">
 				<div class="stats-number">{{ total_candidaturas|default:"0" }}</div>
 				<h6 class="text-muted mb-0">Candidaturas Recebidas</h6>
-				<small class="text-success">
-					<i class="bi bi-arrow-up"></i> +8% este mês
-				</small>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card stats-card text-center p-4">
 				<div class="stats-number">{{ media_candidatos|default:"0"|floatformat:1 }}</div>
 				<h6 class="text-muted mb-0">Média por Vaga</h6>
-				<small class="text-warning">
-					<i class="bi bi-dash"></i> 0% este mês
-				</small>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card stats-card text-center p-4">
 				<div class="stats-number">{{ taxa_aprovacao|default:"0"|floatformat:1 }}%</div>
 				<h6 class="text-muted mb-0">Taxa de Aprovação</h6>
-				<small class="text-danger">
-					<i class="bi bi-arrow-down"></i> -2% este mês
-				</small>
 			</div>
 		</div>
 	</div>
@@ -489,10 +477,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	new Chart(candidaturasCtx, {
 		type: 'bar',
 		data: {
-			labels: ['Jan', 'Fev', 'Mar', 'Abr'],
+			labels: {{ meses_labels|safe }},
 			datasets: [{
 				label: 'Candidaturas',
-				data: [12, 19, 8, 15],
+				data: {{ meses_dados|safe }},
 				backgroundColor: '#372e83',
 				borderColor: '#372e83',
 				borderWidth: 1
@@ -528,10 +516,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	new Chart(statusCtx, {
 		type: 'doughnut',
 		data: {
-			labels: ['Aprovadas', 'Rejeitadas', 'Em Avaliação'],
+			labels: {{ status_labels|safe }},
 			datasets: [{
-				data: [45, 25, 30],
-				backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+				data: {{ status_dados|safe }},
+				backgroundColor: ['#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6c757d', '#007bff'],
 				borderWidth: 2,
 				borderColor: '#fff'
 			}]
@@ -559,11 +547,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	new Chart(disciplinasCtx, {
 		type: 'bar',
 		data: {
-			labels: ['Programação', 'Matemática', 'Física'],
+			labels: {{ disciplinas_labels|safe }},
 			datasets: [{
 				label: 'Vagas',
-				data: [8, 5, 3],
-				backgroundColor: ['#372e83', '#4d3fca', '#6a3fb3'],
+				data: {{ disciplinas_dados|safe }},
+				backgroundColor: ['#372e83', '#4d3fca', '#6a3fb3', '#764ba2', '#667eea'],
 				borderRadius: 4
 			}]
 		},
@@ -594,10 +582,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	new Chart(crCtx, {
 		type: 'bar',
 		data: {
-			labels: ['7.0-8.0', '8.0-9.0', '9.0-10.0'],
+			labels: {{ cr_labels|safe }},
 			datasets: [{
 				label: 'Candidatos',
-				data: [15, 25, 10],
+				data: {{ cr_dados|safe }},
 				backgroundColor: '#4d3fca',
 				borderRadius: 4
 			}]
